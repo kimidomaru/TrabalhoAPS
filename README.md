@@ -1,2 +1,2 @@
-# TrabDiogo
+# TrabalhoAPS
 Trabalho de Arquitetura e Padrões de Software
