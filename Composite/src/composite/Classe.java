@@ -1,12 +1,7 @@
 package composite;
 
-import java.util.ArrayList;
-import java.util.List;
+public class Classe extends ComponenteComposto{
 
-public class Classe extends ElementoComposto{
-
-	List<Atributo> atributos = new ArrayList();
-	List<Metodo> metodos = new ArrayList();
 	private String multiplicidade = null;
 	private String navegabilidade = null;
 	private String modificadorDeAcesso = null;
@@ -36,19 +31,20 @@ public class Classe extends ElementoComposto{
 		this.modificadorDeAcesso = modificadorDeAcesso;
 	}
 
-	public Classe(String nome){
-		super(nome);
+	public Classe(){
+		super();
+		desenha();
 	}
 
 	@Override
 	public void desenha() {
 		super.desenha();
-		//codigo para desenhar a propria classe (borda, delimitadores, etc)
-		System.out.println("Desenhou classe");
+		//codigo para desenhar a propria classe (borda, delimitadores, etc
+		System.out.println("Classe "+ super.getNome() + " foi criada!");
 	}
 	
 	@Override
-	public void addFilho(Elemento e) {
+	public void addFilho(Componente e) {
 		if(e instanceof Atributo || e instanceof Metodo)
 			super.addFilho(e);
 		else

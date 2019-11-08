@@ -1,12 +1,10 @@
 package composite;
 
-import java.util.ArrayList;
-import java.util.List;
 
-public class Diagrama extends ElementoComposto{
+public class Diagrama extends ComponenteComposto{
 
-	public Diagrama(String nome){
-		super(nome);
+	public Diagrama(){
+		super();
 		desenha();
 	}
 	
@@ -14,11 +12,11 @@ public class Diagrama extends ElementoComposto{
 	public void desenha() {
 		super.desenha();
 		//desenha o diagrama
-		System.out.println("DIAGRAMA DESENHADO");
+		System.out.println("Diagrama "+ super.getNome() + " foi criado!");
 	}
 
 	@Override
-	public void addFilho(Elemento e) {
+	public void addFilho(Componente e) {
 		if(e instanceof Atributo || e instanceof Metodo)
 			super.addFilho(e);
 		else

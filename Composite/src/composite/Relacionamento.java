@@ -3,13 +3,13 @@ package composite;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Relacionamento extends Elemento{
+public class Relacionamento extends Componente{
     private String tipo;
     private String direcao;
-    List<Elemento> elementos = new ArrayList(2);
+    List<Componente> elementos = new ArrayList(2);
 
-    public Relacionamento(Elemento elemento1, Elemento elemento2, String direcao, String nome){
-        super(nome);
+    public Relacionamento(Componente elemento1, Componente elemento2, String direcao){
+        super();
         elementos.add(elemento1);
         elementos.add(elemento2);
         this.direcao = direcao;

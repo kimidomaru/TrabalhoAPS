@@ -1,9 +1,7 @@
 package composite;
 
-import java.util.ArrayList;
-import java.util.List;
 
-public class Metodo extends ElementoComposto{
+public class Metodo extends ComponenteComposto{
 
 	private String tipoRetorno = "void";
 	private String modificadoresDeAcesso = "default";
@@ -25,8 +23,8 @@ public class Metodo extends ElementoComposto{
 		this.modificadoresDeAcesso = modificadoresDeAcesso;
 	}
 
-	public Metodo(String nome){
-		super(nome);
+	public Metodo(){
+		super();
 	}
 
 	@Override
@@ -35,7 +33,7 @@ public class Metodo extends ElementoComposto{
 	}
 
 	@Override
-	public void addFilho(Elemento e) {
+	public void addFilho(Componente e) {
 		if(e instanceof Atributo || e instanceof Metodo)
 			super.addFilho(e);
 		else

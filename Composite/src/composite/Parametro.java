@@ -1,6 +1,6 @@
 package composite;
 
-public class Parametro extends Elemento{
+public class Parametro extends Componente{
 
     private String tipo;
 
@@ -13,8 +13,8 @@ public class Parametro extends Elemento{
 		this.tipo = tipo;
 	}
 
-    public Parametro(String tipo, String nome){
-        super(nome);
+    public Parametro(String tipo){
+        super();
         this.tipo = tipo;
     }
 

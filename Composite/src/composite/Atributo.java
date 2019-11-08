@@ -1,6 +1,6 @@
 package composite;
 
-public class Atributo extends Elemento {
+public class Atributo extends Componente {
 
 	private String tipo;
 	private String modificadoresDeAcesso = "default";
@@ -19,11 +19,11 @@ public class Atributo extends Elemento {
 	}
 
 	public void setModificadoresDeAcesso(String modificadores) {
-		this.modificadoresDeAcesso = modificadoresDeAcesso;
+		this.modificadoresDeAcesso = modificadores;
 	}
 
-	public Atributo(String tipo, String nome){
-		super(nome);
+	public Atributo(String tipo){
+		super();
 		this.tipo = tipo;
 	}
 
