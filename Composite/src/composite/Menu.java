@@ -20,6 +20,21 @@ public class Menu {
 			menuInterface();
 		}
 		
+		else if(elemento.equals("atributo")){
+			menuAtributo();
+		}
+		
+		else if(elemento.equals("metodo")){
+			menuMetodo();
+		}
+		
+		else if(elemento.equals("parametro")){
+			menuParametro();
+		}
+		
+		else if(elemento.equals("relacionamento")){
+			menuRelacionamento();
+		}
 	}
 	
 	public void menuInicial() {
@@ -50,5 +65,21 @@ public class Menu {
 				"2 - Inserir Atributo\n"+
 				"3 - Inserir Método\n"+
 				"4 - Inserir Relacionamento\n");
+	}
+	
+	public void menuAtributo(){
+		//opcoes Aqui
+	}
+	
+	public void menuMetodo(){
+		//opcoes Aqui
+	}
+	
+	public void menuParametro(){
+		//opcoes Aqui
+	}
+	
+	public void menuRelacionamento(){
+		//opcoes Aqui
 	}
 }

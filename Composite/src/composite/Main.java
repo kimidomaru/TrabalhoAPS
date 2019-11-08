@@ -69,24 +69,18 @@ public class Main {
         case "diagrama":
         	
 	          //contagemDasOpcoes = 3;
+        	  //System.out.println("Qtd filhos: "+ elementoCompostoAtual.getFilhos().size());
 	          menu.mostrarMenu("diagrama");
-	          
-	          for(int i = 0; i < elementoCompostoAtual.getFilhos().size(); i++){
+	          for(int i = 3; i < (elementoCompostoAtual.getFilhos().size() + 3); i++){
 	        	  
-		          System.out.println((i+1) + " - Abrir a classe " + elementoCompostoAtual.getFilhos().get(i).getNome());
+		          System.out.println((i+1) + " - Abrir a classe " + elementoCompostoAtual.getFilhos().get(i-3).getNome());
 		          
-		          int opcaoDaClasse = atrelaElementoAoNumero.size() + 1;
+		          int opcaoDaClasse = atrelaElementoAoNumero.size();
 		          
 		          atrelaElementoAoNumero.put(opcaoDaClasse, elementoCompostoAtual.getFilhos().get(opcaoDaClasse));
 		          
 	          }
-	        
-	          /*for(int i = contagemDasOpcoes; (i-3)<elementoCompostoAtual.getFilhos().size(); i++){
-	            System.out.println((i+1) + " - Abrir a classe " + elementoCompostoAtual.getFilhos().get(i-3).getNome());
-	            int opcaoDaClasse = i + 1;
-	            atrelaElementoAoNumero.put(opcaoDaClasse, elementoCompostoAtual.getFilhos().get(opcaoDaClasse-3));
-	          }*/
-	          
+	   
 	          System.out.println("0 - Sair");
 	          
 	          do{
@@ -143,6 +137,30 @@ public class Main {
 	    //Menu de Classes
         case "classe": 
         	menu.mostrarMenu("classe");
+
+    		do{
+        		entrada = new Scanner(System.in);
+        		
+        		try {
+        			opcao = entrada.nextInt();
+              
+        			if(opcao < 0 || opcao > 2) {
+        				throw new InputMismatchException();
+        			}
+        		}
+
+        		catch (InputMismatchException e) {
+        			System.out.println("Opcao invalida!");
+        			menu.mostrarMenu("classe");
+        		}
+            
+        	}while(opcao < 1 || opcao > 4);
+
+        	if(opcao==1){
+        		System.out.println("Voltar");
+        		elementoAberto = "diagrama";
+        		menu();
+        	} 
         	
         	break;
         	
@@ -174,8 +192,9 @@ public class Main {
 				
 			case "classe":
 				Classe c = new Classe();
+				elementoCompostoAtual.addFilho(c);
 				elementoAberto = "classe";
-				elementoCompostoAtual = c;
+				//elementoCompostoAtual = c;
 				menu();
 				break;
 				
