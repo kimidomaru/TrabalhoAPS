@@ -31,8 +31,8 @@ public class Classe extends ComponenteComposto{
 		this.modificadorDeAcesso = modificadorDeAcesso;
 	}
 
-	public Classe(){
-		super();
+	public Classe(String nome){
+		super(nome);
 		desenha();
 	}
 

@@ -66,7 +66,7 @@ public class Menu {
 		System.out.println("---Menu de Interface---\n"
 				+ "1 - Voltar\n"
 				+ "2 - Inserir Atributo\n"
-				+ "3 - Inserir M�todo\n"
+				+ "3 - Inserir Metodo\n"
 				+ "4 - Inserir Relacionamento");
 		System.out.print("Digite o numero da opcao desejada: ");
 	}

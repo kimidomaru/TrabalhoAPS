@@ -53,11 +53,11 @@ public class Relacionamento extends Componente{
 
     
 	public Relacionamento(Componente elemento1, Componente elemento2, String tipoRelacionamento, String nome, String direcaoLeitura, String navegabilidade) {
-		super();
+		super(nome);
 		elementos.add(elemento1);
         elementos.add(elemento2);
 		this.tipoRelacionamento = tipoRelacionamento;
-		this.nome = nome;
+		//this.nome = nome;
 		this.direcaoLeitura = direcaoLeitura;
 		this.navegabilidade = navegabilidade;
 	}

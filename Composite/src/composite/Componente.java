@@ -6,12 +6,17 @@ public abstract class Componente {
 
 	private String nome;
 	
-	public Componente(){
-		System.out.print("Digite o nome: ");
-		Scanner entrada = new Scanner(System.in);
-		String nome2 = entrada.nextLine();
-		this.nome = nome2;
-		//entrada.close();
+	public Componente(String nome){
+		if(nome == null) {
+			System.out.print("Digite o nome: ");
+			Scanner entrada = new Scanner(System.in);
+			String nome2 = entrada.nextLine();
+			this.nome = nome2;
+			//entrada.close();
+		} else {
+			this.nome = nome;
+		}
+		
 	}
 	
 	//Get&Set

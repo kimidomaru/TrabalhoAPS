@@ -3,8 +3,8 @@ package composite;
 
 public class Diagrama extends ComponenteComposto{
 
-	public Diagrama(){
-		super();
+	public Diagrama(String nome){
+		super(nome);
 		desenha();
 	}
 	

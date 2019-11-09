@@ -7,8 +7,8 @@ public abstract class ComponenteComposto extends Componente{
 
 	private List<Componente> filhos;
 	
-	public ComponenteComposto() {
-		super();
+	public ComponenteComposto(String nome) {
+		super(nome);
 		this.filhos = new ArrayList<Componente>();
 	}
 	

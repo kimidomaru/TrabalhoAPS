@@ -22,8 +22,8 @@ public class Atributo extends Componente {
 		this.modificadoresDeAcesso = modificadores;
 	}
 
-	public Atributo(String tipo){
-		super();
+	public Atributo(String tipo, String nome){
+		super(nome);
 		this.tipo = tipo;
 	}
 

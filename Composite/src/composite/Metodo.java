@@ -23,18 +23,18 @@ public class Metodo extends ComponenteComposto{
 		this.modificadoresDeAcesso = modificadoresDeAcesso;
 	}
 
-	public Metodo(){
-		super();
+	public Metodo(String nome){
+		super(nome);
 	}
 
 	@Override
 	public void desenha() {
-		System.out.println("Desenhou método");
+		System.out.println("Desenhou metodo");
 	}
 
 	@Override
 	public void addFilho(Componente e) {
-		if(e instanceof Atributo || e instanceof Metodo)
+		if(e instanceof Parametro)
 			super.addFilho(e);
 		else
 			throw new IllegalArgumentException("Filho de tipo invalido!");

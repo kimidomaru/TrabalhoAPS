@@ -1,6 +1,8 @@
 package composite;
 
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,6 +12,8 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Controller {
 
@@ -32,6 +36,7 @@ public class Controller {
 	      
 	      //Menu inicial
 	    	case "inicial":
+	    		abrirDiagrama();
 	    		qtdOpcoes = 3;
 	        	
 	    		menu.mostrarMenu("inicial");
@@ -101,14 +106,14 @@ public class Controller {
 			switch(oquecriar){
 			
 				case "diagrama":
-					Diagrama d = new Diagrama();
+					Diagrama d = new Diagrama(null);
 					elementoAberto = "diagrama";
 					elementoCompostoAtual = d;
 					menu();
 					break;
 					
 				case "classe":
-					Classe c = new Classe();
+					Classe c = new Classe(null);
 					elementoCompostoAtual.addFilho(c);
 					elementoAberto = "classe";
 					//elementoCompostoAtual = c;
@@ -116,7 +121,7 @@ public class Controller {
 					break;
 					
 				case "interface":
-					Interface i = new Interface();
+					Interface i = new Interface(null);
 					elementoAberto = "interface";
 					elementoCompostoAtual = i;
 					menu();
@@ -185,11 +190,12 @@ public class Controller {
 	}
 	
 	public static void salvarDiagrama() { 
-		try(FileWriter fw = new FileWriter("Composite/diagramasSalvos.txt", true);
+		try(FileWriter fw = new FileWriter("Composite/diagramasSalvos", true);
 			    BufferedWriter bw = new BufferedWriter(fw);
 			    PrintWriter out = new PrintWriter(bw))
 			{
 			    out.println("teste");
+			  //-----fazendo ainda
 			    
 			} catch (IOException e) {
 			    System.out.println("Nao foi possivel salvar o diagrama. Tente novamente.\n");
@@ -197,6 +203,38 @@ public class Controller {
 	            menu();
 			    
 			}
+	}
+	
+	public static void abrirDiagrama() { 
+		try {
+			File f = new File("Composite/diagramasSalvos.txt");
+			Scanner input = new Scanner(f);
+			Pattern inicioRegex = Pattern.compile("\\[\\d+\\]");
+			
+			while (input.hasNextLine()) {
+				String linha = input.nextLine();
+				Matcher matcher = inicioRegex.matcher(linha);
+		        boolean matches = matcher.matches();
+		        if(matches) {
+		        	while(input.hasNextLine()) {
+		        		linha = input.nextLine();
+		        		int posicaoNomeClasse = linha.indexOf("{");
+		        		String nomeClasse;
+		        		if(posicaoNomeClasse != -1) {
+		        			nomeClasse = linha.substring(0 , posicaoNomeClasse);
+		        		}
+		        		//-----fazendo ainda
+		        		
+		        	}
+		        	
+		        	
+		        }
+		        //System.out.println("matches: "+matches);
+			}
+			input.close();
+		} catch (FileNotFoundException e){
+			System.out.println("Nao ha diagramas salvos.");
+		}
 	}
 	
 	public void opcoesMenuInicial(int opcao) {

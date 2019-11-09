@@ -31,8 +31,8 @@ public class Interface extends ComponenteComposto {
 		this.modificadorDeAcesso = modificadorDeAcesso;
 	}
 
-	public Interface(){
-		super();
+	public Interface(String nome){
+		super(nome);
 		desenha();
 	}
 

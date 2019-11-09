@@ -13,8 +13,8 @@ public class Parametro extends Componente{
 		this.tipo = tipo;
 	}
 
-    public Parametro(String tipo){
-        super();
+    public Parametro(String tipo, String nome){
+        super(nome);
         this.tipo = tipo;
     }
 
