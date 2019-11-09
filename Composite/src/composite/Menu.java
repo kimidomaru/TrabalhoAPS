@@ -49,14 +49,15 @@ public class Menu {
 		System.out.println("---Menu de Diagrama---\n"
 				+ "1 - Voltar\n"
 				+ "2 - Criar uma Classe\n"
-				+ "3 - Criar uma Interface");
+				+ "3 - Criar uma Interface\n"
+				+ "4 - Salvar");
 	}
 	
 	public void menuClasse() {
 		System.out.println("---Menu de Classe---\n"
 				+ "1 - Voltar\n"
 				+ "2 - Inserir Atributo\n"
-				+ "3 - Inserir Método\n"
+				+ "3 - Inserir Metodo\n"
 				+ "4 - Inserir Relacionamento");
 		System.out.print("Digite o numero da opcao desejada: ");
 	}
@@ -65,7 +66,7 @@ public class Menu {
 		System.out.println("---Menu de Interface---\n"
 				+ "1 - Voltar\n"
 				+ "2 - Inserir Atributo\n"
-				+ "3 - Inserir Método\n"
+				+ "3 - Inserir Mï¿½todo\n"
 				+ "4 - Inserir Relacionamento");
 		System.out.print("Digite o numero da opcao desejada: ");
 	}

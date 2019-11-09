@@ -1,5 +1,9 @@
 package composite;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
@@ -8,15 +12,15 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class Controller {
-	
-	  public static String elementoAberto = "inicial";
-	  public static Componente paiDoAtual;
-	  public static ComponenteComposto elementoCompostoAtual;
-	  public static Componente elementoAtual;	
 
-		public static void menu(){			//menu que ira se adaptar as possibilidades de criacao, exclusao, etc
+	public static String elementoAberto = "inicial";
+	public static Componente paiDoAtual;
+	public static ComponenteComposto elementoCompostoAtual;
+	public static Componente elementoAtual;	
+
+	public static void menu(){			//menu que ira se adaptar as possibilidades de criacao, exclusao, etc
 			
-	    int opcao = -1;
+		int opcao = -1;
 	    int qtdOpcoes;
 	    Menu menu = new Menu();
 	    
@@ -28,7 +32,7 @@ public class Controller {
 	      
 	      //Menu inicial
 	    	case "inicial":
-	        	qtdOpcoes = 3;
+	    		qtdOpcoes = 3;
 	        	
 	    		menu.mostrarMenu("inicial");
 	          
@@ -54,12 +58,12 @@ public class Controller {
 	        //Menu de Diagramas   
 	        case "diagrama":
 	        	
-		          qtdOpcoes = 3;
+		          qtdOpcoes = 4;
 		          
 		          menu.mostrarMenu("diagrama");
 		          
-		          for(int i = 3; i < (elementoCompostoAtual.getFilhos().size() + 3); i++){
-			          System.out.println((i+1) + " - Abrir a classe " + elementoCompostoAtual.getFilhos().get(i-3).getNome());
+		          for(int i = 4; i < (elementoCompostoAtual.getFilhos().size() + 4); i++){
+			          System.out.println((i+1) + " - Abrir a classe " + elementoCompostoAtual.getFilhos().get(i-4).getNome());
 			          int opcaoDaClasse = atrelaElementoAoNumero.size();
 			          atrelaElementoAoNumero.put(opcaoDaClasse, elementoCompostoAtual.getFilhos().get(opcaoDaClasse));
 		          }
@@ -88,6 +92,11 @@ public class Controller {
 		          else if(opcao == 3) {
 		        	  System.out.println("\nCriar interface");
 		        	  criarElemento("interface");
+		          }
+		          
+		          else if(opcao == 4) {
+		        	  System.out.println("Salvando diagrama...");
+		        	  salvarDiagrama();
 		          }
 		          else {
 		        	  paiDoAtual = elementoCompostoAtual;
@@ -126,7 +135,7 @@ public class Controller {
 	        	break;
 
 	      }
-		}
+	}
 
 		public static void criarElemento(String oquecriar){	
 			
@@ -202,8 +211,8 @@ public class Controller {
     			if(elementoAberto.equals("diagrama")) {
     				menu.mostrarMenu("diagrama");
 	            	
-	            	for(int i = 3; i < (elementoCompostoAtual.getFilhos().size() + 3); i++){
-	  		          System.out.println((i+1) + " - Abrir a classe " + elementoCompostoAtual.getFilhos().get(i-3).getNome());
+	            	for(int i = 4; i < (elementoCompostoAtual.getFilhos().size() + 4); i++){
+	  		          System.out.println((i+1) + " - Abrir a classe " + elementoCompostoAtual.getFilhos().get(i-4).getNome());
 	            	}
 	            	
 	            	System.out.println("0 - Sair");
@@ -215,4 +224,20 @@ public class Controller {
 		
 		return opcao;
 	}
+	
+	public static void salvarDiagrama() { 
+		try(FileWriter fw = new FileWriter("Composite/diagramasSalvos.txt", true);
+			    BufferedWriter bw = new BufferedWriter(fw);
+			    PrintWriter out = new PrintWriter(bw))
+			{
+			    out.println("teste");
+			    
+			} catch (IOException e) {
+			    System.out.println("Nao foi possivel salvar o diagrama. Tente novamente.\n");
+	        	elementoAberto = "inicial";
+	            menu();
+			    
+			}
+	}
+	
 }
