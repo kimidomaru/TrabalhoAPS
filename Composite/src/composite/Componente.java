@@ -7,7 +7,7 @@ public abstract class Componente {
 	private String nome;
 	
 	public Componente(){
-		System.out.println("Digite o nome");
+		System.out.print("Digite o nome: ");
 		Scanner entrada = new Scanner(System.in);
 		String nome2 = entrada.nextLine();
 		this.nome = nome2;

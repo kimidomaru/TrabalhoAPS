@@ -39,7 +39,7 @@ public class Interface extends ComponenteComposto {
 	@Override
 	public void desenha() {
 		super.desenha();
-		System.out.println("Interface "+ super.getNome() + " foi criada!");
+		System.out.println("\nInterface "+ super.getNome() + " foi criada!\n");
 	}
 	
 	@Override
@@ -47,7 +47,7 @@ public class Interface extends ComponenteComposto {
 		if(e instanceof Atributo || e instanceof Metodo)
 			super.addFilho(e);
 		else
-			throw new IllegalArgumentException("Filho de tipo invalido");
+			throw new IllegalArgumentException("\nFilho de tipo invalido\n");
 	}
 
 }

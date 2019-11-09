@@ -20,7 +20,7 @@ public class Parametro extends Componente{
 
 	@Override
 	public void desenha() {
-		System.out.println("Desenhou parâmetro");
+		System.out.println("Desenhou parametro");
 	}
 	
 	

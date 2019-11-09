@@ -50,12 +50,12 @@ public class Main {
         	}while(opcao < 0 || opcao > 2);
 
         	if(opcao==1){
-        		System.out.println("Criar diagrama");
+        		System.out.println("\nCriar diagrama");
         		criarElemento("diagrama");
         	} 
         	
         	else if(opcao==2){
-        		System.out.println("Abrir diagrama");
+        		System.out.println("\nAbrir diagrama");
         		abreDiagrama();
         	} 
           
@@ -73,16 +73,14 @@ public class Main {
         	  //System.out.println("Qtd filhos: "+ elementoCompostoAtual.getFilhos().size());
 	          menu.mostrarMenu("diagrama");
 	          for(int i = 3; i < (elementoCompostoAtual.getFilhos().size() + 3); i++){
-	        	  
 		          System.out.println((i+1) + " - Abrir a classe " + elementoCompostoAtual.getFilhos().get(i-3).getNome());
-		          
 		          int opcaoDaClasse = atrelaElementoAoNumero.size();
-		          
 		          atrelaElementoAoNumero.put(opcaoDaClasse, elementoCompostoAtual.getFilhos().get(opcaoDaClasse));
 		          
 	          }
 	   
 	          System.out.println("0 - Sair");
+	          System.out.print("Digite o numero da opcao desejada: ");
 	          
 	          do{
 	        	  
@@ -104,9 +102,8 @@ public class Main {
 	            	for(int i=0; i<elementoCompostoAtual.getFilhos().size(); i++){
 	            		System.out.println((4+i) + " - Abrir a classe " + elementoCompostoAtual.getFilhos().get(i).getNome());
 	            	}
-	            	
 	            	System.out.println("0 - Sair");
-	
+	  	          	System.out.print("Digite o numero da opcao desejada: ");
 	            }
 	          
 	          }while(opcao < 0 || opcao > 3);
@@ -116,14 +113,17 @@ public class Main {
 	          }
 	          
 	          else if(opcao == 1) {
+	        	  System.out.print("\n");
 	        	  elementoAberto = "inicial";
 	              menu();
 	          }
 	          
 	          else if(opcao == 2) {
+	        	  System.out.println("\nCriar classe");
 	        	  criarElemento("classe");
 	          }
 	          else if(opcao == 3) {
+	        	  System.out.println("\nCriar interface");
 	        	  criarElemento("interface");
 	          }
 	          else {
@@ -158,7 +158,7 @@ public class Main {
         	}while(opcao < 1 || opcao > 4);
 
         	if(opcao==1){
-        		System.out.println("Voltar");
+        		System.out.print("\n");
         		elementoAberto = "diagrama";
         		menu();
         	} 
@@ -169,12 +169,12 @@ public class Main {
         	menu.mostrarMenu("interface");
         	break;
 
-        case "atributo":
-        	System.out.println("Selecione a opção que desejar");
+        case "atributo": 
+        	System.out.print("Digite o numero da opcao desejada: ");
         	break;
 
         case "metodo":
-        	System.out.println("Selecione a opção que desejar");
+        	System.out.print("Digite o numero da opcao desejada: ");
         	break;
 
       }

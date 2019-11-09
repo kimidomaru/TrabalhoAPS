@@ -37,7 +37,7 @@ public class Metodo extends ComponenteComposto{
 		if(e instanceof Atributo || e instanceof Metodo)
 			super.addFilho(e);
 		else
-			throw new IllegalArgumentException("Filho de tipo inválido!");
+			throw new IllegalArgumentException("Filho de tipo invalido!");
 	}	
 	
 

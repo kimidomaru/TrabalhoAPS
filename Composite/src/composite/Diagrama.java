@@ -12,7 +12,7 @@ public class Diagrama extends ComponenteComposto{
 	public void desenha() {
 		super.desenha();
 		//desenha o diagrama
-		System.out.println("Diagrama "+ super.getNome() + " foi criado!");
+		System.out.println("\nDiagrama "+ super.getNome() + " foi criado!\n");
 	}
 
 	@Override
@@ -20,7 +20,7 @@ public class Diagrama extends ComponenteComposto{
 		if(e instanceof Atributo || e instanceof Metodo || e instanceof Classe)
 			super.addFilho(e);
 		else
-			throw new IllegalArgumentException("Filho de tipo invalido!");
+			throw new IllegalArgumentException("\nFilho de tipo invalido!\n");
 	}
 
 	//metodo para salvar o diagrama

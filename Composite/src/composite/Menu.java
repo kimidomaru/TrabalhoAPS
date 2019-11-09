@@ -38,33 +38,36 @@ public class Menu {
 	}
 	
 	public void menuInicial() {
-		System.out.println("Digite o numero da opcao desejada:");
-		System.out.println("1 - Criar um diagrama");
-		System.out.println("2 - Abrir um diagrama");
-		System.out.println("0 - Sair");
+		System.out.println("---Menu Inicial---\n"
+				+ "1 - Criar um diagrama\n"
+				+ "2 - Abrir um diagrama\n"
+				+ "0 - Sair");
+		System.out.print("Digite o numero da opcao desejada: ");
 	}
 	
 	public void menuDiagrama() {
-		System.out.println("Selecione a opção que desejar\n"+
-				"1 - Voltar\n"+
-				"2 - Criar uma Classe\n"+
-				"3 - Criar uma Interface");
+		System.out.println("---Menu de Diagrama---\n"
+				+ "1 - Voltar\n"
+				+ "2 - Criar uma Classe\n"
+				+ "3 - Criar uma Interface");
 	}
 	
 	public void menuClasse() {
-		System.out.println("Selecione a opção que desejar\n"+
-				"1 - Voltar\n"+
-				"2 - Inserir Atributo\n"+
-				"3 - Inserir Método\n"+
-				"4 - Inserir Relacionamento\n");
+		System.out.println("---Menu de Classe---\n"
+				+ "1 - Voltar\n"
+				+ "2 - Inserir Atributo\n"
+				+ "3 - Inserir Método\n"
+				+ "4 - Inserir Relacionamento");
+		System.out.print("Digite o numero da opcao desejada: ");
 	}
 	
 	public void menuInterface() {
-		System.out.println("Selecione a opção que desejar\n"+
-				"1 - Voltar\n"+
-				"2 - Inserir Atributo\n"+
-				"3 - Inserir Método\n"+
-				"4 - Inserir Relacionamento\n");
+		System.out.println("---Menu de Interface---\n"
+				+ "1 - Voltar\n"
+				+ "2 - Inserir Atributo\n"
+				+ "3 - Inserir Método\n"
+				+ "4 - Inserir Relacionamento");
+		System.out.print("Digite o numero da opcao desejada: ");
 	}
 	
 	public void menuAtributo(){

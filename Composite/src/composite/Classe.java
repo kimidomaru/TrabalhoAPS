@@ -40,7 +40,7 @@ public class Classe extends ComponenteComposto{
 	public void desenha() {
 		super.desenha();
 		//codigo para desenhar a propria classe (borda, delimitadores, etc
-		System.out.println("Classe "+ super.getNome() + " foi criada!");
+		System.out.println("\nClasse "+ super.getNome() + " foi criada!\n");
 	}
 	
 	@Override
@@ -48,7 +48,7 @@ public class Classe extends ComponenteComposto{
 		if(e instanceof Atributo || e instanceof Metodo)
 			super.addFilho(e);
 		else
-			throw new IllegalArgumentException("Filho de tipo invalido!");
+			throw new IllegalArgumentException("\nFilho de tipo invalido!\n");
 	}
 
 }
