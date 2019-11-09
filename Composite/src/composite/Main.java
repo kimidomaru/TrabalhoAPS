@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-//teste no git 
 
 public class Main {
 
@@ -171,11 +170,11 @@ public class Main {
         	break;
 
         case "atributo":
-        	System.out.println("Selecione a opção que desejar");
+        	System.out.println("Selecione a opÃ§Ã£o que desejar");
         	break;
 
         case "metodo":
-        	System.out.println("Selecione a opção que desejar");
+        	System.out.println("Selecione a opÃ§Ã£o que desejar");
         	break;
 
       }
