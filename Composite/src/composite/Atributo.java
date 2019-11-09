@@ -3,7 +3,7 @@ package composite;
 public class Atributo extends Componente {
 
 	private String tipo;
-	private String modificadoresDeAcesso = "default";
+	private String modificadoresDeAcesso = "Default";
 
 	//Get&Set
 	public String getTipo() {
@@ -29,7 +29,19 @@ public class Atributo extends Componente {
 
 	@Override
 	public void desenha() {
-		System.out.println("Desenhou atributo");
+		
+		if(this.modificadoresDeAcesso == "Default")
+			System.out.println("Atributo Criado: ~ " + super.getNome() + " " + this.tipo);
+		
+		if(this.modificadoresDeAcesso == "Private")
+			System.out.println("Atributo Criado: - " + super.getNome() + " " + this.tipo);
+		
+		if(this.modificadoresDeAcesso == "Public")
+			System.out.println("Atributo Criado: + " + super.getNome() + " " + this.tipo);
+		
+		if(this.modificadoresDeAcesso == "Protected")
+			System.out.println("Atributo Criado: # " + super.getNome() + " " + this.tipo);
+
 	}
 
 }
