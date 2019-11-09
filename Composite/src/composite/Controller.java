@@ -38,20 +38,8 @@ public class Controller {
 	          
 	    		opcao = c.verificarEntrada(elementoAberto, qtdOpcoes);
 
-	        	if(opcao==1){
-	        		System.out.println("\nCriar diagrama");
-	        		criarElemento("diagrama");
-	        	} 
-	        	
-	        	else if(opcao==2){
-	        		System.out.println("\nAbrir diagrama");
-	        		abreDiagrama();
-	        	} 
-	          
-	        	else if(opcao==0){
-	        		System.exit(0);
-	        	}
-	        	
+	        	c.opcoesMenuInicial(opcao);
+	    		
 	          break;
 
 	          
@@ -75,35 +63,7 @@ public class Controller {
 		          
 		          opcao = c.verificarEntrada(elementoAberto, qtdOpcoes);
 		
-		          if(opcao == 0) {
-		        	  System.exit(0);
-		          }
-		          
-		          else if(opcao == 1) {
-		        	  System.out.print("\n");
-		        	  elementoAberto = "inicial";
-		              menu();
-		          }
-		          
-		          else if(opcao == 2) {
-		        	  System.out.println("\nCriar classe");
-		        	  criarElemento("classe");
-		          }
-		          else if(opcao == 3) {
-		        	  System.out.println("\nCriar interface");
-		        	  criarElemento("interface");
-		          }
-		          
-		          else if(opcao == 4) {
-		        	  System.out.println("Salvando diagrama...");
-		        	  salvarDiagrama();
-		          }
-		          else {
-		        	  paiDoAtual = elementoCompostoAtual;
-		        	  elementoAtual = atrelaElementoAoNumero.get(opcao);
-		        	  elementoAberto = "classe";
-		        	  menu();
-		          }
+		          c.opcoesMenuDiagrama(opcao, atrelaElementoAoNumero);
 		          
 		        break;
 
@@ -114,23 +74,22 @@ public class Controller {
 	        	
 	        	opcao = c.verificarEntrada(elementoAberto, qtdOpcoes);
 	        	
-	        	if(opcao==1){
-	        		System.out.print("\n");
-	        		elementoAberto = "diagrama";
-	        		menu();
-	        	} 
+	        	c.opcoesMenuClasse(opcao);
 	        	
 	        	break;
 	        	
 	        case "interface":
+	        	//------------FALTA FAZER--------------
 	        	menu.mostrarMenu("interface");
 	        	break;
 
 	        case "atributo": 
+	        	//------------FALTA FAZER--------------
 	        	System.out.print("Digite o numero da opcao desejada: ");
 	        	break;
 
 	        case "metodo":
+	        	//------------FALTA FAZER--------------
 	        	System.out.print("Digite o numero da opcao desejada: ");
 	        	break;
 
@@ -240,4 +199,61 @@ public class Controller {
 			}
 	}
 	
+	public void opcoesMenuInicial(int opcao) {
+		if(opcao==1){
+    		System.out.println("\nCriar diagrama");
+    		criarElemento("diagrama");
+    	} 
+    	
+    	else if(opcao==2){
+    		System.out.println("\nAbrir diagrama");
+    		abreDiagrama();
+    	} 
+      
+    	else if(opcao==0){
+    		System.exit(0);
+    	}
+    	
+	}
+	
+	public void opcoesMenuDiagrama(int opcao, Map<Integer, Componente> atrelaElementoAoNumero) {
+		if(opcao == 0) {
+      	  System.exit(0);
+        }
+        
+        else if(opcao == 1) {
+      	  System.out.print("\n");
+      	  elementoAberto = "inicial";
+            menu();
+        }
+        
+        else if(opcao == 2) {
+      	  System.out.println("\nCriar classe");
+      	  criarElemento("classe");
+        }
+        else if(opcao == 3) {
+      	  System.out.println("\nCriar interface");
+      	  criarElemento("interface");
+        }
+        
+        else if(opcao == 4) {
+      	  System.out.println("Salvando diagrama...");
+      	  salvarDiagrama();
+        }
+        else {
+      	  paiDoAtual = elementoCompostoAtual;
+      	  elementoAtual = atrelaElementoAoNumero.get(opcao);
+      	  elementoAberto = "classe";
+      	  menu();
+        }
+	}
+	
+	public void opcoesMenuClasse(int opcao) {
+		if(opcao==1){
+    		System.out.print("\n");
+    		elementoAberto = "diagrama";
+    		menu();
+    	} 
+    	
+	}
 }
