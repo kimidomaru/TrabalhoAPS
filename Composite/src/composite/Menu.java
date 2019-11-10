@@ -73,10 +73,12 @@ public class Menu {
 	
 	public void menuAtributo(){
 		//opcoes Aqui
+		System.out.println("MENU DE ATRIBUTO");
 	}
 	
 	public void menuMetodo(){
 		//opcoes Aqui
+		System.out.println("MENU DE METODO");
 	}
 	
 	public void menuParametro(){

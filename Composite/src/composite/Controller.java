@@ -18,7 +18,8 @@ import java.util.regex.Pattern;
 public class Controller {
 
 	public static String elementoAberto = "inicial";
-	public static Componente paiDoAtual;
+	//public static Componente paiDoAtual;
+	public static ComponenteComposto paiDoAtual;
 	public static ComponenteComposto elementoCompostoAtual;
 	public static Componente elementoAtual;	
 
@@ -116,7 +117,8 @@ public class Controller {
 					Classe c = new Classe(null);
 					elementoCompostoAtual.addFilho(c);
 					elementoAberto = "classe";
-					//elementoCompostoAtual = c;
+					paiDoAtual = elementoCompostoAtual;
+					elementoCompostoAtual = c;
 					menu();
 					break;
 					
@@ -128,9 +130,17 @@ public class Controller {
 					break;
 					
 				case "atributo":
+					//FALTA TERMINAR
+					Atributo a = new Atributo(null, null);
+					elementoAberto = "atributo";
+					menu();
 					break;
 					
 				case "metodo":
+					//FALTA TERMINAR
+					Metodo m = new Metodo(null);
+					elementoAberto = "metodo";
+					menu();
 					break;
 					
 				case "parametro":
@@ -287,11 +297,18 @@ public class Controller {
 	}
 	
 	public void opcoesMenuClasse(int opcao) {
-		if(opcao==1){
+		if(opcao == 1){
     		System.out.print("\n");
+    		elementoCompostoAtual = paiDoAtual;
     		elementoAberto = "diagrama";
     		menu();
     	} 
+		
+		else if(opcao == 2) {
+			System.out.println();
+			elementoAberto = "atributo";
+			menu();
+		}
     	
 	}
 }
