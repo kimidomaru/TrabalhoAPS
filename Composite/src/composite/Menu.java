@@ -201,5 +201,5 @@ public class Menu {
  		}
  		System.out.println("+"+ dashes +"+");
 	}
-<<<<<<< HEAD
+
 }
