@@ -1,5 +1,6 @@
 package composite;
 
+import java.util.ArrayList;
 
 public class Menu {
 	public void mostrarMenu(String elemento) {
@@ -20,8 +21,12 @@ public class Menu {
 			menuInterface();
 		}
 		
-		else if(elemento.equals("atributo")){
-			menuAtributo();
+		else if(elemento.equals("atributoTipo")){
+			menuTipoAtributo();
+		}
+		
+		else if(elemento.equals("atributoModificador")){
+			menuModificadorAtributo();
 		}
 		
 		else if(elemento.equals("metodo")){
@@ -71,9 +76,26 @@ public class Menu {
 		System.out.print("Digite o numero da opcao desejada: ");
 	}
 	
-	public void menuAtributo(){
-		//opcoes Aqui
-		System.out.println("MENU DE ATRIBUTO");
+	public void menuTipoAtributo(){
+		System.out.println("---Menu do Tipo do Atributo---\n"
+				+ "1 - byte\n"
+				+ "2 - short\n"
+				+ "3 - int\n"
+				+ "4 - long\n"
+				+ "5 - float\n"
+				+ "6 - double\n"
+				+ "7 - boolean\n"
+				+ "8 - char");
+		System.out.print("Digite o numero da opcao desejada: ");
+	}
+	
+	public void menuModificadorAtributo(){
+		System.out.println("---Menu de Modificador de Acesso do Atributo---\n"
+				+ "1 - Default\n"
+				+ "2 - Private\n"
+				+ "3 - Public\n"
+				+ "4 - Protected");
+		System.out.print("Digite o numero da opcao desejada: ");
 	}
 	
 	public void menuMetodo(){
@@ -87,5 +109,96 @@ public class Menu {
 	
 	public void menuRelacionamento(){
 		//opcoes Aqui
+	}
+	public void ShowComponente(ComponenteComposto obj) {
+		String nome = obj.getNome();
+		String type= "";
+		
+		ArrayList filhos = (ArrayList) obj.getFilhos();
+		ArrayList<String> atributos = new ArrayList();
+		ArrayList<String> metodos = new ArrayList();
+		
+		if(obj instanceof Classe) {
+			
+			type = "Classe";
+		}
+		if(obj instanceof Interface) {
+		
+			type = "Interface";
+		}
+		String Header="|          "+ type+ " " +obj.getNome()+ "          |";
+		
+		int TamHeader = Header.length(); 
+		String dashes = new String(new char[TamHeader-2]).replace("\0", "-");
+		
+		for(int i=0;i < filhos.size();i++) {
+			
+			String typeFilho = "";
+			String Conteudo = "";
+			
+			if (filhos.get(i) instanceof Atributo) {
+				
+				Atributo davez =(Atributo) filhos.get(i); 
+				//System.out.println("Atributo!");
+				String ModificadorAcesso = "";	
+				
+				switch(davez.getModificadoresDeAcesso().toLowerCase()) {
+					case "public":
+						ModificadorAcesso="+";
+					case "private":
+						ModificadorAcesso="-";
+					case "protected":
+						ModificadorAcesso="#";
+					case "default":
+						ModificadorAcesso="~";
+					default:
+						ModificadorAcesso="~";
+				}
+				
+				String preConteudo="| "+ ModificadorAcesso + davez.getNome()+ " : "+ davez.getTipo();
+				int tamPreConteudo = preConteudo.length();
+				String spaces = new String(new char[TamHeader-tamPreConteudo-1]).replace("\0", " ");
+				Conteudo = preConteudo + spaces+"|";
+						
+				atributos.add(Conteudo);
+			}
+			if (filhos.get(i) instanceof Metodo) {
+				Metodo davez =(Metodo) filhos.get(i);
+				//System.out.println("Metodo!");
+				String ModificadorAcesso = "";		
+				
+				switch(davez.getModificadoresDeAcesso().toLowerCase()) {
+					case "public":
+						ModificadorAcesso="+";
+					case "private":
+						ModificadorAcesso="-";
+					case "protected":
+						ModificadorAcesso="#";
+					case "default":
+						ModificadorAcesso="~";
+					default:
+						ModificadorAcesso="+";
+				}
+				
+				String preConteudo="| "+ ModificadorAcesso + davez.getNome()+ "():"+ davez.getTipoRetorno();
+				int tamPreConteudo = preConteudo.length();
+				String spaces = new String(new char[TamHeader-tamPreConteudo-1]).replace("\0", " ");
+				Conteudo = preConteudo + spaces+"|";
+				
+				metodos.add(Conteudo);
+			}
+		}
+		
+		System.out.println("\n+"+ dashes +"+"); // 25 -  // 2 +
+ 		System.out.println(Header);
+ 		System.out.println("+"+ dashes +"+");
+ 		for(int i=0;i<atributos.size();i++) {
+ 			System.out.println(atributos.get(i));
+ 		}
+ 		System.out.println("+"+ dashes +"+");
+ 		for(int i=0;i<metodos.size();i++) {
+ 			System.out.println(metodos.get(i));
+ 		}
+ 		System.out.println("+"+ dashes +"+");
 	}
 }

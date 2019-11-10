@@ -3,6 +3,8 @@ package composite;
 
 public class Diagrama extends ComponenteComposto{
 
+	boolean mensagemCriado = false;
+	
 	public Diagrama(String nome){
 		super(nome);
 		desenha();
@@ -12,11 +14,11 @@ public class Diagrama extends ComponenteComposto{
 	public void desenha() {
 		super.desenha();
 		//desenha o diagrama
-		if(super.getNome() == null) {
+		if(super.getMensagemCriado()) {
 			System.out.println("\nDiagrama "+ super.getNome() + " foi criado!\n");
-		} else { //no futuro nao vai ter esse else
+		} /*else { //no futuro nao vai ter esse else
 			System.out.println("teste diagrama");
-		}
+		}*/
 	}
 
 	@Override

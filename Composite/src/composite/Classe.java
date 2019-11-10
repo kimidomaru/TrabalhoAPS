@@ -40,11 +40,11 @@ public class Classe extends ComponenteComposto{
 	public void desenha() {
 		super.desenha();
 		//codigo para desenhar a propria classe (borda, delimitadores, etc
-				if(super.getNome() == null) {
+				if(super.getMensagemCriado()) {
 					System.out.println("\nClasse "+ super.getNome() + " foi criada!\n");
-				} else { // no futuro nao vai ter esse else
+				} /*else { // no futuro nao vai ter esse else
 					System.out.println("teste classe");
-				}
+				}*/
 	}
 	
 	@Override

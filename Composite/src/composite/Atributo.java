@@ -22,33 +22,33 @@ public class Atributo extends Componente {
 		this.modificadoresDeAcesso = modificadores;
 	}
 
-	public Atributo(String tipo, String nome){
+	public Atributo(String nome, String tipo, String modificadoresDeAcesso){
 		super(nome);
 		this.tipo = tipo;
+		this.modificadoresDeAcesso = modificadoresDeAcesso;
 	}
 
 	@Override
 	public void desenha() {
-		
 		if(this.modificadoresDeAcesso == "Default")
-			if (super.getNome() == null) {
+			if(super.getMensagemCriado()) {
 				System.out.println("Atributo Criado: ~ " + super.getNome() + " " + this.tipo);
 			}			
 		
 		if(this.modificadoresDeAcesso == "Private")
-			if (super.getNome() == null) {
+			if(super.getMensagemCriado()) {
 				System.out.println("Atributo Criado: - " + super.getNome() + " " + this.tipo);
 			}
 			
 		
 		if(this.modificadoresDeAcesso == "Public")
-			if (super.getNome() == null) {
+			if(super.getMensagemCriado()) {
 				System.out.println("Atributo Criado: + " + super.getNome() + " " + this.tipo);
 			}
 			
 		
 		if(this.modificadoresDeAcesso == "Protected")
-			if (super.getNome() == null) {
+			if(super.getMensagemCriado()) {
 				System.out.println("Atributo Criado: # " + super.getNome() + " " + this.tipo);
 			}
 			

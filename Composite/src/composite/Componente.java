@@ -5,9 +5,11 @@ import java.util.Scanner;
 public abstract class Componente {
 
 	private String nome;
+	private boolean mensagemCriado;
 	
 	public Componente(String nome){
 		if(nome == null) {
+			this.mensagemCriado = true;
 			System.out.print("Digite o nome: ");
 			Scanner entrada = new Scanner(System.in);
 			String nome2 = entrada.nextLine();
@@ -26,6 +28,14 @@ public abstract class Componente {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+	
+	public boolean getMensagemCriado() {
+		return this.mensagemCriado;
+	}
+
+	public void setMensagemCriado(boolean mensagemCriado) {
+		this.mensagemCriado = mensagemCriado;
 	}
 	
 	
