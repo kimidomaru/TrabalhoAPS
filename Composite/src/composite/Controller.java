@@ -37,7 +37,7 @@ public class Controller {
 	      
 	      //Menu inicial
 	    	case "inicial":
-	    		abrirDiagrama();
+	    		//abrirDiagrama();
 	    		qtdOpcoes = 3;
 	        	
 	    		menu.mostrarMenu("inicial");
@@ -102,53 +102,69 @@ public class Controller {
 	      }
 	}
 
-		public static void criarElemento(String oquecriar){	
+		public static void criarElemento(String oQueCriar, String nomeOQueCriar, boolean abrindoDiagrama){
 			
-			switch(oquecriar){
+			switch(oQueCriar){
 			
-				case "diagrama":
-					Diagrama d = new Diagrama(null);
+			case "diagrama":
+				if (abrindoDiagrama == false) {
+					Diagrama d = new Diagrama(nomeOQueCriar);
 					elementoAberto = "diagrama";
 					elementoCompostoAtual = d;
 					menu();
 					break;
-					
-				case "classe":
-					Classe c = new Classe(null);
+				} else {
+					Diagrama d = new Diagrama(nomeOQueCriar);
+					elementoAberto = "diagrama";
+					elementoCompostoAtual = d;
+					break;
+				}
+				
+				
+			case "classe":
+				if (abrindoDiagrama == false) {
+					Classe c = new Classe(nomeOQueCriar);
 					elementoCompostoAtual.addFilho(c);
 					elementoAberto = "classe";
-					paiDoAtual = elementoCompostoAtual;
 					elementoCompostoAtual = c;
 					menu();
 					break;
-					
-				case "interface":
-					Interface i = new Interface(null);
+				} else {
+					Classe c = new Classe(nomeOQueCriar);
+					elementoCompostoAtual.addFilho(c);
+					elementoAberto = "classe";
+					elementoCompostoAtual = c;
+					break;
+				}
+				
+				
+			case "interface":
+				if (abrindoDiagrama == false) {
+					Interface i = new Interface(nomeOQueCriar);
 					elementoAberto = "interface";
 					elementoCompostoAtual = i;
 					menu();
 					break;
-					
-				case "atributo":
-					//FALTA TERMINAR
-					Atributo a = new Atributo(null, null);
-					elementoAberto = "atributo";
-					menu();
+				} else {
+					Interface i = new Interface(nomeOQueCriar);
+					elementoAberto = "interface";
+					elementoCompostoAtual = i;
 					break;
-					
-				case "metodo":
-					//FALTA TERMINAR
-					Metodo m = new Metodo(null);
-					elementoAberto = "metodo";
-					menu();
-					break;
-					
-				case "parametro":
-					break;
-					
-				case "relacionamento":
-					break;
-			}
+				}
+				
+				
+			case "atributo":
+				break;
+				
+			case "metodo":
+				break;
+				
+			case "parametro":
+				break;
+				
+			case "relacionamento":
+				break;
+		}
 		}
 
 		//abre um arquivo contendo um diagrama e passa os elementos para uma lista de elementos
@@ -226,20 +242,41 @@ public class Controller {
 				Matcher matcher = inicioRegex.matcher(linha);
 		        boolean matches = matcher.matches();
 		        if(matches) {
+		        	// Criando diagrama
+	        		linha = input.nextLine();
+	        		criarElemento("diagrama", linha, true);
+	        		
 		        	while(input.hasNextLine()) {
+		        		// Criando classes
 		        		linha = input.nextLine();
 		        		int posicaoNomeClasse = linha.indexOf("{");
 		        		String nomeClasse;
 		        		if(posicaoNomeClasse != -1) {
 		        			nomeClasse = linha.substring(0 , posicaoNomeClasse);
+		        			criarElemento("classe", nomeClasse, true);
 		        		}
-		        		//-----fazendo ainda
+		        		
+		        		String componentesClasse[] = linha.split(";");
+		        		for(int i=0; i<componentesClasse.length; i++) {
+		        			String subComponente[] = componentesClasse[i].split(":");
+		        			String multipClasse;
+		        			if (subComponente.length == 2) {
+		        				if(subComponente[0] == "multipClasse") { 
+		        					System.out.println("alou");
+		        					//elementoCompostoAtual.setMultiplicidade(subComponente[1]);
+		        				}
+		        			}
+		        			
+		        			/*if(subComponente[0] == "naveg") {
+		        				System.out.println("e um multiplicador");
+		        			}*/
+		        		}
+		        		
 		        		
 		        	}
 		        	
 		        	
 		        }
-		        //System.out.println("matches: "+matches);
 			}
 			input.close();
 		} catch (FileNotFoundException e){
@@ -250,7 +287,7 @@ public class Controller {
 	public void opcoesMenuInicial(int opcao) {
 		if(opcao==1){
     		System.out.println("\nCriar diagrama");
-    		criarElemento("diagrama");
+    		criarElemento("diagrama", null, false);
     	} 
     	
     	else if(opcao==2){
@@ -277,11 +314,11 @@ public class Controller {
         
         else if(opcao == 2) {
       	  System.out.println("\nCriar classe");
-      	  criarElemento("classe");
+      	  criarElemento("classe", null, false);
         }
         else if(opcao == 3) {
       	  System.out.println("\nCriar interface");
-      	  criarElemento("interface");
+      	  criarElemento("interface", null, false);
         }
         
         else if(opcao == 4) {

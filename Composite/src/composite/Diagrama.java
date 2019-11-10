@@ -12,7 +12,11 @@ public class Diagrama extends ComponenteComposto{
 	public void desenha() {
 		super.desenha();
 		//desenha o diagrama
-		System.out.println("\nDiagrama "+ super.getNome() + " foi criado!\n");
+		if(super.getNome() == null) {
+			System.out.println("\nDiagrama "+ super.getNome() + " foi criado!\n");
+		} else { //no futuro nao vai ter esse else
+			System.out.println("teste diagrama");
+		}
 	}
 
 	@Override

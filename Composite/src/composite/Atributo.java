@@ -31,16 +31,27 @@ public class Atributo extends Componente {
 	public void desenha() {
 		
 		if(this.modificadoresDeAcesso == "Default")
-			System.out.println("Atributo Criado: ~ " + super.getNome() + " " + this.tipo);
+			if (super.getNome() == null) {
+				System.out.println("Atributo Criado: ~ " + super.getNome() + " " + this.tipo);
+			}			
 		
 		if(this.modificadoresDeAcesso == "Private")
-			System.out.println("Atributo Criado: - " + super.getNome() + " " + this.tipo);
+			if (super.getNome() == null) {
+				System.out.println("Atributo Criado: - " + super.getNome() + " " + this.tipo);
+			}
+			
 		
 		if(this.modificadoresDeAcesso == "Public")
-			System.out.println("Atributo Criado: + " + super.getNome() + " " + this.tipo);
+			if (super.getNome() == null) {
+				System.out.println("Atributo Criado: + " + super.getNome() + " " + this.tipo);
+			}
+			
 		
 		if(this.modificadoresDeAcesso == "Protected")
-			System.out.println("Atributo Criado: # " + super.getNome() + " " + this.tipo);
+			if (super.getNome() == null) {
+				System.out.println("Atributo Criado: # " + super.getNome() + " " + this.tipo);
+			}
+			
 
 	}
 
