@@ -39,7 +39,9 @@ public class Controller {
 	      
 	      //Menu inicial
 	    	case "inicial":
-	    		abrirDiagrama();
+	    		
+	    		//// DESCOMENTE PARA TESTAR METODO abrirDiagrama() ////
+	    		//abrirDiagrama();
 	    		qtdOpcoes = 3;
 	        	
 	    		menu.mostrarMenu("inicial");
