@@ -21,8 +21,12 @@ public class Menu {
 			menuInterface();
 		}
 		
-		else if(elemento.equals("atributo")){
-			menuAtributo();
+		else if(elemento.equals("atributoTipo")){
+			menuTipoAtributo();
+		}
+		
+		else if(elemento.equals("atributoModificador")){
+			menuModificadorAtributo();
 		}
 		
 		else if(elemento.equals("metodo")){
@@ -72,9 +76,26 @@ public class Menu {
 		System.out.print("Digite o numero da opcao desejada: ");
 	}
 	
-	public void menuAtributo(){
-		//opcoes Aqui
-		System.out.println("MENU DE ATRIBUTO");
+	public void menuTipoAtributo(){
+		System.out.println("---Menu do Tipo do Atributo---\n"
+				+ "1 - byte\n"
+				+ "2 - short\n"
+				+ "3 - int\n"
+				+ "4 - long\n"
+				+ "5 - float\n"
+				+ "6 - double\n"
+				+ "7 - boolean\n"
+				+ "8 - char");
+		System.out.print("Digite o numero da opcao desejada: ");
+	}
+	
+	public void menuModificadorAtributo(){
+		System.out.println("---Menu de Modificador de Acesso do Atributo---\n"
+				+ "1 - Default\n"
+				+ "2 - Private\n"
+				+ "3 - Public\n"
+				+ "4 - Protected");
+		System.out.print("Digite o numero da opcao desejada: ");
 	}
 	
 	public void menuMetodo(){
@@ -180,4 +201,5 @@ public class Menu {
  		}
  		System.out.println("+"+ dashes +"+");
 	}
+<<<<<<< HEAD
 }

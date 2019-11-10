@@ -26,6 +26,8 @@ public class Controller {
 	public static void menu(){			//menu que ira se adaptar as possibilidades de criacao, exclusao, etc
 			
 		int opcao = -1;
+		int opcaoTipo = -1;
+    	int opcaoModificador = -1;
 	    int qtdOpcoes;
 	    Menu menu = new Menu();
 	    
@@ -37,6 +39,8 @@ public class Controller {
 	      
 	      //Menu inicial
 	    	case "inicial":
+	    		
+	    		//// DESCOMENTE PARA TESTAR METODO abrirDiagrama() ////
 	    		//abrirDiagrama();
 	    		qtdOpcoes = 3;
 	        	
@@ -56,8 +60,8 @@ public class Controller {
 		          
 		          menu.mostrarMenu("diagrama");
 		          
-		          for(int i = 4; i < (elementoCompostoAtual.getFilhos().size() + 4); i++){
-			          System.out.println((i+1) + " - Abrir a classe " + elementoCompostoAtual.getFilhos().get(i-4).getNome());
+		          for(int i = qtdOpcoes; i < (elementoCompostoAtual.getFilhos().size() + qtdOpcoes); i++){
+			          System.out.println((i+1) + " - Abrir a classe " + elementoCompostoAtual.getFilhos().get(i-qtdOpcoes).getNome());
 			          int opcaoDaClasse = atrelaElementoAoNumero.size();
 			          atrelaElementoAoNumero.put(opcaoDaClasse, elementoCompostoAtual.getFilhos().get(opcaoDaClasse));
 		          }
@@ -78,6 +82,17 @@ public class Controller {
 	        	qtdOpcoes = 4;
 	        	menu.mostrarMenu("classe");
 	        	
+	        	for(int i = qtdOpcoes; i < (elementoCompostoAtual.getFilhos().size() + qtdOpcoes); i++){
+			          System.out.println((i+1) + " - Modificar atributo " + elementoCompostoAtual.getFilhos().get(i-qtdOpcoes).getNome());
+			          int opcaoDoAtributo = atrelaElementoAoNumero.size();
+			          atrelaElementoAoNumero.put(opcaoDoAtributo, elementoCompostoAtual.getFilhos().get(opcaoDoAtributo));
+		          }
+	        	
+	        	qtdOpcoes += elementoCompostoAtual.getFilhos().size();
+	        	
+	        	System.out.println("0 - Sair");
+		        System.out.print("Digite o numero da opcao desejada: ");
+	        	
 	        	opcao = c.verificarEntrada(elementoAberto, qtdOpcoes);
 	        	
 	        	c.opcoesMenuClasse(opcao);
@@ -90,8 +105,16 @@ public class Controller {
 	        	break;
 
 	        case "atributo": 
-	        	//------------FALTA FAZER--------------
-	        	System.out.print("Digite o numero da opcao desejada: ");
+	        	int qtdOpcoesTipo = 8;
+	        	int qtdOpcoesModificador = 4;
+	        	
+	        	menu.mostrarMenu("atributoTipo");
+	        	opcaoTipo = c.verificarEntrada(elementoAberto, qtdOpcoesTipo);
+	        	
+	        	menu.mostrarMenu("atributoModificador");
+	        	opcaoModificador = c.verificarEntrada(elementoAberto, qtdOpcoesModificador);
+	        	
+		        c.opcoesMenuTipoAtributo(opcaoTipo, opcaoModificador);
 	        	break;
 
 	        case "metodo":
@@ -102,7 +125,7 @@ public class Controller {
 	      }
 	}
 
-		public static void criarElemento(String oQueCriar, String nomeOQueCriar, boolean abrindoDiagrama){
+		public static void criarElemento(String oQueCriar, String nomeOQueCriar, boolean abrindoDiagrama, String tipoAtributo, String modificadorAtributo){
 			
 			switch(oQueCriar){
 			
@@ -154,7 +177,16 @@ public class Controller {
 				
 				
 			case "atributo":
-				break;
+				if (abrindoDiagrama == false) {
+					Atributo a = new Atributo(nomeOQueCriar, tipoAtributo, modificadorAtributo);
+					elementoAberto = "classe";
+					menu();
+					break;
+				} else {
+					Atributo a = new Atributo(nomeOQueCriar, tipoAtributo, modificadorAtributo);
+					elementoAberto = "classe";
+					break;
+				}
 				
 			case "metodo":
 				break;
@@ -208,6 +240,17 @@ public class Controller {
 	            	System.out.println("0 - Sair");
 	  	          	System.out.print("Digite o numero da opcao desejada: ");
     			}
+    			
+    			if(elementoAberto.equals("classe")) {
+    				menu.mostrarMenu("classe");
+    	        	
+    	        	for(int i = qtdOpcoes; i < (elementoCompostoAtual.getFilhos().size() + qtdOpcoes); i++){
+    			          System.out.println((i+1) + " - Modificar atributo " + elementoCompostoAtual.getFilhos().get(i-qtdOpcoes).getNome());
+    		          }
+    	        	
+    	        	System.out.println("0 - Sair");
+    		        System.out.print("Digite o numero da opcao desejada: ");
+    			}
     		}
         
     	}while(opcao < 0 || opcao > qtdOpcoes);
@@ -244,7 +287,7 @@ public class Controller {
 		        if(matches) {
 		        	// Criando diagrama
 	        		linha = input.nextLine();
-	        		criarElemento("diagrama", linha, true);
+	        		criarElemento("diagrama", linha, true, null, null);
 	        		
 		        	while(input.hasNextLine()) {
 		        		// Criando classes
@@ -253,32 +296,111 @@ public class Controller {
 		        		String nomeClasse;
 		        		if(posicaoNomeClasse != -1) {
 		        			nomeClasse = linha.substring(0 , posicaoNomeClasse);
-		        			criarElemento("classe", nomeClasse, true);
 		        		}
+		        		
+		        		//criarElemento("classe", nomeClasse, true);
 		        		
 		        		String componentesClasse[] = linha.split(";");
-		        		for(int i=0; i<componentesClasse.length; i++) {
+		        		for(int i=0; i<componentesClasse.length; i++) {        			
+		        			
 		        			String subComponente[] = componentesClasse[i].split(":");
 		        			String multipClasse;
-		        			if (subComponente.length == 2) {
-		        				if(subComponente[0] == "multipClasse") { 
-		        					System.out.println("alou");
-		        					//elementoCompostoAtual.setMultiplicidade(subComponente[1]);
-		        				}
-		        			}
+		        			String navegClasse;
+		        			String modifClasse;
+		        			List<Componente> atributosClasse;
+		        			List<Componente> metodosClasse;
 		        			
-		        			/*if(subComponente[0] == "naveg") {
-		        				System.out.println("e um multiplicador");
-		        			}*/
+		        			Pattern regexVerifInicio = Pattern.compile("\\w*\\{\\w*");
+		        			//Pattern regexVerifAtributo = Pattern.compile("\\w*\\[\\w*\\]");
+		        			//Pattern regexVerifMetodo = Pattern.compile("\\w*\\[\\w*\\(\\w*\\)\\]\\}");
+		        			
+		    				Matcher matcherPedacoInicio = regexVerifInicio.matcher(subComponente[0]);
+		    		        boolean matchesPedacoInicio = matcherPedacoInicio.matches();
+		    		        
+		    		        //Matcher matcherPedacoAtributo = regexVerifAtributo.matcher(subComponente[1]);
+		    		        //boolean matchesPedacoAtributo = matcherPedacoAtributo.matches();
+		    		        
+		    		        //Matcher matcherPedacoMetodo = regexVerifMetodo.matcher(subComponente[1]);
+		    		        //boolean matchesPedacoMetodo = matcherPedacoMetodo.matches();
+
+		    		        if (matchesPedacoInicio) {
+		    		        	String splitMultip[] = subComponente[0].split("\\{");
+				        		if(splitMultip[1].equals("multipClasse")) {
+				        			multipClasse = subComponente[1];
+				        			
+				        			////// TESTE //////
+				        			System.out.println("Multiplicidade da classe: " +multipClasse);
+				        		}
+				        	} else if (subComponente[0].equals("atrClasse")) {
+		    		        	String splitAtr[] = subComponente[1].split("\\[");
+		    		        	String AtrNome = splitAtr[0];
+		    		        	
+		    		        	String splitDentroAtributos[] = splitAtr[1].split(",");
+		    		        	String tipoAtr[] = splitDentroAtributos[0].split("-");
+		    		        	String tipoAtrNome = tipoAtr[1];
+		    		        	
+		    		        	String modificadorAtr[] = splitDentroAtributos[1].split("-");
+		    		        	String modificadorAtrNome = modificadorAtr[1];
+		    		        	
+		    		        	
+		    		        	//criarElemento("atributo", null, true, tipoAtrNome, modificadorAtrNome);
+		    		        	
+		    		        	////// TESTE //////
+		    		        	System.out.println("====ATRIBUTOS====");
+		    		        	System.out.println("Nome do Atributo: " +AtrNome);
+		    		        	System.out.println("Tipo do Atributo: " +tipoAtrNome);
+		    		        	System.out.println("Modificador do Atributo: " +modificadorAtrNome + "\n");
+		    		        	
+		    		        } else if (subComponente[0].equals("metodoClasse")) {
+		    		        	String splitMetodo[] = subComponente[1].split("\\[");
+		    		        	String MetodoNome = splitMetodo[0];
+		    		        	
+		    		        	String splitDentroMetodos[] = splitMetodo[1].split(",");
+		    		        	String retMetodo[] = splitDentroMetodos[0].split("-");
+		    		        	String retMetodoNome = retMetodo[1];
+		    		        	
+		    		        	String modifMetodo[] = splitDentroMetodos[1].split("-");
+		    		        	String modifMetodoNome = modifMetodo[1];
+		    		        	
+		    		        	String paramMetodo[] = splitDentroMetodos[2].split("-");
+		    		        	String paramMetodoMaisUm[] = paramMetodo[1].split("\\(");
+		    		        	String paramMetodoNome = paramMetodoMaisUm[0];
+		    		        	
+		    		        	String tipoParametro[] = paramMetodoMaisUm[1].split("_");
+		    		        	String tipoParametroMaisUm[] = tipoParametro[1].split("\\)");
+		    		        	String tipoParametroNome = tipoParametroMaisUm[0];
+		    		        	
+		    		        	// criar o elemento Metodo quando estiver pronto
+		    		        	
+		    		        	////// TESTE //////
+		    		        	System.out.println("====METODOS====");
+		    		        	System.out.println("Nome do Metodo: " +MetodoNome);
+		    		        	System.out.println("Tipo de Retorno do Metodo: " +retMetodoNome);
+		    		        	System.out.println("Modificador do Metodo: " +modifMetodoNome);
+		    		        	System.out.println("Parametro do Metodo: " +paramMetodoNome);
+		    		        	System.out.println("Tipo do Parametro: " +tipoParametroNome);
+		    		        } else if (subComponente[0].equals("navegClasse")) {
+		    		        	navegClasse = subComponente[1];
+		    		        	
+		    		        	////// TESTE //////
+		    		        	System.out.println("Navegabilidade da classe: " +navegClasse);
+		    		        } else if (subComponente[0].equals("modifClasse")) {
+		    		        	multipClasse = subComponente[1];
+		    		        	
+		    		        	////// TESTE //////
+		    		        	System.out.println("Multiplicidade da classe: " +multipClasse);
+		    		        }
+		    		        
 		        		}
-		        		
-		        		
 		        	}
-		        	
-		        	
+		        		
+		        		
 		        }
-			}
+		        	
+		        	
+		    }
 			input.close();
+			
 		} catch (FileNotFoundException e){
 			System.out.println("Nao ha diagramas salvos.");
 		}
@@ -287,7 +409,7 @@ public class Controller {
 	public void opcoesMenuInicial(int opcao) {
 		if(opcao==1){
     		System.out.println("\nCriar diagrama");
-    		criarElemento("diagrama", null, false);
+    		criarElemento("diagrama", null, false, null, null);
     	} 
     	
     	else if(opcao==2){
@@ -309,16 +431,16 @@ public class Controller {
         else if(opcao == 1) {
       	  System.out.print("\n");
       	  elementoAberto = "inicial";
-            menu();
+          menu();
         }
         
         else if(opcao == 2) {
       	  System.out.println("\nCriar classe");
-      	  criarElemento("classe", null, false);
+      	  criarElemento("classe", null, false, null, null);
         }
         else if(opcao == 3) {
       	  System.out.println("\nCriar interface");
-      	  criarElemento("interface", null, false);
+      	  criarElemento("interface", null, false, null, null);
         }
         
         else if(opcao == 4) {
@@ -342,10 +464,87 @@ public class Controller {
     	} 
 		
 		else if(opcao == 2) {
-			System.out.println();
+			System.out.println("\n");
 			elementoAberto = "atributo";
 			menu();
 		}
+    	
+	}
+	
+	public void opcoesMenuTipoAtributo(int opcaoTipo, int opcaoModificador) {
+		if(opcaoTipo == 1){
+    		if(opcaoModificador == 1)
+    			criarElemento("atributo", null, false, "byte", "Default");
+    		if(opcaoModificador == 2)
+    			criarElemento("atributo", null, false, "byte", "Private");
+    		if(opcaoModificador == 3)
+    			criarElemento("atributo", null, false, "byte", "Public");
+    		if(opcaoModificador == 4)
+    			criarElemento("atributo", null, false, "byte", "Protected");
+    	} else if(opcaoTipo == 2) {
+    		if(opcaoModificador == 1)
+    			criarElemento("atributo", null, false, "short", "Default");
+    		if(opcaoModificador == 2)
+    			criarElemento("atributo", null, false, "short", "Private");
+    		if(opcaoModificador == 3)
+    			criarElemento("atributo", null, false, "short", "Public");
+    		if(opcaoModificador == 4)
+    			criarElemento("atributo", null, false, "short", "Protected");
+    	} else if(opcaoTipo == 3) {
+    		if(opcaoModificador == 1)
+    			criarElemento("atributo", null, false, "int", "Default");
+    		if(opcaoModificador == 2)
+    			criarElemento("atributo", null, false, "int", "Private");
+    		if(opcaoModificador == 3)
+    			criarElemento("atributo", null, false, "int", "Public");
+    		if(opcaoModificador == 4)
+    			criarElemento("atributo", null, false, "int", "Protected");
+    	} else if(opcaoTipo == 4) {
+    		if(opcaoModificador == 1)
+    			criarElemento("atributo", null, false, "long", "Default");
+    		if(opcaoModificador == 2)
+    			criarElemento("atributo", null, false, "long", "Private");
+    		if(opcaoModificador == 3)
+    			criarElemento("atributo", null, false, "long", "Public");
+    		if(opcaoModificador == 4)
+    			criarElemento("atributo", null, false, "long", "Protected");
+    	} else if(opcaoTipo == 5) {
+    		if(opcaoModificador == 1)
+    			criarElemento("atributo", null, false, "float", "Default");
+    		if(opcaoModificador == 2)
+    			criarElemento("atributo", null, false, "float", "Private");
+    		if(opcaoModificador == 3)
+    			criarElemento("atributo", null, false, "float", "Public");
+    		if(opcaoModificador == 4)
+    			criarElemento("atributo", null, false, "float", "Protected");
+    	} else if(opcaoTipo == 6) {
+    		if(opcaoModificador == 1)
+    			criarElemento("atributo", null, false, "double", "Default");
+    		if(opcaoModificador == 2)
+    			criarElemento("atributo", null, false, "double", "Private");
+    		if(opcaoModificador == 3)
+    			criarElemento("atributo", null, false, "double", "Public");
+    		if(opcaoModificador == 4)
+    			criarElemento("atributo", null, false, "double", "Protected");
+    	} else if(opcaoTipo == 7) {
+    		if(opcaoModificador == 1)
+    			criarElemento("atributo", null, false, "boolean", "Default");
+    		if(opcaoModificador == 2)
+    			criarElemento("atributo", null, false, "boolean", "Private");
+    		if(opcaoModificador == 3)
+    			criarElemento("atributo", null, false, "boolean", "Public");
+    		if(opcaoModificador == 4)
+    			criarElemento("atributo", null, false, "boolean", "Protected");
+    	} else if(opcaoTipo == 8) {
+    		if(opcaoModificador == 1)
+    			criarElemento("atributo", null, false, "char", "Default");
+    		if(opcaoModificador == 2)
+    			criarElemento("atributo", null, false, "char", "Private");
+    		if(opcaoModificador == 3)
+    			criarElemento("atributo", null, false, "char", "Public");
+    		if(opcaoModificador == 4)
+    			criarElemento("atributo", null, false, "char", "Protected");
+    	}
     	
 	}
 }
