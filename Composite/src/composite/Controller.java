@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
@@ -63,11 +62,7 @@ public class Controller {
 		          
 		          menu.mostrarMenu("diagrama");
 		          
-		          for(int i = qtdOpcoes; i < (elementoCompostoAtual.getFilhos().size() + qtdOpcoes); i++){
-			          System.out.println((i+1) + " - Abrir a classe " + elementoCompostoAtual.getFilhos().get(i-qtdOpcoes).getNome());
-			          int opcaoDaClasse = atrelaElementoAoNumero.size();
-			          atrelaElementoAoNumero.put(opcaoDaClasse, elementoCompostoAtual.getFilhos().get(opcaoDaClasse));
-		          }
+		          mostrarOpcoesDosFilhos("diagrama", qtdOpcoes, atrelaElementoAoNumero);
 		   
 		          qtdOpcoes += elementoCompostoAtual.getFilhos().size();
 		          
@@ -82,16 +77,14 @@ public class Controller {
 
 		    //Menu de Classes
 	        case "classe": 
-	        	menu.ShowComponente(elementoCompostoAtual);
+	        	
+	        	imprimirClasses();
+	        	//menu.ShowComponente(elementoCompostoAtual);
 
 	        	qtdOpcoes = 5;
 	        	menu.mostrarMenu("classe");
 	        	
-	        	for(int i = qtdOpcoes; i < (elementoCompostoAtual.getFilhos().size() + qtdOpcoes); i++){
-			          System.out.println((i+1) + " - Modificar atributo " + elementoCompostoAtual.getFilhos().get(i-qtdOpcoes).getNome());
-			          int opcaoDoAtributo = atrelaElementoAoNumero.size();
-			          atrelaElementoAoNumero.put(opcaoDoAtributo, elementoCompostoAtual.getFilhos().get(opcaoDoAtributo));
-		          }
+	        	mostrarOpcoesDosFilhos("classe", qtdOpcoes, atrelaElementoAoNumero);
 	        	
 	        	qtdOpcoes += elementoCompostoAtual.getFilhos().size();
 	        	
@@ -106,11 +99,22 @@ public class Controller {
 	        	
 	        case "interface":
 	        	//------------FALTA FAZER--------------
+	        	qtdOpcoes = 5;
 	        	menu.mostrarMenu("interface");
+	        	
+	        	mostrarOpcoesDosFilhos("interface", qtdOpcoes, atrelaElementoAoNumero);
+	        	
+	        	qtdOpcoes += elementoCompostoAtual.getFilhos().size();
+	        	
+	        	System.out.println("0 - Sair");
+		        System.out.print("Digite o numero da opcao desejada: ");
+	        	
+	        	opcao = c.verificarEntrada(elementoAberto, qtdOpcoes);
+	        	
 	        	break;
 
 	        case "atributo": 
-	        	int qtdOpcoesTipo = 8;
+	        	int qtdOpcoesTipo = 9;
 	        	int qtdOpcoesModificador = 4;
 	        	
 	        	menu.mostrarMenu("atributoTipo");
@@ -138,18 +142,14 @@ public class Controller {
 					Diagrama d = new Diagrama(nomeOQueCriar);
 					elementoAberto = "diagrama";
 					elementoCompostoAtual = d;
-					Diagrama copia = new Diagrama(elementoCompostoAtual.getNome());
-					copia = copiarElementoDiagrama((Diagrama) elementoCompostoAtual, copia);
-					DiagramasSalvos.quickSave(copia);
+					salvarElemento(d);
 					menu();
 					break;
 				} else {
 					Diagrama d = new Diagrama(nomeOQueCriar);
 					elementoAberto = "diagrama";
 					elementoCompostoAtual = d;
-					Diagrama copia = new Diagrama(elementoCompostoAtual.getNome());
-					copia = copiarElementoDiagrama((Diagrama) elementoCompostoAtual, copia);
-					DiagramasSalvos.quickSave(copia);
+					salvarElemento(d);
 					break;
 				}
 				
@@ -178,9 +178,7 @@ public class Controller {
 					elementoAberto = "classe";
 					paiDoAtual = elementoCompostoAtual;
 					elementoCompostoAtual = c;
-					Classe copia = new Classe(elementoCompostoAtual.getNome());
-					copia = copiarElementoClasse((Classe)elementoCompostoAtual, copia);
-					DiagramasSalvos.quickSave(copia);
+					salvarElemento(c);
 					menu();
 					break;
 				} else {
@@ -188,9 +186,7 @@ public class Controller {
 					elementoCompostoAtual.addFilho(c);
 					elementoAberto = "classe";
 					elementoCompostoAtual = c;
-					Classe copia = new Classe(elementoCompostoAtual.getNome());
-					copia = copiarElementoClasse((Classe)elementoCompostoAtual, copia);
-					DiagramasSalvos.quickSave(copia);
+					salvarElemento(c);
 					break;
 				}
 				
@@ -198,12 +194,14 @@ public class Controller {
 			case "interface":
 				if (abrindoDiagrama == false) {
 					Interface i = new Interface(nomeOQueCriar);
+					elementoCompostoAtual.addFilho(i);
 					elementoAberto = "interface";
 					elementoCompostoAtual = i;
 					menu();
 					break;
 				} else {
 					Interface i = new Interface(nomeOQueCriar);
+					elementoCompostoAtual.addFilho(i);
 					elementoAberto = "interface";
 					elementoCompostoAtual = i;
 					break;
@@ -214,18 +212,14 @@ public class Controller {
 				if (abrindoDiagrama == false) {
 					Atributo a = new Atributo(nomeOQueCriar, tipoAtributo, modificadorAtributo);
 					elementoCompostoAtual.addFilho(a);
-					Classe copia = new Classe(elementoCompostoAtual.getNome());
-					copia = copiarElementoClasse((Classe)elementoCompostoAtual, copia);
-					DiagramasSalvos.quickSave(copia);
+					salvarElemento(elementoCompostoAtual);
 					elementoAberto = "classe";
 					menu();
 					break;
 				} else {
 					Atributo a = new Atributo(nomeOQueCriar, tipoAtributo, modificadorAtributo);
 					elementoCompostoAtual.addFilho(a);
-					Classe copia = new Classe(elementoCompostoAtual.getNome());
-					copia = copiarElementoClasse((Classe)elementoCompostoAtual, copia);
-					DiagramasSalvos.quickSave(copia);
+					salvarElemento(elementoCompostoAtual);
 					elementoAberto = "classe";
 					break;
 				}
@@ -243,13 +237,6 @@ public class Controller {
 		}
 		}
 
-		//abre um arquivo contendo um diagrama e passa os elementos para uma lista de elementos
-		public static List<Componente> abreDiagrama(){			
-			
-			List<Componente> teste = new ArrayList<Componente>();
-			return teste;
-		}
-	
 	public int verificarEntrada(String elementoAberto, int qtdOpcoes) {
 		
 		Menu menu = new Menu();
@@ -624,7 +611,7 @@ public class Controller {
     	
     	else if(opcao==2){
     		System.out.println("\nAbrir diagrama");
-    		abreDiagrama();
+    		abrirDiagrama();
     	} 
       
     	else if(opcao==0){
@@ -714,19 +701,22 @@ public class Controller {
 		}
 		
 		else if(opcao == 5) {
-			paiDoAtual.removerFilho(elementoCompostoAtual);
+			paiDoAtual.removerFilho(elementoCompostoAtual.getNome(), elementoCompostoAtual.getClass().getSimpleName());
         	elementoCompostoAtual = DiagramasSalvos.undo();
         	if(elementoCompostoAtual == null) {
         		elementoAberto = "inicial";
+        		paiDoAtual = null;
         	}
         	else if(elementoCompostoAtual instanceof Diagrama) {
         		elementoAberto = "diagrama";
         	}
         	else if(elementoCompostoAtual instanceof Classe) {
         		elementoAberto = "classe";
+        		paiDoAtual.addFilho(elementoCompostoAtual);
         	}
         	else if(elementoCompostoAtual instanceof Interface) {
         		elementoAberto = "interface";
+        		paiDoAtual.addFilho(elementoCompostoAtual);
         	}
         	//DiagramasSalvos.mostrar();
         	menu();
@@ -820,26 +810,76 @@ public class Controller {
 	}
 	
 	//COPIANDO OBJETOS PRA NAO ALTERAR O STATIC
-		public static Diagrama copiarElementoDiagrama(Diagrama original, Diagrama copia) {
-			copia.setMensagemCriado(original.getMensagemCriado());
-			if(original.getFilhos().size() > 0) {
-				for(int i = 0; i < original.getFilhos().size(); i++) {
-					copia.addFilho(original.getFilhos().get(i));
-				}
+	public static Diagrama copiarElementoDiagrama(Diagrama original, Diagrama copia) {
+		copia.setMensagemCriado(original.getMensagemCriado());
+		if(original.getFilhos().size() > 0) {
+			for(int i = 0; i < original.getFilhos().size(); i++) {
+				copia.addFilho(original.getFilhos().get(i));
 			}
-			return copia;
+		}
+		return copia;
+	}
+		
+	public static Classe copiarElementoClasse (Classe original, Classe copia) {
+		copia.setMultiplicidade(original.getMultiplicidade());
+		copia.setModificadorDeAcesso(original.getModificadorDeAcesso());
+		copia.setMultiplicidade(original.getMultiplicidade());
+		copia.setNavegabilidade(original.getNavegabilidade());
+		if(original.getFilhos().size() > 0) {
+			for(int i = 0; i < original.getFilhos().size(); i++) {
+				copia.addFilho(original.getFilhos().get(i));
+			}
+		}
+		return copia;
+	}
+	
+	public static Interface copiarElementoInterface(Interface original, Interface copia){
+		//FALTA FAZER
+		return copia;
+	}
+	public static void salvarElemento(ComponenteComposto c){
+		if(c instanceof Diagrama){
+			Diagrama copia = new Diagrama(elementoCompostoAtual.getNome());
+			copia = copiarElementoDiagrama((Diagrama) elementoCompostoAtual, copia);
+			DiagramasSalvos.quickSave(copia);
+		}
+		else if(c instanceof Classe){
+			Classe copia = new Classe(elementoCompostoAtual.getNome());
+			copia = copiarElementoClasse((Classe)elementoCompostoAtual, copia);
+			DiagramasSalvos.quickSave(copia);
+		}
+		else if(c instanceof Interface){
+			//FALTA FAZER
+		}
+	}
+	public static void imprimirClasses(){
+		//METODO PRA IMPRIMIR TODAS AS CLASSES
+		List <ComponenteComposto> filhosDoDiagrama = new ArrayList<ComponenteComposto>();
+		Menu menu = new Menu();
+    	for(int i = 0; i < paiDoAtual.getFilhos().size(); i++){
+    		filhosDoDiagrama.add((ComponenteComposto)paiDoAtual.getFilhos().get(i));
+    		menu.ShowComponente(filhosDoDiagrama.get(i));
+    	}
+	}
+	
+	public static void mostrarOpcoesDosFilhos(String tipo, int qtdOpcoes, Map<Integer, Componente> atrelaElementoAoNumero){
+		
+		if(tipo.equals("diagrama")){
+			for(int i = qtdOpcoes; i < (elementoCompostoAtual.getFilhos().size() + qtdOpcoes); i++){
+		          System.out.println((i+1) + " - Abrir a classe " + elementoCompostoAtual.getFilhos().get(i-qtdOpcoes).getNome());
+		          int opcaoDaClasse = atrelaElementoAoNumero.size();
+		          atrelaElementoAoNumero.put(opcaoDaClasse, elementoCompostoAtual.getFilhos().get(opcaoDaClasse));
+	          }
 		}
 		
-		public static Classe copiarElementoClasse (Classe original, Classe copia) {
-			copia.setMultiplicidade(original.getMultiplicidade());
-			copia.setModificadorDeAcesso(original.getModificadorDeAcesso());
-			copia.setMultiplicidade(original.getMultiplicidade());
-			copia.setNavegabilidade(original.getNavegabilidade());
-			if(original.getFilhos().size() > 0) {
-				for(int i = 0; i < original.getFilhos().size(); i++) {
-					copia.addFilho(original.getFilhos().get(i));
-				}
-			}
-			return copia;
+		else if(tipo.equals("classe") || tipo.equals("interface")){
+			for(int i = qtdOpcoes; i < (elementoCompostoAtual.getFilhos().size() + qtdOpcoes); i++){
+		          System.out.println((i+1) + " - Modificar atributo " + elementoCompostoAtual.getFilhos().get(i-qtdOpcoes).getNome());
+		          int opcaoDoAtributo = atrelaElementoAoNumero.size();
+		          atrelaElementoAoNumero.put(opcaoDoAtributo, elementoCompostoAtual.getFilhos().get(opcaoDoAtributo));
+	         }
+      	
 		}
+	}
+	
 }

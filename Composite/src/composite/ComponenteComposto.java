@@ -20,14 +20,35 @@ public abstract class ComponenteComposto extends Componente{
 	}
 	
 	public void addFilho(Componente e) {
-		filhos.add(e);
+		int indice = verificaFilhoJaExiste(e.getNome(), e.getClass().getSimpleName());
+		if(indice == -1){
+			filhos.add(e);
+		}
+		else{
+			filhos.remove(indice);
+			filhos.add(e);
+		}
 	}
 	
 	public List<Componente> getFilhos(){
 		return this.filhos;
 	}
 	
-	public void removerFilho(Componente e) {
-		filhos.remove(e);
+	public void removerFilho(String nomeComponente, String tipoComponente) {
+		int indice = verificaFilhoJaExiste(nomeComponente, tipoComponente);
+		if(indice != -1){
+			filhos.remove(indice);
+		}
+	}
+	
+	public int verificaFilhoJaExiste(String nomeComponente, String tipoComponente){
+		int indice = -1;
+		for(int i = 0; i < filhos.size(); i++){
+			if(filhos.get(i).getNome().equals(nomeComponente) && filhos.get(i).getClass().getSimpleName().equals(tipoComponente)){
+				indice = i;
+				break;
+			}
+		}
+		return indice;
 	}
 }
