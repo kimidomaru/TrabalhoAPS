@@ -73,7 +73,7 @@ public class Menu {
 				+ "1 - Voltar\n"
 				+ "2 - Inserir Atributo\n"
 				+ "3 - Inserir Metodo\n"
-				+ "4 - Inserir Relacionamento"
+				+ "4 - Inserir Relacionamento\n"
 				+ "5 - Ctrl + Z");
 	}
 	

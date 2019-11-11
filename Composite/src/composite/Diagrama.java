@@ -23,7 +23,7 @@ public class Diagrama extends ComponenteComposto{
 
 	@Override
 	public void addFilho(Componente e) {
-		if(e instanceof Classe)
+		if(e instanceof Classe || e instanceof Interface)
 			super.addFilho(e);
 		else
 			throw new IllegalArgumentException("\nFilho de tipo invalido!\n");
