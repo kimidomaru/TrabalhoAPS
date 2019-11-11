@@ -42,7 +42,7 @@ public class Controller {
 	    	case "inicial":
 	    		
 	    		//// DESCOMENTE PARA TESTAR METODO abrirDiagrama() OU METODO salvarDiagrama() ////
-	    		//abrirDiagrama();
+	    		
 	    		//salvarDiagrama();
 	    		qtdOpcoes = 3;
 	        	
@@ -57,21 +57,24 @@ public class Controller {
 	          
 	        //Menu de Diagramas   
 	        case "diagrama":
+	        	if(elementoCompostoAtual.getFilhos().size() > 0) {
+	        		imprimirClasses();
+	        	}
 	        	
-		          qtdOpcoes = 5;
+		        qtdOpcoes = 5;
 		          
-		          menu.mostrarMenu("diagrama");
+		        menu.mostrarMenu("diagrama");
 		          
-		          mostrarOpcoesDosFilhos("diagrama", qtdOpcoes, atrelaElementoAoNumero);
+		        mostrarOpcoesDosFilhos("diagrama", qtdOpcoes, atrelaElementoAoNumero);
 		   
-		          qtdOpcoes += elementoCompostoAtual.getFilhos().size();
+		        qtdOpcoes += elementoCompostoAtual.getFilhos().size();
 		          
-		          System.out.println("0 - Sair");
-		          System.out.print("Digite o numero da opcao desejada: ");
+		        System.out.println("0 - Sair");
+		        System.out.print("Digite o numero da opcao desejada: ");
 		          
-		          opcao = c.verificarEntrada(elementoAberto, qtdOpcoes);
+		        opcao = c.verificarEntrada(elementoAberto, qtdOpcoes);
 		
-		          c.opcoesMenuDiagrama(opcao, atrelaElementoAoNumero);
+		        c.opcoesMenuDiagrama(opcao, atrelaElementoAoNumero);
 		          
 		        break;
 
@@ -185,6 +188,7 @@ public class Controller {
 					Classe c = new Classe(nomeOQueCriar);
 					elementoCompostoAtual.addFilho(c);
 					elementoAberto = "classe";
+					paiDoAtual = elementoCompostoAtual;
 					elementoCompostoAtual = c;
 					salvarElemento(c);
 					break;
@@ -227,6 +231,8 @@ public class Controller {
 			case "metodo":
 				if (abrindoDiagrama == false) {
 					//
+				} else {
+					
 				}
 				
 			case "parametro":
@@ -475,131 +481,183 @@ public class Controller {
 			File f = new File("Composite/diagramasSalvos.txt");
 			Scanner input = new Scanner(f);
 			Pattern inicioRegex = Pattern.compile("\\[\\d+\\]");
+			int qtdOpcoesAbrirDiagrama = 0;
+			int opcaoEscolhida = -1;
 			
+			System.out.println("\n---Menu para abrir diagrama---");
 			while (input.hasNextLine()) {
 				String linha = input.nextLine();
 				Matcher matcher = inicioRegex.matcher(linha);
 		        boolean matches = matcher.matches();
-		        if(matches) {
-		        	// Criando diagrama
-	        		linha = input.nextLine();
-	        		criarElemento("diagrama", linha, true, null, null);
-	        		
-		        	while(input.hasNextLine()) {
-		        		// Criando classes
-		        		linha = input.nextLine();
-		        		int posicaoNomeClasse = linha.indexOf("{");
-		        		String nomeClasse;
-		        		if(posicaoNomeClasse != -1) {
-		        			nomeClasse = linha.substring(0 , posicaoNomeClasse);
-		        		}
-		        		
-		        		//criarElemento("classe", nomeClasse, true);
-		        		
-		        		String componentesClasse[] = linha.split(";");
-		        		for(int i=0; i<componentesClasse.length; i++) {        			
-		        			
-		        			String subComponente[] = componentesClasse[i].split(":");
-		        			String multipClasse;
-		        			String navegClasse;
-		        			String modifClasse;
-		        			List<Componente> atributosClasse;
-		        			List<Componente> metodosClasse;
-		        			
-		        			Pattern regexVerifInicio = Pattern.compile("\\w*\\{\\w*");
-		        			//Pattern regexVerifAtributo = Pattern.compile("\\w*\\[\\w*\\]");
-		        			//Pattern regexVerifMetodo = Pattern.compile("\\w*\\[\\w*\\(\\w*\\)\\]\\}");
-		        			
-		    				Matcher matcherPedacoInicio = regexVerifInicio.matcher(subComponente[0]);
-		    		        boolean matchesPedacoInicio = matcherPedacoInicio.matches();
-		    		        
-		    		        //Matcher matcherPedacoAtributo = regexVerifAtributo.matcher(subComponente[1]);
-		    		        //boolean matchesPedacoAtributo = matcherPedacoAtributo.matches();
-		    		        
-		    		        //Matcher matcherPedacoMetodo = regexVerifMetodo.matcher(subComponente[1]);
-		    		        //boolean matchesPedacoMetodo = matcherPedacoMetodo.matches();
 
-		    		        if (matchesPedacoInicio) {
-		    		        	String splitMultip[] = subComponente[0].split("\\{");
-				        		if(splitMultip[1].equals("multipClasse")) {
-				        			multipClasse = subComponente[1];
-				        			
-				        			////// TESTE //////
-				        			System.out.println("Multiplicidade da classe: " +multipClasse);
-				        		}
-				        	} else if (subComponente[0].equals("atributo")) {
-		    		        	String splitAtr[] = subComponente[1].split("\\[");
-		    		        	String AtrNome = splitAtr[0];
-		    		        	
-		    		        	String splitDentroAtributos[] = splitAtr[1].split(",");
-		    		        	String tipoAtr[] = splitDentroAtributos[0].split("-");
-		    		        	String tipoAtrNome = tipoAtr[1];
-		    		        	
-		    		        	String modificadorAtr[] = splitDentroAtributos[1].split("-");
-		    		        	String modificadorAtrNome = modificadorAtr[1];
-		    		        	
-		    		        	
-		    		        	//criarElemento("atributo", null, true, tipoAtrNome, modificadorAtrNome);
-		    		        	
-		    		        	////// TESTE //////
-		    		        	System.out.println("\n====ATRIBUTOS====");
-		    		        	System.out.println("Nome do Atributo: " +AtrNome);
-		    		        	System.out.println("Tipo do Atributo: " +tipoAtrNome);
-		    		        	System.out.println("Modificador do Atributo: " +modificadorAtrNome + "\n");
-		    		        	
-		    		        } else if (subComponente[0].equals("metodo")) {
-		    		        	String splitMetodo[] = subComponente[1].split("\\[");
-		    		        	String MetodoNome = splitMetodo[0];
-		    		        	
-		    		        	String splitDentroMetodos[] = splitMetodo[1].split(",");
-		    		        	String retMetodo[] = splitDentroMetodos[0].split("-");
-		    		        	String retMetodoNome = retMetodo[1];
-		    		        	
-		    		        	String modifMetodo[] = splitDentroMetodos[1].split("-");
-		    		        	String modifMetodoNome = modifMetodo[1];
-		    		        	
-		    		        	String paramMetodo[] = splitDentroMetodos[2].split("-");
-		    		        	String paramMetodoMaisUm[] = paramMetodo[1].split("\\(");
-		    		        	String paramMetodoNome = paramMetodoMaisUm[0];
-		    		        	
-		    		        	String tipoParametro[] = paramMetodoMaisUm[1].split("_");
-		    		        	String tipoParametroMaisUm[] = tipoParametro[1].split("\\)");
-		    		        	String tipoParametroNome = tipoParametroMaisUm[0];
-		    		        	
-		    		        	// criar o elemento Metodo quando estiver pronto
-		    		        	
-		    		        	////// TESTE //////
-		    		        	System.out.println("\n====METODOS====");
-		    		        	System.out.println("Nome do Metodo: " +MetodoNome);
-		    		        	System.out.println("Tipo de Retorno do Metodo: " +retMetodoNome);
-		    		        	System.out.println("Modificador do Metodo: " +modifMetodoNome);
-		    		        	System.out.println("Parametro do Metodo: " +paramMetodoNome);
-		    		        	System.out.println("Tipo do Parametro: " +tipoParametroNome);
-		    		        	
-		    		        } else if (subComponente[0].equals("navegClasse")) {
-		    		        	navegClasse = subComponente[1];
-		    		        	
-		    		        	////// TESTE //////
-		    		        	System.out.println("Navegabilidade da classe: " +navegClasse);
-		    		        } else if (subComponente[0].equals("modifClasse")) {
-		    		        	multipClasse = subComponente[1];
-		    		        	
-		    		        	////// TESTE //////
-		    		        	System.out.println("Multiplicidade da classe: " +multipClasse);
-		    		        }
-		    		        
-		        		}
-		        	}
-		        		
-		        		
+		        if(matches) {
+		        	
+		        	// criando o menu
+		        	String numeroCabecalho[] = linha.split("\\[");
+		        	String numeroCabecalhoSozinho[] = numeroCabecalho[1].split("\\]");
+		        	System.out.print(numeroCabecalhoSozinho[0] + " - ");
+		        	linha = input.nextLine();
+		        	System.out.println(linha);
+		        	qtdOpcoesAbrirDiagrama++;
 		        }
-		        	
-		        	
 		    }
-			input.close();
 			
+			System.out.println("0 - Voltar");
+	        System.out.print("Digite o numero da opcao desejada: ");
+	        
+			do{
+	        	Scanner escolha = new Scanner(System.in);
+	        	try {
+	    			opcaoEscolhida = escolha.nextInt();
+	          
+	    			if(opcaoEscolhida < 0 || opcaoEscolhida > qtdOpcoesAbrirDiagrama) {
+	    				throw new InputMismatchException();
+	    			}
+	    		} catch (InputMismatchException e) {
+	    			System.out.print("Opcao invalida! Digite uma opcao valida: ");
+	    		}
+	        }while(opcaoEscolhida < 0 || opcaoEscolhida > qtdOpcoesAbrirDiagrama);
+			
+			if(opcaoEscolhida == 0) {
+				menu();
+			} else {
+				Scanner inputNovamente = new Scanner(f);
+				Pattern diagramaEscolhidoRegex = Pattern.compile("\\[" + Integer.toString(opcaoEscolhida) + "\\]");
+				String linhaNovamente;
+				
+				while(inputNovamente.hasNextLine()) {
+					linhaNovamente = inputNovamente.nextLine();
+					Matcher matcherNovamente = diagramaEscolhidoRegex.matcher(linhaNovamente);
+			        boolean matchesNovamente = matcherNovamente.matches();
+			        
+			        if(matchesNovamente) {
+			        	linhaNovamente = inputNovamente.nextLine();
+			        	
+			        	// criando diagrama
+			        	Diagrama d = new Diagrama(linhaNovamente);
+						elementoAberto = "diagrama";
+						elementoCompostoAtual = d;
+						salvarElemento(d);
+						
+						while(inputNovamente.hasNextLine() && !(linhaNovamente = inputNovamente.nextLine()).equals("=END")) {
+							elementoCompostoAtual = d;
+							int posicaoNomeClasse = linhaNovamente.indexOf("{");
+							String nomeClasse = null;
+			        		if(posicaoNomeClasse != -1) {
+			        			nomeClasse = linhaNovamente.substring(0 , posicaoNomeClasse);
+			        		}
+			        		
+			        		//criando classe e adicionando seus atributos e/ou metodos
+			        		Classe c = new Classe(nomeClasse);
+			        		//System.out.println("EM QUE LINHA O PROGRAMA TA: " +linhaNovamente);
+			        		//System.out.println("PUTA QUE PARIU: "+elementoCompostoAtual.getNome());
+							elementoCompostoAtual.addFilho(c);
+							elementoAberto = "classe";
+							paiDoAtual = elementoCompostoAtual;
+							elementoCompostoAtual = c;
+							salvarElemento(c);
+							
+			        		String componentesClasse[] = linhaNovamente.split(";");
+			        		for(int i=0; i<componentesClasse.length; i++) {        			
+			        			
+			        			String subComponente[] = componentesClasse[i].split(":");
+			        			String multipClasse;
+			        			String navegClasse;
+			        			String modifClasse;
+			        			
+			        			Pattern regexVerifInicio = Pattern.compile("\\w*\\{\\w*");
+			        			
+			    				Matcher matcherPedacoInicio = regexVerifInicio.matcher(subComponente[0]);
+			    		        boolean matchesPedacoInicio = matcherPedacoInicio.matches();
+	
+			    		        if (matchesPedacoInicio) {
+			    		        	String splitMultip[] = subComponente[0].split("\\{");
+					        		if(splitMultip[1].equals("multipClasse")) {
+					        			multipClasse = subComponente[1];
+					        			
+					        			// adiciona a multiplicidade na classe
+					        			c.setMultiplicidade(multipClasse);
+					        		}
+					        	} else if (subComponente[0].equals("atributo")) {
+			    		        	String splitAtr[] = subComponente[1].split("\\[");
+			    		        	String atrNome = splitAtr[0];
+			    		        	
+			    		        	String splitDentroAtributos[] = splitAtr[1].split(",");
+			    		        	String tipoAtr[] = splitDentroAtributos[0].split("-");
+			    		        	String tipoAtrNome = tipoAtr[1];
+			    		        	
+			    		        	String modificadorAtr[] = splitDentroAtributos[1].split("-");
+			    		        	String modificadorAtrNome = modificadorAtr[1];
+	
+			    		        	
+			    		        	// adiciona o atributo na classe
+			    		        	Atributo a = new Atributo(atrNome, tipoAtrNome, modificadorAtrNome);
+			    					elementoCompostoAtual.addFilho(a);
+			    					salvarElemento(elementoCompostoAtual);
+			    					elementoAberto = "classe";
+			    					
+			    		        } else if (subComponente[0].equals("metodo")) {
+			    		        	String splitMetodo[] = subComponente[1].split("\\[");
+			    		        	String metodoNome = splitMetodo[0];
+			    		        	
+			    		        	String splitDentroMetodos[] = splitMetodo[1].split(",");
+			    		        	String retMetodo[] = splitDentroMetodos[0].split("-");
+			    		        	String retMetodoNome = retMetodo[1];
+			    		        	
+			    		        	String modifMetodo[] = splitDentroMetodos[1].split("-");
+			    		        	String modifMetodoNome = modifMetodo[1];
+			    		        	
+			    		        	String paramMetodo[] = splitDentroMetodos[2].split("-");
+			    		        	String paramMetodoMaisUm[] = paramMetodo[1].split("\\(");
+			    		        	String paramMetodoNome = paramMetodoMaisUm[0];
+			    		        	
+			    		        	String tipoParametro[] = paramMetodoMaisUm[1].split("_");
+			    		        	String tipoParametroMaisUm[] = tipoParametro[1].split("\\)");
+			    		        	String tipoParametroNome = tipoParametroMaisUm[0];
+			    		        	
+			    		        	// adiciona o metodo na classe
+			    		        	Metodo m = new Metodo(metodoNome);
+			    		        	m.setTipoRetorno(retMetodoNome);
+			    		        	m.setModificadoresDeAcesso(modifMetodoNome);
+			    		        	Parametro p = new Parametro(tipoParametroNome, paramMetodoNome);
+			    		        	m.addFilho(p);
+			    		        	
+			    					elementoCompostoAtual.addFilho(m);
+			    					salvarElemento(elementoCompostoAtual);
+			    					elementoAberto = "classe";
+			    		        	
+			    		        } else if (subComponente[0].equals("navegClasse")) {
+			    		        	navegClasse = subComponente[1];
+			    		        	
+			    		        	// adiciona a navegabilidade na classe
+			    		        	c.setNavegabilidade(navegClasse);
+			    		        } else if (subComponente[0].equals("modifClasse")) {
+			    		        	modifClasse = subComponente[1];
+			    		        	
+			    		        	// adiciona o modificador na classe
+			    		        	c.setMultiplicidade(modifClasse);
+			    		        }
+			    		        
+			        		}
+						
+						}
+						
+						// ir para o menu de diagrama
+						elementoAberto = "diagrama";
+						elementoCompostoAtual = d;
+						paiDoAtual = d;
+						menu();
+			        }
+			        
+				}
+				
+				inputNovamente.close();
+			}
+			
+			input.close();
+		
 		} catch (FileNotFoundException e){
-			System.out.println("Nao ha diagramas salvos.");
+			System.err.println("Nao ha diagramas salvos.");
 		}
 	}
 	
@@ -610,7 +668,6 @@ public class Controller {
     	} 
     	
     	else if(opcao==2){
-    		System.out.println("\nAbrir diagrama");
     		abrirDiagrama();
     	} 
       

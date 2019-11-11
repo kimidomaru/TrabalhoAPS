@@ -1,4 +1,0 @@
-[1]
-DiagramaABC
-ClasseABC{multipClasse:null;navegClasse:null;modifClasse:null;atributo:testAtr[tipoAtr-int,modifAtr-private];metodo:metTeste[retornoMetodo-void,modifMetodo-default,paramMetodo-paraTeste(tipoParam_int)];metodo:metTeste2[retornoMetodo-void,modifMetodo-default,paramMetodo-paraTeste2(tipoParam_int),paramMetodo-paraTeste3(tipoParam_int)]}
-=END

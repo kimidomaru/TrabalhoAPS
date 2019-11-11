@@ -5,7 +5,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		System.out.println("Instrucoes iniciais:\n");
+		System.out.println("Instrucoes iniciais:");
 
 		Controller.menu();
 		

@@ -43,7 +43,7 @@ public class Menu {
 	}
 	
 	public void menuInicial() {
-		System.out.println("---Menu Inicial---\n"
+		System.out.println("\n---Menu Inicial---\n"
 				+ "1 - Criar um diagrama\n"
 				+ "2 - Abrir um diagrama\n"
 				+ "0 - Sair");
@@ -51,7 +51,7 @@ public class Menu {
 	}
 	
 	public void menuDiagrama() {
-		System.out.println("---Menu de Diagrama---\n"
+		System.out.println("\n---Menu de Diagrama---\n"
 				+ "1 - Voltar\n"
 				+ "2 - Criar uma Classe\n"
 				+ "3 - Criar uma Interface\n"
@@ -60,7 +60,7 @@ public class Menu {
 	}
 	
 	public void menuClasse() {
-		System.out.println("---Menu de Classe---\n"
+		System.out.println("\n---Menu de Classe---\n"
 				+ "1 - Voltar\n"
 				+ "2 - Inserir Atributo\n"
 				+ "3 - Inserir Metodo\n"
@@ -69,7 +69,7 @@ public class Menu {
 	}
 	
 	public void menuInterface() {
-		System.out.println("---Menu de Interface---\n"
+		System.out.println("\n---Menu de Interface---\n"
 				+ "1 - Voltar\n"
 				+ "2 - Inserir Atributo\n"
 				+ "3 - Inserir Metodo\n"
@@ -78,7 +78,7 @@ public class Menu {
 	}
 	
 	public void menuTipoAtributo(){
-		System.out.println("---Menu do Tipo do Atributo---\n"
+		System.out.println("\n---Menu do Tipo do Atributo---\n"
 				+ "1 - byte\n"
 				+ "2 - short\n"
 				+ "3 - int\n"
@@ -92,7 +92,7 @@ public class Menu {
 	}
 	
 	public void menuModificadorAtributo(){
-		System.out.println("---Menu de Modificador de Acesso do Atributo---\n"
+		System.out.println("\n---Menu de Modificador de Acesso do Atributo---\n"
 				+ "1 - Default\n"
 				+ "2 - Private\n"
 				+ "3 - Public\n"
