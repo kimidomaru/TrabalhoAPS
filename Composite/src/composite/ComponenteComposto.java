@@ -26,5 +26,8 @@ public abstract class ComponenteComposto extends Componente{
 	public List<Componente> getFilhos(){
 		return this.filhos;
 	}
-
+	
+	public void removerFilho(Componente e) {
+		filhos.remove(e);
+	}
 }

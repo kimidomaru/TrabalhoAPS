@@ -55,7 +55,8 @@ public class Menu {
 				+ "1 - Voltar\n"
 				+ "2 - Criar uma Classe\n"
 				+ "3 - Criar uma Interface\n"
-				+ "4 - Salvar");
+				+ "4 - Salvar Diagrama\n"
+				+ "5 - Ctrl + Z");
 	}
 	
 	public void menuClasse() {
@@ -63,8 +64,8 @@ public class Menu {
 				+ "1 - Voltar\n"
 				+ "2 - Inserir Atributo\n"
 				+ "3 - Inserir Metodo\n"
-				+ "4 - Inserir Relacionamento");
-		System.out.print("Digite o numero da opcao desejada: ");
+				+ "4 - Inserir Relacionamento\n"
+				+ "5 - Ctrl + Z");
 	}
 	
 	public void menuInterface() {
@@ -72,8 +73,8 @@ public class Menu {
 				+ "1 - Voltar\n"
 				+ "2 - Inserir Atributo\n"
 				+ "3 - Inserir Metodo\n"
-				+ "4 - Inserir Relacionamento");
-		System.out.print("Digite o numero da opcao desejada: ");
+				+ "4 - Inserir Relacionamento"
+				+ "5 - Ctrl + Z");
 	}
 	
 	public void menuTipoAtributo(){
@@ -85,7 +86,8 @@ public class Menu {
 				+ "5 - float\n"
 				+ "6 - double\n"
 				+ "7 - boolean\n"
-				+ "8 - char");
+				+ "8 - char"
+				+ "9 - String");
 		System.out.print("Digite o numero da opcao desejada: ");
 	}
 	
@@ -110,6 +112,7 @@ public class Menu {
 	public void menuRelacionamento(){
 		//opcoes Aqui
 	}
+	
 	public void ShowComponente(ComponenteComposto obj) {
 		String nome = obj.getNome();
 		String type= "";
@@ -138,24 +141,29 @@ public class Menu {
 			
 			if (filhos.get(i) instanceof Atributo) {
 				
-				Atributo davez =(Atributo) filhos.get(i); 
+				Atributo daVez =(Atributo) filhos.get(i); 
 				//System.out.println("Atributo!");
 				String ModificadorAcesso = "";	
 				
-				switch(davez.getModificadoresDeAcesso().toLowerCase()) {
+				switch(daVez.getModificadoresDeAcesso().toLowerCase()) {
 					case "public":
 						ModificadorAcesso="+";
+						break;
 					case "private":
 						ModificadorAcesso="-";
+						break;
 					case "protected":
 						ModificadorAcesso="#";
+						break;
 					case "default":
 						ModificadorAcesso="~";
+						break;
 					default:
 						ModificadorAcesso="~";
+						break;
 				}
 				
-				String preConteudo="| "+ ModificadorAcesso + davez.getNome()+ " : "+ davez.getTipo();
+				String preConteudo="| "+ ModificadorAcesso + daVez.getNome()+ " : "+ daVez.getTipo();
 				int tamPreConteudo = preConteudo.length();
 				String spaces = new String(new char[TamHeader-tamPreConteudo-1]).replace("\0", " ");
 				Conteudo = preConteudo + spaces+"|";
@@ -163,24 +171,29 @@ public class Menu {
 				atributos.add(Conteudo);
 			}
 			if (filhos.get(i) instanceof Metodo) {
-				Metodo davez =(Metodo) filhos.get(i);
+				Metodo daVez =(Metodo) filhos.get(i);
 				//System.out.println("Metodo!");
 				String ModificadorAcesso = "";		
 				
-				switch(davez.getModificadoresDeAcesso().toLowerCase()) {
+				switch(daVez.getModificadoresDeAcesso().toLowerCase()) {
 					case "public":
 						ModificadorAcesso="+";
+						break;
 					case "private":
 						ModificadorAcesso="-";
+						break;
 					case "protected":
 						ModificadorAcesso="#";
+						break;
 					case "default":
 						ModificadorAcesso="~";
+						break;
 					default:
 						ModificadorAcesso="+";
+						break;
 				}
 				
-				String preConteudo="| "+ ModificadorAcesso + davez.getNome()+ "():"+ davez.getTipoRetorno();
+				String preConteudo="| "+ ModificadorAcesso + daVez.getNome()+ "():"+ daVez.getTipoRetorno();
 				int tamPreConteudo = preConteudo.length();
 				String spaces = new String(new char[TamHeader-tamPreConteudo-1]).replace("\0", " ");
 				Conteudo = preConteudo + spaces+"|";

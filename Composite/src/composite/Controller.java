@@ -1,8 +1,10 @@
 package composite;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,7 +23,7 @@ public class Controller {
 	//public static Componente paiDoAtual;
 	public static ComponenteComposto paiDoAtual;
 	public static ComponenteComposto elementoCompostoAtual;
-	public static Componente elementoAtual;	
+	public static Componente elementoAtual;
 
 	public static void menu(){			//menu que ira se adaptar as possibilidades de criacao, exclusao, etc
 			
@@ -40,8 +42,9 @@ public class Controller {
 	      //Menu inicial
 	    	case "inicial":
 	    		
-	    		//// DESCOMENTE PARA TESTAR METODO abrirDiagrama() ////
+	    		//// DESCOMENTE PARA TESTAR METODO abrirDiagrama() OU METODO salvarDiagrama() ////
 	    		//abrirDiagrama();
+	    		//salvarDiagrama();
 	    		qtdOpcoes = 3;
 	        	
 	    		menu.mostrarMenu("inicial");
@@ -56,7 +59,7 @@ public class Controller {
 	        //Menu de Diagramas   
 	        case "diagrama":
 	        	
-		          qtdOpcoes = 4;
+		          qtdOpcoes = 5;
 		          
 		          menu.mostrarMenu("diagrama");
 		          
@@ -79,7 +82,8 @@ public class Controller {
 
 		    //Menu de Classes
 	        case "classe": 
-	        	qtdOpcoes = 4;
+	        	menu.ShowComponente(elementoCompostoAtual);
+	        	qtdOpcoes = 5;
 	        	menu.mostrarMenu("classe");
 	        	
 	        	for(int i = qtdOpcoes; i < (elementoCompostoAtual.getFilhos().size() + qtdOpcoes); i++){
@@ -118,8 +122,7 @@ public class Controller {
 	        	break;
 
 	        case "metodo":
-	        	//------------FALTA FAZER--------------
-	        	System.out.print("Digite o numero da opcao desejada: ");
+	        	//
 	        	break;
 
 	      }
@@ -134,12 +137,18 @@ public class Controller {
 					Diagrama d = new Diagrama(nomeOQueCriar);
 					elementoAberto = "diagrama";
 					elementoCompostoAtual = d;
+					Diagrama copia = new Diagrama(elementoCompostoAtual.getNome());
+					copia = copiarElementoDiagrama((Diagrama) elementoCompostoAtual, copia);
+					DiagramasSalvos.quickSave(copia);
 					menu();
 					break;
 				} else {
 					Diagrama d = new Diagrama(nomeOQueCriar);
 					elementoAberto = "diagrama";
 					elementoCompostoAtual = d;
+					Diagrama copia = new Diagrama(elementoCompostoAtual.getNome());
+					copia = copiarElementoDiagrama((Diagrama) elementoCompostoAtual, copia);
+					DiagramasSalvos.quickSave(copia);
 					break;
 				}
 				
@@ -147,9 +156,30 @@ public class Controller {
 			case "classe":
 				if (abrindoDiagrama == false) {
 					Classe c = new Classe(nomeOQueCriar);
+					/////// DEBUG PARA SALVAR DIAGRAMA
+					/*
+					Metodo m = new Metodo("metTeste");
+					Parametro p = new Parametro("int", "paraTeste");
+					m.addFilho(p);
+					Atributo a = new Atributo("testAtr","int","private");
+					Metodo m2 = new Metodo("metTeste2");
+					Parametro p2 = new Parametro("int", "paraTeste2");
+					Parametro p3 = new Parametro("int", "paraTeste3");
+					m2.addFilho(p2);
+					m2.addFilho(p3);
+					
+					c.addFilho(m);
+					c.addFilho(a);
+					c.addFilho(m2);
+					*/
+					///////
 					elementoCompostoAtual.addFilho(c);
 					elementoAberto = "classe";
+					paiDoAtual = elementoCompostoAtual;
 					elementoCompostoAtual = c;
+					Classe copia = new Classe(elementoCompostoAtual.getNome());
+					copia = copiarElementoClasse((Classe)elementoCompostoAtual, copia);
+					DiagramasSalvos.quickSave(copia);
 					menu();
 					break;
 				} else {
@@ -157,6 +187,9 @@ public class Controller {
 					elementoCompostoAtual.addFilho(c);
 					elementoAberto = "classe";
 					elementoCompostoAtual = c;
+					Classe copia = new Classe(elementoCompostoAtual.getNome());
+					copia = copiarElementoClasse((Classe)elementoCompostoAtual, copia);
+					DiagramasSalvos.quickSave(copia);
 					break;
 				}
 				
@@ -179,17 +212,27 @@ public class Controller {
 			case "atributo":
 				if (abrindoDiagrama == false) {
 					Atributo a = new Atributo(nomeOQueCriar, tipoAtributo, modificadorAtributo);
+					elementoCompostoAtual.addFilho(a);
+					Classe copia = new Classe(elementoCompostoAtual.getNome());
+					copia = copiarElementoClasse((Classe)elementoCompostoAtual, copia);
+					DiagramasSalvos.quickSave(copia);
 					elementoAberto = "classe";
 					menu();
 					break;
 				} else {
 					Atributo a = new Atributo(nomeOQueCriar, tipoAtributo, modificadorAtributo);
+					elementoCompostoAtual.addFilho(a);
+					Classe copia = new Classe(elementoCompostoAtual.getNome());
+					copia = copiarElementoClasse((Classe)elementoCompostoAtual, copia);
+					DiagramasSalvos.quickSave(copia);
 					elementoAberto = "classe";
 					break;
 				}
 				
 			case "metodo":
-				break;
+				if (abrindoDiagrama == false) {
+					//
+				}
 				
 			case "parametro":
 				break;
@@ -259,19 +302,184 @@ public class Controller {
 	}
 	
 	public static void salvarDiagrama() { 
-		try(FileWriter fw = new FileWriter("Composite/diagramasSalvos", true);
-			    BufferedWriter bw = new BufferedWriter(fw);
-			    PrintWriter out = new PrintWriter(bw))
-			{
-			    out.println("teste");
-			  //-----fazendo ainda
-			    
-			} catch (IOException e) {
-			    System.out.println("Nao foi possivel salvar o diagrama. Tente novamente.\n");
-	        	elementoAberto = "inicial";
-	            menu();
-			    
+		int qtdDiagramasSalvos = 0;
+		boolean emBranco = true;
+		
+		try {
+			File arquivo = new File("Composite/diagramasSalvos.txt");		
+			Pattern cabecalhoRegex = Pattern.compile("\\[\\d+\\]");
+			Scanner input = new Scanner(arquivo);
+			
+			while (input.hasNextLine()) {
+				String linha = input.nextLine();
+				Matcher matcher = cabecalhoRegex.matcher(linha);
+			    boolean matches = matcher.matches();
+			      
+			    if(matches) {
+			       	emBranco = false;
+			    	qtdDiagramasSalvos++;
+			    }
 			}
+			
+			
+			Pattern ultimoCabecalhoRegex = Pattern.compile("\\["+Integer.toString(qtdDiagramasSalvos)+"\\]");
+			
+			try {
+				BufferedReader arquivoLer = new BufferedReader(new FileReader(arquivo));
+				BufferedWriter arquivoEscrever = new BufferedWriter(new FileWriter(arquivo, true));
+				
+				if(emBranco) {
+					arquivoEscrever.write("[1]");
+		        	arquivoEscrever.flush();
+		        	
+		        	if(elementoAberto.equals("diagrama")) {
+		        		arquivoEscrever.write("\n"+ elementoCompostoAtual.getNome());
+			        	arquivoEscrever.flush();
+		        		List<Componente> listaDeFilhos = elementoCompostoAtual.getFilhos();
+						for(int i = 0; i<listaDeFilhos.size();i++) {
+							Componente filhoPosicao = listaDeFilhos.get(i);
+							if(filhoPosicao instanceof Classe) {
+								Classe filhoDaPosicaoClasse = (Classe) filhoPosicao;
+								arquivoEscrever.write("\n" + filhoDaPosicaoClasse.getNome() + "{multipClasse:" + filhoDaPosicaoClasse.getMultiplicidade() 
+														+ ";navegClasse:" + filhoDaPosicaoClasse.getNavegabilidade()
+														+ ";modifClasse:" + filhoDaPosicaoClasse.getModificadorDeAcesso());
+					        	arquivoEscrever.flush();
+					        	
+					        	List<Componente> listaDeFilhosDaClasse = filhoDaPosicaoClasse.getFilhos();
+					        	for(int j=0; j<listaDeFilhosDaClasse.size();j++) {
+					        		Componente filhoPosicaoClasse = listaDeFilhosDaClasse.get(j);
+					        		if(filhoPosicaoClasse instanceof Atributo) {
+					        			Atributo filhoAtributo = (Atributo) filhoPosicaoClasse;
+					        			arquivoEscrever.write(";atributo:" + filhoAtributo.getNome() + "[tipoAtr-" + filhoAtributo.getTipo()
+					        									+ ",modifAtr-" + filhoAtributo.getModificadoresDeAcesso()
+					        									+ "]");
+					        			arquivoEscrever.flush();
+					        		}
+					        	}
+					        	
+					        	for(int k=0; k<listaDeFilhosDaClasse.size();k++) {
+					        		Componente filhoPosicaoClasse = listaDeFilhosDaClasse.get(k);
+					        		if(filhoPosicaoClasse instanceof Metodo) {
+					        			Metodo filhoMetodo = (Metodo) filhoPosicaoClasse;
+					        			arquivoEscrever.write(";metodo:" + filhoMetodo.getNome() + "[retornoMetodo-" + filhoMetodo.getTipoRetorno()
+					        									+ ",modifMetodo-" + filhoMetodo.getModificadoresDeAcesso());
+					        			arquivoEscrever.flush();
+					        			
+					        			List<Componente> listaDeFilhosDoMetodo = filhoMetodo.getFilhos();
+					        			for(int l=0; l<listaDeFilhosDoMetodo.size();l++) {
+					        				Componente filhoPosicaoMetodo = listaDeFilhosDoMetodo.get(l);
+					        				if(filhoPosicaoMetodo instanceof Parametro) {
+					        					Parametro filhoParametro = (Parametro) filhoPosicaoMetodo;
+					        					if (l == listaDeFilhosDoMetodo.size()-1) {
+					        						arquivoEscrever.write(",paramMetodo-" + filhoParametro.getNome() + "(tipoParam_" + filhoParametro.getTipo() + ")]");
+						        					arquivoEscrever.flush();
+					        					} else {
+					        						arquivoEscrever.write(",paramMetodo-" + filhoParametro.getNome() + "(tipoParam_" + filhoParametro.getTipo() + ")");
+						        					arquivoEscrever.flush();
+					        					}
+					        					
+					        				}
+					        			}
+					        		}
+					        	}
+					        	
+					        	arquivoEscrever.write("}\n");
+			        			arquivoEscrever.flush();
+							}
+						}
+						arquivoEscrever.write("=END");
+	        			arquivoEscrever.flush();
+					}
+		        } else {
+		        	String line;
+					while((line = arquivoLer.readLine()) != null) {
+						Matcher matcherLine = ultimoCabecalhoRegex.matcher(line);
+				        boolean matchesLine = matcherLine.matches();
+				        
+				        if(matchesLine) {
+				        	while((line = arquivoLer.readLine()) != null){
+				        		// percorrendo o ultimo diagrama
+				        	}
+				        	arquivoLer.readLine();
+				        	arquivoEscrever.write("\n\n["+ (qtdDiagramasSalvos+1) +"]");
+				        	arquivoEscrever.flush();
+				        	
+				        	if(elementoAberto.equals("diagrama")) {
+				        		arquivoEscrever.write("\n"+ elementoCompostoAtual.getNome());
+					        	arquivoEscrever.flush();
+				        		List<Componente> listaDeFilhos = elementoCompostoAtual.getFilhos();
+								for(int i = 0; i<listaDeFilhos.size();i++) {
+									Componente filhoPosicao = listaDeFilhos.get(i);
+									if(filhoPosicao instanceof Classe) {
+										Classe filhoDaPosicaoClasse = (Classe) filhoPosicao;
+										arquivoEscrever.write("\n" + filhoDaPosicaoClasse.getNome() + "{multipClasse:" + filhoDaPosicaoClasse.getMultiplicidade() 
+																+ ";navegClasse:" + filhoDaPosicaoClasse.getNavegabilidade()
+																+ ";modifClasse:" + filhoDaPosicaoClasse.getModificadorDeAcesso());
+							        	arquivoEscrever.flush();
+							        	
+							        	List<Componente> listaDeFilhosDaClasse = filhoDaPosicaoClasse.getFilhos();
+							        	for(int j=0; j<listaDeFilhosDaClasse.size();j++) {
+							        		Componente filhoPosicaoClasse = listaDeFilhosDaClasse.get(j);
+							        		if(filhoPosicaoClasse instanceof Atributo) {
+							        			Atributo filhoAtributo = (Atributo) filhoPosicaoClasse;
+							        			arquivoEscrever.write(";atributo:" + filhoAtributo.getNome() + "[tipoAtr-" + filhoAtributo.getTipo()
+							        									+ ",modifAtr-" + filhoAtributo.getModificadoresDeAcesso()
+							        									+ "]");
+							        			arquivoEscrever.flush();
+							        		}
+							        	}
+							        	
+							        	for(int k=0; k<listaDeFilhosDaClasse.size();k++) {
+							        		Componente filhoPosicaoClasse = listaDeFilhosDaClasse.get(k);
+							        		if(filhoPosicaoClasse instanceof Metodo) {
+							        			Metodo filhoMetodo = (Metodo) filhoPosicaoClasse;
+							        			arquivoEscrever.write(";metodo:" + filhoMetodo.getNome() + "[retornoMetodo-" + filhoMetodo.getTipoRetorno()
+							        									+ ",modifMetodo-" + filhoMetodo.getModificadoresDeAcesso());
+							        			arquivoEscrever.flush();
+							        			
+							        			List<Componente> listaDeFilhosDoMetodo = filhoMetodo.getFilhos();
+							        			for(int l=0; l<listaDeFilhosDoMetodo.size();l++) {
+							        				Componente filhoPosicaoMetodo = listaDeFilhosDoMetodo.get(l);
+							        				if(filhoPosicaoMetodo instanceof Parametro) {
+							        					Parametro filhoParametro = (Parametro) filhoPosicaoMetodo;
+							        					if (l == listaDeFilhosDoMetodo.size()-1) {
+							        						arquivoEscrever.write(",paramMetodo-" + filhoParametro.getNome() + "(tipoParam_" + filhoParametro.getTipo() + ")]");
+								        					arquivoEscrever.flush();
+							        					} else {
+							        						arquivoEscrever.write(",paramMetodo-" + filhoParametro.getNome() + "(tipoParam_" + filhoParametro.getTipo() + ")");
+								        					arquivoEscrever.flush();
+							        					}
+							        					
+							        				}
+							        			}
+							        		}
+							        	}
+							        	
+							        	arquivoEscrever.write("}\n");
+					        			arquivoEscrever.flush();
+									}
+								}
+								arquivoEscrever.write("=END");
+			        			arquivoEscrever.flush();
+							}
+				        }
+					}
+		        }
+			} catch (IOException ex) {
+				System.out.println("Arquivo nao encontrado");
+			}
+			
+		} catch (FileNotFoundException exc) {
+			// Criar arquivo
+			File file = new File("Composite/", "diagramasSalvos.txt");
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			salvarDiagrama();
+		}
+		
 	}
 	
 	public static void abrirDiagrama() { 
@@ -331,7 +539,7 @@ public class Controller {
 				        			////// TESTE //////
 				        			System.out.println("Multiplicidade da classe: " +multipClasse);
 				        		}
-				        	} else if (subComponente[0].equals("atrClasse")) {
+				        	} else if (subComponente[0].equals("atributo")) {
 		    		        	String splitAtr[] = subComponente[1].split("\\[");
 		    		        	String AtrNome = splitAtr[0];
 		    		        	
@@ -346,12 +554,12 @@ public class Controller {
 		    		        	//criarElemento("atributo", null, true, tipoAtrNome, modificadorAtrNome);
 		    		        	
 		    		        	////// TESTE //////
-		    		        	System.out.println("====ATRIBUTOS====");
+		    		        	System.out.println("\n====ATRIBUTOS====");
 		    		        	System.out.println("Nome do Atributo: " +AtrNome);
 		    		        	System.out.println("Tipo do Atributo: " +tipoAtrNome);
 		    		        	System.out.println("Modificador do Atributo: " +modificadorAtrNome + "\n");
 		    		        	
-		    		        } else if (subComponente[0].equals("metodoClasse")) {
+		    		        } else if (subComponente[0].equals("metodo")) {
 		    		        	String splitMetodo[] = subComponente[1].split("\\[");
 		    		        	String MetodoNome = splitMetodo[0];
 		    		        	
@@ -373,12 +581,13 @@ public class Controller {
 		    		        	// criar o elemento Metodo quando estiver pronto
 		    		        	
 		    		        	////// TESTE //////
-		    		        	System.out.println("====METODOS====");
+		    		        	System.out.println("\n====METODOS====");
 		    		        	System.out.println("Nome do Metodo: " +MetodoNome);
 		    		        	System.out.println("Tipo de Retorno do Metodo: " +retMetodoNome);
 		    		        	System.out.println("Modificador do Metodo: " +modifMetodoNome);
 		    		        	System.out.println("Parametro do Metodo: " +paramMetodoNome);
 		    		        	System.out.println("Tipo do Parametro: " +tipoParametroNome);
+		    		        	
 		    		        } else if (subComponente[0].equals("navegClasse")) {
 		    		        	navegClasse = subComponente[1];
 		    		        	
@@ -447,6 +656,26 @@ public class Controller {
       	  System.out.println("Salvando diagrama...");
       	  salvarDiagrama();
         }
+		
+        else if(opcao == 5) {
+        	elementoCompostoAtual = DiagramasSalvos.undo();
+        	if(elementoCompostoAtual == null) {
+        		paiDoAtual = null;
+        		elementoAberto = "inicial";
+        	}
+        	else if(elementoCompostoAtual instanceof Diagrama) {
+        		elementoAberto = "diagrama";
+        	}
+        	else if(elementoCompostoAtual instanceof Classe) {
+        		elementoAberto = "classe";
+        	}
+        	else if(elementoCompostoAtual instanceof Interface) {
+        		elementoAberto = "interface";
+        	}
+        	//DiagramasSalvos.mostrar();
+        	menu();
+        }
+		
         else {
       	  paiDoAtual = elementoCompostoAtual;
       	  elementoAtual = atrelaElementoAoNumero.get(opcao);
@@ -467,8 +696,38 @@ public class Controller {
 			System.out.println("\n");
 			elementoAberto = "atributo";
 			menu();
+		} 
+		
+		else if(opcao == 3) {
+			System.out.println("\n");
+			elementoAberto = "metodo";
+			menu();
 		}
-    	
+		
+		else if(opcao == 4) {
+			System.out.println("\n");
+			elementoAberto = "relacionamento";
+			menu();
+		}
+		
+		else if(opcao == 5) {
+			paiDoAtual.removerFilho(elementoCompostoAtual);
+        	elementoCompostoAtual = DiagramasSalvos.undo();
+        	if(elementoCompostoAtual == null) {
+        		elementoAberto = "inicial";
+        	}
+        	else if(elementoCompostoAtual instanceof Diagrama) {
+        		elementoAberto = "diagrama";
+        	}
+        	else if(elementoCompostoAtual instanceof Classe) {
+        		elementoAberto = "classe";
+        	}
+        	else if(elementoCompostoAtual instanceof Interface) {
+        		elementoAberto = "interface";
+        	}
+        	//DiagramasSalvos.mostrar();
+        	menu();
+     }
 	}
 	
 	public void opcoesMenuTipoAtributo(int opcaoTipo, int opcaoModificador) {
@@ -544,7 +803,40 @@ public class Controller {
     			criarElemento("atributo", null, false, "char", "Public");
     		if(opcaoModificador == 4)
     			criarElemento("atributo", null, false, "char", "Protected");
+    	} else if(opcaoTipo == 9) {
+    		if(opcaoModificador == 1)
+    			criarElemento("atributo", null, false, "String", "Default");
+    		if(opcaoModificador == 2)
+    			criarElemento("atributo", null, false, "String", "Private");
+    		if(opcaoModificador == 3)
+    			criarElemento("atributo", null, false, "String", "Public");
+    		if(opcaoModificador == 4)
+    			criarElemento("atributo", null, false, "String", "Protected");
     	}
     	
 	}
+	
+	//COPIANDO OBJETOS PRA NAO ALTERAR O STATIC
+		public static Diagrama copiarElementoDiagrama(Diagrama original, Diagrama copia) {
+			copia.setMensagemCriado(original.getMensagemCriado());
+			if(original.getFilhos().size() > 0) {
+				for(int i = 0; i < original.getFilhos().size(); i++) {
+					copia.addFilho(original.getFilhos().get(i));
+				}
+			}
+			return copia;
+		}
+		
+		public static Classe copiarElementoClasse (Classe original, Classe copia) {
+			copia.setMultiplicidade(original.getMultiplicidade());
+			copia.setModificadorDeAcesso(original.getModificadorDeAcesso());
+			copia.setMultiplicidade(original.getMultiplicidade());
+			copia.setNavegabilidade(original.getNavegabilidade());
+			if(original.getFilhos().size() > 0) {
+				for(int i = 0; i < original.getFilhos().size(); i++) {
+					copia.addFilho(original.getFilhos().get(i));
+				}
+			}
+			return copia;
+		}
 }
