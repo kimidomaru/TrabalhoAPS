@@ -83,6 +83,7 @@ public class Controller {
 		    //Menu de Classes
 	        case "classe": 
 	        	menu.ShowComponente(elementoCompostoAtual);
+
 	        	qtdOpcoes = 5;
 	        	menu.mostrarMenu("classe");
 	        	
@@ -383,11 +384,11 @@ public class Controller {
 					        		}
 					        	}
 					        	
-					        	arquivoEscrever.write("}\n");
+					        	arquivoEscrever.write("}");
 			        			arquivoEscrever.flush();
 							}
 						}
-						arquivoEscrever.write("=END");
+						arquivoEscrever.write("\n=END");
 	        			arquivoEscrever.flush();
 					}
 		        } else {
@@ -455,11 +456,11 @@ public class Controller {
 							        		}
 							        	}
 							        	
-							        	arquivoEscrever.write("}\n");
+							        	arquivoEscrever.write("}");
 					        			arquivoEscrever.flush();
 									}
 								}
-								arquivoEscrever.write("=END");
+								arquivoEscrever.write("\n=END");
 			        			arquivoEscrever.flush();
 							}
 				        }
@@ -655,6 +656,8 @@ public class Controller {
         else if(opcao == 4) {
       	  System.out.println("Salvando diagrama...");
       	  salvarDiagrama();
+      	  elementoAberto = "inicial";
+      	  menu();
         }
 		
         else if(opcao == 5) {
@@ -727,7 +730,7 @@ public class Controller {
         	}
         	//DiagramasSalvos.mostrar();
         	menu();
-     }
+		}
 	}
 	
 	public void opcoesMenuTipoAtributo(int opcaoTipo, int opcaoModificador) {

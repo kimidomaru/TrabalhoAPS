@@ -86,7 +86,7 @@ public class Menu {
 				+ "5 - float\n"
 				+ "6 - double\n"
 				+ "7 - boolean\n"
-				+ "8 - char"
+				+ "8 - char\n"
 				+ "9 - String");
 		System.out.print("Digite o numero da opcao desejada: ");
 	}
