@@ -646,7 +646,15 @@ public class Controller {
 	}
 	
 	public static Interface copiarElementoInterface(Interface original, Interface copia){
-		//FALTA FAZER
+		copia.setMultiplicidade(original.getMultiplicidade());
+		copia.setModificadorDeAcesso(original.getModificadorDeAcesso());
+		copia.setMultiplicidade(original.getMultiplicidade());
+		copia.setNavegabilidade(original.getNavegabilidade());
+		if(original.getFilhos().size() > 0) {
+			for(int i = 0; i < original.getFilhos().size(); i++) {
+				copia.addFilho(original.getFilhos().get(i));
+			}
+		}
 		return copia;
 	}
 	
@@ -662,7 +670,9 @@ public class Controller {
 			DiagramasSalvos.quickSave(copia);
 		}
 		else if(c instanceof Interface){
-			//FALTA FAZER
+			Interface copia = new Interface(elementoCompostoAtual.getNome());
+			copia = copiarElementoInterface((Interface)elementoCompostoAtual, copia);
+			DiagramasSalvos.quickSave(copia);
 		}
 	}
 	
@@ -680,10 +690,11 @@ public class Controller {
 		
 		if(tipo.equals("diagrama")){
 			for(int i = qtdOpcoes; i < (elementoCompostoAtual.getFilhos().size() + qtdOpcoes); i++){
-		          System.out.println((i+1) + " - Abrir a classe " + elementoCompostoAtual.getFilhos().get(i-qtdOpcoes).getNome());
-		          int opcaoDaClasse = atrelaElementoAoNumero.size();
-		          atrelaElementoAoNumero.put(opcaoDaClasse, elementoCompostoAtual.getFilhos().get(opcaoDaClasse));
-	          }
+				String tipoFilho = elementoCompostoAtual.getFilhos().get(i-qtdOpcoes).getClass().getSimpleName().toLowerCase();
+				System.out.println((i+1) + " - Abrir a "+ tipoFilho +" " + elementoCompostoAtual.getFilhos().get(i-qtdOpcoes).getNome());
+		        int opcaoDaClasse = atrelaElementoAoNumero.size();
+	            atrelaElementoAoNumero.put(opcaoDaClasse, elementoCompostoAtual.getFilhos().get(opcaoDaClasse));
+	        }
 		}
 		
 		else if(tipo.equals("classe") || tipo.equals("interface")){
