@@ -607,7 +607,11 @@ public class Controller {
 	}
 	
 	public void opcoesMenuClasseOuInterface(int opcao, Map<Integer, Componente> atrelaElementoAoNumero) {
-		if(opcao == 1){
+		if(opcao == 0) {
+			System.exit(0);
+		}
+		
+		else if(opcao == 1){
     		System.out.print("\n");
     		elementoCompostoAtual = paiDoAtual;
     		elementoAberto = "diagrama";
