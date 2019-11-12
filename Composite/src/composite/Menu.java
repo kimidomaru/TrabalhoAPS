@@ -29,12 +29,24 @@ public class Menu {
 			menuModificadorAtributo();
 		}
 		
-		else if(elemento.equals("metodo")){
-			menuMetodo();
+		else if(elemento.equals("metodoTipoRetorno")){
+			menuMetodoTipoRetorno();
 		}
 		
-		else if(elemento.equals("parametro")){
-			menuParametro();
+		else if(elemento.equals("metodoModificadorClasse")){
+			menuModificadorMetodoClasse();
+		}
+		
+		else if(elemento.equals("metodoModificadorInterface")){
+			menuModificadorMetodoInterface();
+		}
+		
+		else if(elemento.equals("adicionarParametro")){
+			menuAdicionarParametro();
+		}
+		
+		else if(elemento.equals("tipoParametro")){
+			menuTipoParametro();
 		}
 		
 		else if(elemento.equals("relacionamento")){
@@ -92,7 +104,7 @@ public class Menu {
 	}
 	
 	public void menuModificadorAtributo(){
-		System.out.println("\n---Menu de Modificador de Acesso do Atributo---\n"
+		System.out.println("\n---Menu de Modificador de Acesso de Atributo---\n"
 				+ "1 - Default\n"
 				+ "2 - Private\n"
 				+ "3 - Public\n"
@@ -100,13 +112,57 @@ public class Menu {
 		System.out.print("Digite o numero da opcao desejada: ");
 	}
 	
-	public void menuMetodo(){
-		//opcoes Aqui
-		System.out.println("MENU DE METODO");
+	
+	public void menuModificadorMetodoClasse(){
+		System.out.println("\n---Menu de Modificador de Acesso de Metodo---\n"
+				+ "1 - Default\n"
+				+ "2 - Private\n"
+				+ "3 - Public\n"
+				+ "4 - Protected");
+		System.out.print("Digite o numero da opcao desejada: ");
 	}
 	
-	public void menuParametro(){
-		//opcoes Aqui
+	public void menuModificadorMetodoInterface(){
+		System.out.println("\n---Menu de Modificador de Acesso de Metodo---\n"
+				+ "1 - Default\n"
+				+ "2 - Public");
+		System.out.print("Digite o numero da opcao desejada: ");
+	}
+	
+	public void menuMetodoTipoRetorno(){
+		System.out.println("\n---Menu do Tipo do Metodo---\n"
+				+ "1 - byte\n"
+				+ "2 - short\n"
+				+ "3 - int\n"
+				+ "4 - long\n"
+				+ "5 - float\n"
+				+ "6 - double\n"
+				+ "7 - boolean\n"
+				+ "8 - char\n"
+				+ "9 - String\n"
+				+ "10 - void");
+		System.out.print("Digite o numero da opcao desejada: ");
+	}
+	
+	public void menuAdicionarParametro(){
+		System.out.println("\n---Escolha se deseja adicionar um parametro ao metodo---\n"
+				+ "1 - Sim\n"
+				+ "2 - Nao\n");
+		System.out.print("Digite o numero da opcao desejada: ");
+	}
+	
+	public void menuTipoParametro(){
+		System.out.println("\n---Menu do Tipo do Parametro---\n"
+				+ "1 - byte\n"
+				+ "2 - short\n"
+				+ "3 - int\n"
+				+ "4 - long\n"
+				+ "5 - float\n"
+				+ "6 - double\n"
+				+ "7 - boolean\n"
+				+ "8 - char\n"
+				+ "9 - String");
+		System.out.print("Digite o numero da opcao desejada: ");
 	}
 	
 	public void menuRelacionamento(){

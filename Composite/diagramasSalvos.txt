@@ -1,4 +1,15 @@
 [1]
-aaaa
-bbbb{multipClasse:null;navegClasse:null;modifClasse:null;atributo:asasd[tipoAtr-short,modifAtr-Private]}
+aaa
+bbb{multipClasse:null;navegClasse:null;modifClasse:null;metodo:ccc[retornoMetodo-byte,modifMetodo-Default,paramMetodo-ppp(tipoParam_byte)]}
+=END
+
+[2]
+Exemplo
+aaa{multipClasse:null;navegClasse:null;modifClasse:null;metodo:metodoExemplo1[retornoMetodo-byte,modifMetodo-Default}
+=END
+
+[3]
+palsdalspdapsldpasd
+aaaa{multipClasse:null;navegClasse:null;modifClasse:null;atributo:lqpldpwdl[tipoAtr-short,modifAtr-Private];metodo:dlqwdl[retornoMetodo-byte,modifMetodo-Default,paramMetodo-mqkwdqd(tipoParam_byte)];metodo:sdasd[retornoMetodo-short,modifMetodo-Private}
+nqwgd{multipInterface:null;navegInterface:null;modifInterface:null;atributo:asdasd[tipoAtr-short,modifAtr-Public];metodo:qwidkqwdk[retornoMetodo-byte,modifMetodo-Public,paramMetodo-iqif(tipoParam_short)];metodo:qwdijwdq[retornoMetodo-short,modifMetodo-Public;metodo:asid[retornoMetodo-short,modifMetodo-Public,paramMetodo-qwdkoq(tipoParam_short)]}
 =END

@@ -81,6 +81,7 @@ public class DiagramasSalvos {
 		        		List<Componente> listaDeFilhos = elementoCompostoAtual.getFilhos();
 						for(int i = 0; i<listaDeFilhos.size();i++) {
 							Componente filhoPosicao = listaDeFilhos.get(i);
+							
 							if(filhoPosicao instanceof Classe) {
 								Classe filhoDaPosicaoClasse = (Classe) filhoPosicao;
 								arquivoEscrever.write("\n" + filhoDaPosicaoClasse.getNome() + "{multipClasse:" + filhoDaPosicaoClasse.getMultiplicidade() 
@@ -104,6 +105,53 @@ public class DiagramasSalvos {
 					        		Componente filhoPosicaoClasse = listaDeFilhosDaClasse.get(k);
 					        		if(filhoPosicaoClasse instanceof Metodo) {
 					        			Metodo filhoMetodo = (Metodo) filhoPosicaoClasse;
+					        			arquivoEscrever.write(";metodo:" + filhoMetodo.getNome() + "[retornoMetodo-" + filhoMetodo.getTipoRetorno()
+					        									+ ",modifMetodo-" + filhoMetodo.getModificadoresDeAcesso());
+					        			arquivoEscrever.flush();
+					        			
+					        			List<Componente> listaDeFilhosDoMetodo = filhoMetodo.getFilhos();
+					        			for(int l=0; l<listaDeFilhosDoMetodo.size();l++) {
+					        				Componente filhoPosicaoMetodo = listaDeFilhosDoMetodo.get(l);
+					        				if(filhoPosicaoMetodo instanceof Parametro) {
+					        					Parametro filhoParametro = (Parametro) filhoPosicaoMetodo;
+					        					if (l == listaDeFilhosDoMetodo.size()-1) {
+					        						arquivoEscrever.write(",paramMetodo-" + filhoParametro.getNome() + "(tipoParam_" + filhoParametro.getTipo() + ")]");
+						        					arquivoEscrever.flush();
+					        					} else {
+					        						arquivoEscrever.write(",paramMetodo-" + filhoParametro.getNome() + "(tipoParam_" + filhoParametro.getTipo() + ")");
+						        					arquivoEscrever.flush();
+					        					}
+					        					
+					        				}
+					        			}
+					        		}
+					        	}
+					        	
+					        	arquivoEscrever.write("}");
+			        			arquivoEscrever.flush();
+							} else if (filhoPosicao instanceof Interface) {
+								Interface filhoDaPosicaoInterface = (Interface) filhoPosicao;
+								arquivoEscrever.write("\n" + filhoDaPosicaoInterface.getNome() + "{multipInterface:" + filhoDaPosicaoInterface.getMultiplicidade() 
+														+ ";navegInterface:" + filhoDaPosicaoInterface.getNavegabilidade()
+														+ ";modifInterface:" + filhoDaPosicaoInterface.getModificadorDeAcesso());
+					        	arquivoEscrever.flush();
+					        	
+					        	List<Componente> listaDeFilhosDaInterface = filhoDaPosicaoInterface.getFilhos();
+					        	for(int j=0; j<listaDeFilhosDaInterface.size();j++) {
+					        		Componente filhoPosicaoInterface = listaDeFilhosDaInterface.get(j);
+					        		if(filhoPosicaoInterface instanceof Atributo) {
+					        			Atributo filhoAtributo = (Atributo) filhoPosicaoInterface;
+					        			arquivoEscrever.write(";atributo:" + filhoAtributo.getNome() + "[tipoAtr-" + filhoAtributo.getTipo()
+					        									+ ",modifAtr-" + filhoAtributo.getModificadoresDeAcesso()
+					        									+ "]");
+					        			arquivoEscrever.flush();
+					        		}
+					        	}
+					        	
+					        	for(int k=0; k<listaDeFilhosDaInterface.size();k++) {
+					        		Componente filhoPosicaoInterface = listaDeFilhosDaInterface.get(k);
+					        		if(filhoPosicaoInterface instanceof Metodo) {
+					        			Metodo filhoMetodo = (Metodo) filhoPosicaoInterface;
 					        			arquivoEscrever.write(";metodo:" + filhoMetodo.getNome() + "[retornoMetodo-" + filhoMetodo.getTipoRetorno()
 					        									+ ",modifMetodo-" + filhoMetodo.getModificadoresDeAcesso());
 					        			arquivoEscrever.flush();
@@ -176,6 +224,53 @@ public class DiagramasSalvos {
 							        		Componente filhoPosicaoClasse = listaDeFilhosDaClasse.get(k);
 							        		if(filhoPosicaoClasse instanceof Metodo) {
 							        			Metodo filhoMetodo = (Metodo) filhoPosicaoClasse;
+							        			arquivoEscrever.write(";metodo:" + filhoMetodo.getNome() + "[retornoMetodo-" + filhoMetodo.getTipoRetorno()
+							        									+ ",modifMetodo-" + filhoMetodo.getModificadoresDeAcesso());
+							        			arquivoEscrever.flush();
+							        			
+							        			List<Componente> listaDeFilhosDoMetodo = filhoMetodo.getFilhos();
+							        			for(int l=0; l<listaDeFilhosDoMetodo.size();l++) {
+							        				Componente filhoPosicaoMetodo = listaDeFilhosDoMetodo.get(l);
+							        				if(filhoPosicaoMetodo instanceof Parametro) {
+							        					Parametro filhoParametro = (Parametro) filhoPosicaoMetodo;
+							        					if (l == listaDeFilhosDoMetodo.size()-1) {
+							        						arquivoEscrever.write(",paramMetodo-" + filhoParametro.getNome() + "(tipoParam_" + filhoParametro.getTipo() + ")]");
+								        					arquivoEscrever.flush();
+							        					} else {
+							        						arquivoEscrever.write(",paramMetodo-" + filhoParametro.getNome() + "(tipoParam_" + filhoParametro.getTipo() + ")");
+								        					arquivoEscrever.flush();
+							        					}
+							        					
+							        				}
+							        			}
+							        		}
+							        	}
+							        	
+							        	arquivoEscrever.write("}");
+					        			arquivoEscrever.flush();
+									} else if (filhoPosicao instanceof Interface) {
+										Interface filhoDaPosicaoInterface = (Interface) filhoPosicao;
+										arquivoEscrever.write("\n" + filhoDaPosicaoInterface.getNome() + "{multipInterface:" + filhoDaPosicaoInterface.getMultiplicidade() 
+																+ ";navegInterface:" + filhoDaPosicaoInterface.getNavegabilidade()
+																+ ";modifInterface:" + filhoDaPosicaoInterface.getModificadorDeAcesso());
+							        	arquivoEscrever.flush();
+							        	
+							        	List<Componente> listaDeFilhosDaInterface = filhoDaPosicaoInterface.getFilhos();
+							        	for(int j=0; j<listaDeFilhosDaInterface.size();j++) {
+							        		Componente filhoPosicaoInterface = listaDeFilhosDaInterface.get(j);
+							        		if(filhoPosicaoInterface instanceof Atributo) {
+							        			Atributo filhoAtributo = (Atributo) filhoPosicaoInterface;
+							        			arquivoEscrever.write(";atributo:" + filhoAtributo.getNome() + "[tipoAtr-" + filhoAtributo.getTipo()
+							        									+ ",modifAtr-" + filhoAtributo.getModificadoresDeAcesso()
+							        									+ "]");
+							        			arquivoEscrever.flush();
+							        		}
+							        	}
+							        	
+							        	for(int k=0; k<listaDeFilhosDaInterface.size();k++) {
+							        		Componente filhoPosicaoInterface = listaDeFilhosDaInterface.get(k);
+							        		if(filhoPosicaoInterface instanceof Metodo) {
+							        			Metodo filhoMetodo = (Metodo) filhoPosicaoInterface;
 							        			arquivoEscrever.write(";metodo:" + filhoMetodo.getNome() + "[retornoMetodo-" + filhoMetodo.getTipoRetorno()
 							        									+ ",modifMetodo-" + filhoMetodo.getModificadoresDeAcesso());
 							        			arquivoEscrever.flush();

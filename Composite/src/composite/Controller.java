@@ -19,12 +19,12 @@ import java.util.regex.Pattern;
 public class Controller {
 
 	public static String elementoAberto = "inicial";
-	//public static Componente paiDoAtual;
 	public static ComponenteComposto paiDoAtual;
 	public static ComponenteComposto elementoCompostoAtual;
 	public static Componente elementoAtual;
-
-	public static void menu(){			//menu que ira se adaptar as possibilidades de criacao, exclusao, etc
+	
+	//menu que ira se adaptar as possibilidades de criacao, exclusao, etc
+	public static void menu() {	
 			
 		int opcao = -1;
 		int opcaoTipo = -1;
@@ -77,7 +77,7 @@ public class Controller {
 		        System.out.print("Digite o numero da opcao desejada: ");
 	        	
 	        	opcao = c.verificarEntrada(elementoAberto, qtdOpcoes);
-	        	c.opcoesMenuClasseOuInterface(opcao);
+	        	c.opcoesMenuClasseOuInterface(opcao, atrelaElementoAoNumero);
 	        	break;
 	        	
 	        case "interface":
@@ -92,7 +92,7 @@ public class Controller {
 		        System.out.print("Digite o numero da opcao desejada: ");
 	        	
 	        	opcao = c.verificarEntrada(elementoAberto, qtdOpcoes);
-	        	c.opcoesMenuClasseOuInterface(opcao);
+	        	c.opcoesMenuClasseOuInterface(opcao, atrelaElementoAoNumero);
 	        	break;
 
 	        case "atributo": 
@@ -116,13 +116,33 @@ public class Controller {
 	        	break;
 
 	        case "metodo":
-	        	//
+	        	int qtdOpcoesTipoRetorno = 10;
+	        	int qtdOpcoesModificadorMetodoClasse = 4;
+	        	int qtdOpcoesModificadorMetodoInterface = 2;
+	        	
+	        	menu.mostrarMenu("metodoTipoRetorno");
+	        	opcaoTipo = c.verificarEntrada(elementoAberto, qtdOpcoesTipoRetorno);
+	        	
+	        	if(elementoCompostoAtual instanceof Classe) {
+	        		menu.mostrarMenu("metodoModificadorClasse");
+		        	opcaoModificador = c.verificarEntrada(elementoAberto, qtdOpcoesModificadorMetodoClasse);
+	        	} else if(elementoCompostoAtual instanceof Interface) {
+	        		menu.mostrarMenu("metodoModificadorInterface");
+	        		opcaoModificador = c.verificarEntrada(elementoAberto, qtdOpcoesModificadorMetodoInterface);
+	        	}
+	        	
+	        	if(elementoCompostoAtual instanceof Classe) {
+	        		c.opcoesMenuTipoMetodoClasse(opcaoTipo, opcaoModificador);
+	        	} else if (elementoCompostoAtual instanceof Interface) {
+	        		c.opcoesMenuTipoMetodoInterface(opcaoTipo, opcaoModificador);
+	        	}
+
 	        	break;
 
 	      }
 	}
 
-	public static void criarElemento(String oQueCriar, String nomeOQueCriar, boolean abrindoDiagrama, String tipoAtributo, String modificadorAtributo){
+	public static void criarElemento(String oQueCriar, String nomeOQueCriar, String tipoAtributo, String modificadorAtributo){
 			
 		switch(oQueCriar){
 			
@@ -136,23 +156,6 @@ public class Controller {
 				
 			case "classe":
 				Classe c = new Classe(nomeOQueCriar);
-				/////// DEBUG PARA SALVAR DIAGRAMA
-				/*
-				Metodo m = new Metodo("metTeste");
-				Parametro p = new Parametro("int", "paraTeste");
-				m.addFilho(p);
-				Atributo a = new Atributo("testAtr","int","private");
-				Metodo m2 = new Metodo("metTeste2");
-				Parametro p2 = new Parametro("int", "paraTeste2");
-				Parametro p3 = new Parametro("int", "paraTeste3");
-				m2.addFilho(p2);
-				m2.addFilho(p3);
-				
-				c.addFilho(m);
-				c.addFilho(a);
-				c.addFilho(m2);
-				*/
-				///////
 				elementoCompostoAtual.addFilho(c);
 				elementoAberto = "classe";
 				paiDoAtual = elementoCompostoAtual;
@@ -178,41 +181,80 @@ public class Controller {
 				elementoAberto = "classe";
 				menu();
 				break;
-				
-			case "metodo":
-				break;
-				
-			case "parametro":
-				break;
-				
+
 			case "relacionamento":
 				break;
 		}
 	}
-
+	
+	public static void criarElementoMetodo(String nomeOQueCriar, String tipoRetorno, String modificadoresDeAcesso ) {
+		int qtdOpcoes = 2;
+		int qtdOpcoesTipoParametro = 9;
+		int opcao = -1;
+		int opcaoTipoParametro = -1;
+		
+		Menu menu = new Menu();
+		Controller c = new Controller();
+		Metodo m = new Metodo(nomeOQueCriar, tipoRetorno, modificadoresDeAcesso);
+		elementoCompostoAtual.addFilho(m);
+		salvarElemento(elementoCompostoAtual);
+		elementoAberto = "classe";
+		
+		do {
+			menu.mostrarMenu("adicionarParametro");
+			opcao = c.verificarEntrada(elementoAberto, qtdOpcoes);
+			
+			if(opcao == 1) {
+				menu.mostrarMenu("tipoParametro");
+				opcaoTipoParametro = c.verificarEntrada(elementoAberto, qtdOpcoesTipoParametro);
+				Parametro p = null;
+				
+				if (opcaoTipoParametro == 1) {
+					p = new Parametro("byte", null);
+				} else if (opcaoTipoParametro == 2) {
+					p = new Parametro("short", null);
+				} else if (opcaoTipoParametro == 3) {
+					p = new Parametro("int", null);
+				} else if (opcaoTipoParametro == 4) {
+					p = new Parametro("long", null);
+				} else if (opcaoTipoParametro == 5) {
+					p = new Parametro("float", null);
+				} else if (opcaoTipoParametro == 6) {
+					p = new Parametro("double", null);
+				} else if (opcaoTipoParametro == 7) {
+					p = new Parametro("boolean", null);
+				} else if (opcaoTipoParametro == 8) {
+					p = new Parametro("char", null);
+				} else if (opcaoTipoParametro == 9) {
+					p = new Parametro("String", null);
+				}
+				
+				m.addFilho(p);
+			}	
+		}while(opcao == 1);
+		
+		
+		menu();
+	}
+	
 	public int verificarEntrada(String elementoAberto, int qtdOpcoes) {
 		Scanner entrada = new Scanner(System.in);
 		int opcao = -1;
 		
 		do{
     		entrada = new Scanner(System.in);
-    		
     		try {
     			opcao = entrada.nextInt();
-          
     			if(opcao < 0 || opcao > qtdOpcoes) {
     				throw new InputMismatchException();
     			}
-    		}
-
-    		catch (InputMismatchException e) {
+    		} catch (InputMismatchException e) {
     			System.out.print("Opcao invalida! Digite uma opcao valida: ");
     		}
-        
-    	}while(opcao < 0 || opcao > qtdOpcoes);
-		
+    	}while(opcao < 0 || opcao > qtdOpcoes);	
 		return opcao;
 	}
+	
 	
 	public static void abrirDiagrama() { 
 		try {
@@ -279,103 +321,200 @@ public class Controller {
 						
 						while(inputNovamente.hasNextLine() && !(linhaNovamente = inputNovamente.nextLine()).equals("=END")) {
 							elementoCompostoAtual = d;
-							int posicaoNomeClasse = linhaNovamente.indexOf("{");
-							String nomeClasse = null;
-			        		if(posicaoNomeClasse != -1) {
+							//int posicaoNomeClasse = linhaNovamente.indexOf("{");
+
+							String pegandoNomeClasse[] = linhaNovamente.split("\\{");
+							String pegandoClasseOuInterf[] = pegandoNomeClasse[1].split(":");
+							String nomeClasse = pegandoNomeClasse[0];
+			        		/*if(posicaoNomeClasse != -1) {
 			        			nomeClasse = linhaNovamente.substring(0 , posicaoNomeClasse);
-			        		}
+			        		}*/
 			        		
-			        		//criando classe e adicionando seus atributos e/ou metodos
-			        		Classe c = new Classe(nomeClasse);
-							elementoCompostoAtual.addFilho(c);
-							elementoAberto = "classe";
-							paiDoAtual = elementoCompostoAtual;
-							elementoCompostoAtual = c;
-							salvarElemento(c);
-							
-			        		String componentesClasse[] = linhaNovamente.split(";");
-			        		for(int i=0; i<componentesClasse.length; i++) {        			
-			        			
-			        			String subComponente[] = componentesClasse[i].split(":");
-			        			String multipClasse;
-			        			String navegClasse;
-			        			String modifClasse;
-			        			
-			        			Pattern regexVerifInicio = Pattern.compile("\\w*\\{\\w*");
-			        			
-			    				Matcher matcherPedacoInicio = regexVerifInicio.matcher(subComponente[0]);
-			    		        boolean matchesPedacoInicio = matcherPedacoInicio.matches();
-	
-			    		        if (matchesPedacoInicio) {
-			    		        	String splitMultip[] = subComponente[0].split("\\{");
-					        		if(splitMultip[1].equals("multipClasse")) {
-					        			multipClasse = subComponente[1];
-					        			
-					        			// adiciona a multiplicidade na classe
-					        			c.setMultiplicidade(multipClasse);
-					        		}
-					        	} else if (subComponente[0].equals("atributo")) {
-			    		        	String splitAtr[] = subComponente[1].split("\\[");
-			    		        	String atrNome = splitAtr[0];
-			    		        	
-			    		        	String splitDentroAtributos[] = splitAtr[1].split(",");
-			    		        	String tipoAtr[] = splitDentroAtributos[0].split("-");
-			    		        	String tipoAtrNome = tipoAtr[1];
-			    		        	
-			    		        	String modificadorAtr[] = splitDentroAtributos[1].split("-");
-			    		        	String modificadorAtrNome = modificadorAtr[1];
-	
-			    		        	
-			    		        	// adiciona o atributo na classe
-			    		        	Atributo a = new Atributo(atrNome, tipoAtrNome, modificadorAtrNome);
-			    					elementoCompostoAtual.addFilho(a);
-			    					salvarElemento(elementoCompostoAtual);
-			    					elementoAberto = "classe";
-			    					
-			    		        } else if (subComponente[0].equals("metodo")) {
-			    		        	String splitMetodo[] = subComponente[1].split("\\[");
-			    		        	String metodoNome = splitMetodo[0];
-			    		        	
-			    		        	String splitDentroMetodos[] = splitMetodo[1].split(",");
-			    		        	String retMetodo[] = splitDentroMetodos[0].split("-");
-			    		        	String retMetodoNome = retMetodo[1];
-			    		        	
-			    		        	String modifMetodo[] = splitDentroMetodos[1].split("-");
-			    		        	String modifMetodoNome = modifMetodo[1];
-			    		        	
-			    		        	String paramMetodo[] = splitDentroMetodos[2].split("-");
-			    		        	String paramMetodoMaisUm[] = paramMetodo[1].split("\\(");
-			    		        	String paramMetodoNome = paramMetodoMaisUm[0];
-			    		        	
-			    		        	String tipoParametro[] = paramMetodoMaisUm[1].split("_");
-			    		        	String tipoParametroMaisUm[] = tipoParametro[1].split("\\)");
-			    		        	String tipoParametroNome = tipoParametroMaisUm[0];
-			    		        	
-			    		        	// adiciona o metodo na classe
-			    		        	Metodo m = new Metodo(metodoNome);
-			    		        	m.setTipoRetorno(retMetodoNome);
-			    		        	m.setModificadoresDeAcesso(modifMetodoNome);
-			    		        	Parametro p = new Parametro(tipoParametroNome, paramMetodoNome);
-			    		        	m.addFilho(p);
-			    		        	
-			    					elementoCompostoAtual.addFilho(m);
-			    					salvarElemento(elementoCompostoAtual);
-			    					elementoAberto = "classe";
-			    		        	
-			    		        } else if (subComponente[0].equals("navegClasse")) {
-			    		        	navegClasse = subComponente[1];
-			    		        	
-			    		        	// adiciona a navegabilidade na classe
-			    		        	c.setNavegabilidade(navegClasse);
-			    		        } else if (subComponente[0].equals("modifClasse")) {
-			    		        	modifClasse = subComponente[1];
-			    		        	
-			    		        	// adiciona o modificador na classe
-			    		        	c.setMultiplicidade(modifClasse);
-			    		        }
-			    		        
-			        		}
-						
+							if (pegandoClasseOuInterf[0].equals("multipClasse")) {
+								//criando a classe
+				        		Classe c = new Classe(nomeClasse);
+								elementoCompostoAtual.addFilho(c);
+								elementoAberto = "classe";
+								paiDoAtual = elementoCompostoAtual;
+								elementoCompostoAtual = c;
+								salvarElemento(c);
+								
+
+				        		String componentesClasse[] = linhaNovamente.split(";");
+				        		for(int i=0; i<componentesClasse.length; i++) {        			
+				        			
+				        			String subComponente[] = componentesClasse[i].split(":");
+				        			String multipClasse;
+				        			String navegClasse;
+				        			String modifClasse;
+				        			
+				        			Pattern regexVerifInicio = Pattern.compile("\\w*\\{\\w*");
+				        			
+				    				Matcher matcherPedacoInicio = regexVerifInicio.matcher(subComponente[0]);
+				    		        boolean matchesPedacoInicio = matcherPedacoInicio.matches();
+		
+				    		        if (matchesPedacoInicio) {
+				    		        	String splitMultip[] = subComponente[0].split("\\{");
+						        		if(splitMultip[1].equals("multipClasse")) {
+						        			multipClasse = subComponente[1];
+						        			
+						        			// adiciona a multiplicidade na classe
+						        			c.setMultiplicidade(multipClasse);
+						        		}
+						        	} else if (subComponente[0].equals("atributo")) {
+				    		        	String splitAtr[] = subComponente[1].split("\\[");
+				    		        	String atrNome = splitAtr[0];
+				    		        	
+				    		        	String splitDentroAtributos[] = splitAtr[1].split(",");
+				    		        	String tipoAtr[] = splitDentroAtributos[0].split("-");
+				    		        	String tipoAtrNome = tipoAtr[1];
+				    		        	
+				    		        	String modificadorAtr[] = splitDentroAtributos[1].split("-");
+				    		        	String modificadorAtrNome = modificadorAtr[1];
+		
+				    		        	
+				    		        	// adiciona o atributo na classe
+				    		        	Atributo a = new Atributo(atrNome, tipoAtrNome, modificadorAtrNome);
+				    					elementoCompostoAtual.addFilho(a);
+				    					salvarElemento(elementoCompostoAtual);
+				    					elementoAberto = "classe";
+				    					
+				    		        } else if (subComponente[0].equals("metodo")) {
+				    		        	String splitMetodo[] = subComponente[1].split("\\[");
+				    		        	String metodoNome = splitMetodo[0];
+				    		        	
+				    		        	String splitDentroMetodos[] = splitMetodo[1].split(",");
+				    		        	String retMetodo[] = splitDentroMetodos[0].split("-");
+				    		        	String retMetodoNome = retMetodo[1];
+				    		        	
+				    		        	String modifMetodo[] = splitDentroMetodos[1].split("-");
+				    		        	String modifMetodoNome = modifMetodo[1];
+				    		        	
+				    		        	Metodo m = new Metodo(metodoNome, retMetodoNome, modifMetodoNome);
+				    		        	
+				    		        	if(splitDentroMetodos.length > 2) {
+				    		        		String paramMetodo[] = splitDentroMetodos[2].split("-");
+					    		        	String paramMetodoMaisUm[] = paramMetodo[1].split("\\(");
+					    		        	String paramMetodoNome = paramMetodoMaisUm[0];
+					    		        	
+					    		        	String tipoParametro[] = paramMetodoMaisUm[1].split("_");
+					    		        	String tipoParametroMaisUm[] = tipoParametro[1].split("\\)");
+					    		        	String tipoParametroNome = tipoParametroMaisUm[0];
+					    		        	
+					    		        	Parametro p = new Parametro(tipoParametroNome, paramMetodoNome);
+					    		        	m.addFilho(p);
+				    		        	}
+				    		        	
+				    		        	// adiciona o metodo na classe
+				    					elementoCompostoAtual.addFilho(m);
+				    					salvarElemento(elementoCompostoAtual);
+				    					elementoAberto = "classe";
+				    		        	
+				    		        } else if (subComponente[0].equals("navegClasse")) {
+				    		        	navegClasse = subComponente[1];
+				    		        	
+				    		        	// adiciona a navegabilidade na classe
+				    		        	c.setNavegabilidade(navegClasse);
+				    		        } else if (subComponente[0].equals("modifClasse")) {
+				    		        	modifClasse = subComponente[1];
+				    		        	
+				    		        	// adiciona o modificador na classe
+				    		        	c.setMultiplicidade(modifClasse);
+				    		        }
+				    		        
+				        		}
+							} else if (pegandoClasseOuInterf[0].equals("multipInterface")) {
+								Interface interf = new Interface(nomeClasse);
+								elementoCompostoAtual.addFilho(interf);
+								elementoAberto = "interface";
+								paiDoAtual = elementoCompostoAtual;
+								elementoCompostoAtual = interf;
+								salvarElemento(interf);
+								
+								String componentesInterface[] = linhaNovamente.split(";");
+				        		for(int i=0; i<componentesInterface.length; i++) {        			
+				        			
+				        			String subComponente[] = componentesInterface[i].split(":");
+				        			String multipInterface;
+				        			String navegInterface;
+				        			String modifInterface;
+				        			
+				        			Pattern regexVerifInicio = Pattern.compile("\\w*\\{\\w*");
+				        			
+				    				Matcher matcherPedacoInicio = regexVerifInicio.matcher(subComponente[0]);
+				    		        boolean matchesPedacoInicio = matcherPedacoInicio.matches();
+		
+				    		        if (matchesPedacoInicio) {
+				    		        	String splitMultip[] = subComponente[0].split("\\{");
+						        		if(splitMultip[1].equals("multipClasse")) {
+						        			multipInterface = subComponente[1];
+						        			
+						        			// adiciona a multiplicidade na interface
+						        			interf.setMultiplicidade(multipInterface);
+						        		}
+						        	} else if (subComponente[0].equals("atributo")) {
+				    		        	String splitAtr[] = subComponente[1].split("\\[");
+				    		        	String atrNome = splitAtr[0];
+				    		        	
+				    		        	String splitDentroAtributos[] = splitAtr[1].split(",");
+				    		        	String tipoAtr[] = splitDentroAtributos[0].split("-");
+				    		        	String tipoAtrNome = tipoAtr[1];
+				    		        	
+				    		        	String modificadorAtr[] = splitDentroAtributos[1].split("-");
+				    		        	String modificadorAtrNome = modificadorAtr[1];
+		
+				    		        	
+				    		        	// adiciona o atributo na interface
+				    		        	Atributo a = new Atributo(atrNome, tipoAtrNome, modificadorAtrNome);
+				    					elementoCompostoAtual.addFilho(a);
+				    					salvarElemento(elementoCompostoAtual);
+				    					elementoAberto = "interface";
+				    					
+				    		        } else if (subComponente[0].equals("metodo")) {
+				    		        	String splitMetodo[] = subComponente[1].split("\\[");
+				    		        	String metodoNome = splitMetodo[0];
+				    		        	
+				    		        	String splitDentroMetodos[] = splitMetodo[1].split(",");
+				    		        	String retMetodo[] = splitDentroMetodos[0].split("-");
+				    		        	String retMetodoNome = retMetodo[1];
+				    		        	
+				    		        	String modifMetodo[] = splitDentroMetodos[1].split("-");
+				    		        	String modifMetodoNome = modifMetodo[1];
+				    		        	
+				    		        	Metodo m = new Metodo(metodoNome, retMetodoNome, modifMetodoNome);
+				    		        	
+				    		        	if(splitDentroMetodos.length > 2) {
+				    		        		String paramMetodo[] = splitDentroMetodos[2].split("-");
+					    		        	String paramMetodoMaisUm[] = paramMetodo[1].split("\\(");
+					    		        	String paramMetodoNome = paramMetodoMaisUm[0];
+					    		        	
+					    		        	String tipoParametro[] = paramMetodoMaisUm[1].split("_");
+					    		        	String tipoParametroMaisUm[] = tipoParametro[1].split("\\)");
+					    		        	String tipoParametroNome = tipoParametroMaisUm[0];
+					    		        	
+					    		        	Parametro p = new Parametro(tipoParametroNome, paramMetodoNome);
+					    		        	m.addFilho(p);
+				    		        	}
+				    		        	
+				    		        	// adiciona o metodo na interface
+				    					elementoCompostoAtual.addFilho(m);
+				    					salvarElemento(elementoCompostoAtual);
+				    					elementoAberto = "interface";
+				    		        	
+				    		        } else if (subComponente[0].equals("navegInterface")) {
+				    		        	navegInterface = subComponente[1];
+				    		        	
+				    		        	// adiciona a navegabilidade na interface
+				    		        	interf.setNavegabilidade(navegInterface);
+				    		        } else if (subComponente[0].equals("modifInterface")) {
+				    		        	modifInterface = subComponente[1];
+				    		        	
+				    		        	// adiciona o modificador na interface
+				    		        	interf.setMultiplicidade(modifInterface);
+				    		        }
+				    		        
+				        		}
+							}
 						}
 						
 						// ir para o menu de diagrama
@@ -400,7 +539,7 @@ public class Controller {
 	public void opcoesMenuInicial(int opcao) {
 		if(opcao==1){
     		System.out.println("\nCriar diagrama");
-    		criarElemento("diagrama", null, false, null, null);
+    		criarElemento("diagrama", null, null, null);
     	} 
     	
     	else if(opcao==2){
@@ -426,11 +565,11 @@ public class Controller {
         
         else if(opcao == 2) {
       	  System.out.println("\nCriar classe");
-      	  criarElemento("classe", null, false, null, null);
+      	  criarElemento("classe", null, null, null);
         }
         else if(opcao == 3) {
       	  System.out.println("\nCriar interface");
-      	  criarElemento("interface", null, false, null, null);
+      	  criarElemento("interface", null, null, null);
         }
         
         else if(opcao == 4) {
@@ -459,14 +598,15 @@ public class Controller {
         }
 		
         else {
-      	  paiDoAtual = elementoCompostoAtual;
-      	  elementoAtual = atrelaElementoAoNumero.get(opcao);
-      	  elementoAberto = "classe";
-      	  menu();
+      	  	//paiDoAtual = elementoCompostoAtual;
+        	opcao = opcao - 6;
+      	  	elementoCompostoAtual = (ComponenteComposto) atrelaElementoAoNumero.get(opcao);
+      	  	elementoAberto = "classe";
+      	  	menu();
         }
 	}
 	
-	public void opcoesMenuClasseOuInterface(int opcao) {
+	public void opcoesMenuClasseOuInterface(int opcao, Map<Integer, Componente> atrelaElementoAoNumero) {
 		if(opcao == 1){
     		System.out.print("\n");
     		elementoCompostoAtual = paiDoAtual;
@@ -511,113 +651,279 @@ public class Controller {
         		paiDoAtual.addFilho(elementoCompostoAtual);
         	}
         	menu();
+		} else {
+			opcao = opcao - 6;
+			Componente componenteNome = atrelaElementoAoNumero.get(opcao);
+			List<Componente> filhosRecuperados = elementoCompostoAtual.getFilhos();
+			for(int i = 0;i<filhosRecuperados.size();i++) {
+				if (filhosRecuperados.get(i).getNome().equals(componenteNome.getNome())) {
+		        	// remove o atributo a ser modificado
+		        	elementoCompostoAtual.removerFilho(componenteNome.getNome(), filhosRecuperados.get(i).getClass().getSimpleName());
+		        	
+		        	// coleta as informações para substituir o componente antigo
+		        	if(componenteNome instanceof Atributo) {
+		        		elementoAberto = "atributo";
+		        	} else if(componenteNome instanceof Metodo) {
+		        		elementoAberto = "metodo";
+		        	}
+		      	  	menu();
+				}
+			}
 		}
 	}
 	
 	public void opcoesMenuTipoAtributo(int opcaoTipo, int opcaoModificador) {
 		if(opcaoTipo == 1){
     		if(opcaoModificador == 1)
-    			criarElemento("atributo", null, false, "byte", "Default");
+    			criarElemento("atributo", null, "byte", "Default");
     		else if(opcaoModificador == 2)
-    			criarElemento("atributo", null, false, "byte", "Private");
+    			criarElemento("atributo", null, "byte", "Private");
     		else if(opcaoModificador == 3)
-    			criarElemento("atributo", null, false, "byte", "Public");
+    			criarElemento("atributo", null, "byte", "Public");
     		else if(opcaoModificador == 4)
-    			criarElemento("atributo", null, false, "byte", "Protected");
+    			criarElemento("atributo", null, "byte", "Protected");
     	} else if(opcaoTipo == 2) {
     		if(opcaoModificador == 1)
-    			criarElemento("atributo", null, false, "short", "Default");
+    			criarElemento("atributo", null, "short", "Default");
     		else if(opcaoModificador == 2)
-    			criarElemento("atributo", null, false, "short", "Private");
+    			criarElemento("atributo", null, "short", "Private");
     		else if(opcaoModificador == 3)
-    			criarElemento("atributo", null, false, "short", "Public");
+    			criarElemento("atributo", null, "short", "Public");
     		else if(opcaoModificador == 4)
-    			criarElemento("atributo", null, false, "short", "Protected");
+    			criarElemento("atributo", null, "short", "Protected");
     	} else if(opcaoTipo == 3) {
     		if(opcaoModificador == 1)
-    			criarElemento("atributo", null, false, "int", "Default");
+    			criarElemento("atributo", null, "int", "Default");
     		else if(opcaoModificador == 2)
-    			criarElemento("atributo", null, false, "int", "Private");
+    			criarElemento("atributo", null, "int", "Private");
     		else if(opcaoModificador == 3)
-    			criarElemento("atributo", null, false, "int", "Public");
+    			criarElemento("atributo", null, "int", "Public");
     		else if(opcaoModificador == 4)
-    			criarElemento("atributo", null, false, "int", "Protected");
+    			criarElemento("atributo", null, "int", "Protected");
     	} else if(opcaoTipo == 4) {
     		if(opcaoModificador == 1)
-    			criarElemento("atributo", null, false, "long", "Default");
+    			criarElemento("atributo", null, "long", "Default");
     		else if(opcaoModificador == 2)
-    			criarElemento("atributo", null, false, "long", "Private");
+    			criarElemento("atributo", null, "long", "Private");
     		else if(opcaoModificador == 3)
-    			criarElemento("atributo", null, false, "long", "Public");
+    			criarElemento("atributo", null, "long", "Public");
     		else if(opcaoModificador == 4)
-    			criarElemento("atributo", null, false, "long", "Protected");
+    			criarElemento("atributo", null, "long", "Protected");
     	} else if(opcaoTipo == 5) {
     		if(opcaoModificador == 1)
-    			criarElemento("atributo", null, false, "float", "Default");
+    			criarElemento("atributo", null, "float", "Default");
     		else if(opcaoModificador == 2)
-    			criarElemento("atributo", null, false, "float", "Private");
+    			criarElemento("atributo", null, "float", "Private");
     		else if(opcaoModificador == 3)
-    			criarElemento("atributo", null, false, "float", "Public");
+    			criarElemento("atributo", null, "float", "Public");
     		else if(opcaoModificador == 4)
-    			criarElemento("atributo", null, false, "float", "Protected");
+    			criarElemento("atributo", null, "float", "Protected");
     	} else if(opcaoTipo == 6) {
     		if(opcaoModificador == 1)
-    			criarElemento("atributo", null, false, "double", "Default");
+    			criarElemento("atributo", null, "double", "Default");
     		else if(opcaoModificador == 2)
-    			criarElemento("atributo", null, false, "double", "Private");
+    			criarElemento("atributo", null, "double", "Private");
     		else if(opcaoModificador == 3)
-    			criarElemento("atributo", null, false, "double", "Public");
+    			criarElemento("atributo", null, "double", "Public");
     		else if(opcaoModificador == 4)
-    			criarElemento("atributo", null, false, "double", "Protected");
+    			criarElemento("atributo", null, "double", "Protected");
     	} else if(opcaoTipo == 7) {
     		if(opcaoModificador == 1)
-    			criarElemento("atributo", null, false, "boolean", "Default");
+    			criarElemento("atributo", null, "boolean", "Default");
     		else if(opcaoModificador == 2)
-    			criarElemento("atributo", null, false, "boolean", "Private");
+    			criarElemento("atributo", null, "boolean", "Private");
     		else if(opcaoModificador == 3)
-    			criarElemento("atributo", null, false, "boolean", "Public");
+    			criarElemento("atributo", null, "boolean", "Public");
     		else if(opcaoModificador == 4)
-    			criarElemento("atributo", null, false, "boolean", "Protected");
+    			criarElemento("atributo", null, "boolean", "Protected");
     	} else if(opcaoTipo == 8) {
     		if(opcaoModificador == 1)
-    			criarElemento("atributo", null, false, "char", "Default");
+    			criarElemento("atributo", null, "char", "Default");
     		else if(opcaoModificador == 2)
-    			criarElemento("atributo", null, false, "char", "Private");
+    			criarElemento("atributo", null, "char", "Private");
     		else if(opcaoModificador == 3)
-    			criarElemento("atributo", null, false, "char", "Public");
+    			criarElemento("atributo", null, "char", "Public");
     		else if(opcaoModificador == 4)
-    			criarElemento("atributo", null, false, "char", "Protected");
+    			criarElemento("atributo", null, "char", "Protected");
     	} else if(opcaoTipo == 9) {
     		if(opcaoModificador == 1)
-    			criarElemento("atributo", null, false, "String", "Default");
+    			criarElemento("atributo", null, "String", "Default");
     		else if(opcaoModificador == 2)
-    			criarElemento("atributo", null, false, "String", "Private");
+    			criarElemento("atributo", null, "String", "Private");
     		else if(opcaoModificador == 3)
-    			criarElemento("atributo", null, false, "String", "Public");
+    			criarElemento("atributo", null, "String", "Public");
     		else if(opcaoModificador == 4)
-    			criarElemento("atributo", null, false, "String", "Protected");
+    			criarElemento("atributo", null, "String", "Protected");
     	}	
 	}
 	
 	public void opcoesMenuTipoAtributoInterface(int opcaoTipo) {
 		if(opcaoTipo == 1){
-    		criarElemento("atributo", null, false, "byte", "Public");
+    		criarElemento("atributo", null, "byte", "Public");
     	} else if(opcaoTipo == 2) {
-    		criarElemento("atributo", null, false, "short", "Public");
+    		criarElemento("atributo", null, "short", "Public");
     	} else if(opcaoTipo == 3) {
-    		criarElemento("atributo", null, false, "int", "Public");
+    		criarElemento("atributo", null, "int", "Public");
     	} else if(opcaoTipo == 4) {
-    		criarElemento("atributo", null, false, "long", "Public");
+    		criarElemento("atributo", null, "long", "Public");
     	} else if(opcaoTipo == 5) {
-    		criarElemento("atributo", null, false, "float", "Public");
+    		criarElemento("atributo", null, "float", "Public");
     	} else if(opcaoTipo == 6) {
-    		criarElemento("atributo", null, false, "double", "Public");
+    		criarElemento("atributo", null, "double", "Public");
     	} else if(opcaoTipo == 7) {
-    		criarElemento("atributo", null, false, "boolean", "Public");
+    		criarElemento("atributo", null, "boolean", "Public");
     	} else if(opcaoTipo == 8) {
-    		criarElemento("atributo", null, false, "char", "Public");
+    		criarElemento("atributo", null, "char", "Public");
     	} else if(opcaoTipo == 9) {
-    		criarElemento("atributo", null, false, "String", "Public");
+    		criarElemento("atributo", null, "String", "Public");
+    	}
+	}
+	
+	public void opcoesMenuTipoMetodoClasse(int opcaoTipo, int opcaoModificador) {
+		if(opcaoTipo == 1){
+    		if(opcaoModificador == 1)
+    			criarElementoMetodo(null, "byte", "Default");
+    		else if(opcaoModificador == 2)
+    			criarElementoMetodo(null, "byte", "Private");
+    		else if(opcaoModificador == 3)
+    			criarElementoMetodo(null, "byte", "Public");
+    		else if(opcaoModificador == 4)
+    			criarElementoMetodo(null, "byte", "Protected");
+    	} else if(opcaoTipo == 2) {
+    		if(opcaoModificador == 1)
+    			criarElementoMetodo(null, "short", "Default");
+    		else if(opcaoModificador == 2)
+    			criarElementoMetodo(null, "short", "Private");
+    		else if(opcaoModificador == 3)
+    			criarElementoMetodo(null, "short", "Public");
+    		else if(opcaoModificador == 4)
+    			criarElementoMetodo(null, "short", "Protected");
+    	} else if(opcaoTipo == 3) {
+    		if(opcaoModificador == 1)
+    			criarElementoMetodo(null, "int", "Default");
+    		else if(opcaoModificador == 2)
+    			criarElementoMetodo(null, "int", "Private");
+    		else if(opcaoModificador == 3)
+    			criarElementoMetodo(null, "int", "Public");
+    		else if(opcaoModificador == 4)
+    			criarElementoMetodo(null, "int", "Protected");
+    	} else if(opcaoTipo == 4) {
+    		if(opcaoModificador == 1)
+    			criarElementoMetodo(null, "long", "Default");
+    		else if(opcaoModificador == 2)
+    			criarElementoMetodo(null, "long", "Private");
+    		else if(opcaoModificador == 3)
+    			criarElementoMetodo(null, "long", "Public");
+    		else if(opcaoModificador == 4)
+    			criarElementoMetodo(null, "long", "Protected");
+    	} else if(opcaoTipo == 5) {
+    		if(opcaoModificador == 1)
+    			criarElementoMetodo(null, "float", "Default");
+    		else if(opcaoModificador == 2)
+    			criarElementoMetodo(null, "float", "Private");
+    		else if(opcaoModificador == 3)
+    			criarElementoMetodo(null, "float", "Public");
+    		else if(opcaoModificador == 4)
+    			criarElementoMetodo(null, "float", "Protected");
+    	} else if(opcaoTipo == 6) {
+    		if(opcaoModificador == 1)
+    			criarElementoMetodo(null, "double", "Default");
+    		else if(opcaoModificador == 2)
+    			criarElementoMetodo(null, "double", "Private");
+    		else if(opcaoModificador == 3)
+    			criarElementoMetodo(null, "double", "Public");
+    		else if(opcaoModificador == 4)
+    			criarElementoMetodo(null, "double", "Protected");
+    	} else if(opcaoTipo == 7) {
+    		if(opcaoModificador == 1)
+    			criarElementoMetodo(null, "boolean", "Default");
+    		else if(opcaoModificador == 2)
+    			criarElementoMetodo(null, "boolean", "Private");
+    		else if(opcaoModificador == 3)
+    			criarElementoMetodo(null, "boolean", "Public");
+    		else if(opcaoModificador == 4)
+    			criarElementoMetodo(null, "boolean", "Protected");
+    	} else if(opcaoTipo == 8) {
+    		if(opcaoModificador == 1)
+    			criarElementoMetodo(null, "char", "Default");
+    		else if(opcaoModificador == 2)
+    			criarElementoMetodo(null, "char", "Private");
+    		else if(opcaoModificador == 3)
+    			criarElementoMetodo(null, "char", "Public");
+    		else if(opcaoModificador == 4)
+    			criarElementoMetodo(null, "char", "Protected");
+    	} else if(opcaoTipo == 9) {
+    		if(opcaoModificador == 1)
+    			criarElementoMetodo(null, "String", "Default");
+    		else if(opcaoModificador == 2)
+    			criarElementoMetodo(null, "String", "Private");
+    		else if(opcaoModificador == 3)
+    			criarElementoMetodo(null, "String", "Public");
+    		else if(opcaoModificador == 4)
+    			criarElementoMetodo(null, "String", "Protected");
+    	} else if(opcaoTipo == 10) {
+    		if(opcaoModificador == 1)
+    			criarElementoMetodo(null, "void", "Default");
+    		else if(opcaoModificador == 2)
+    			criarElementoMetodo(null, "void", "Private");
+    		else if(opcaoModificador == 3)
+    			criarElementoMetodo(null, "void", "Public");
+    		else if(opcaoModificador == 4)
+    			criarElementoMetodo(null, "void", "Protected");
+    	}
+	}
+	
+	public void opcoesMenuTipoMetodoInterface(int opcaoTipo, int opcaoModificador) {
+		if(opcaoTipo == 1){
+    		if(opcaoModificador == 1)
+    			criarElementoMetodo(null, "byte", "Default");
+    		else if(opcaoModificador == 2)
+    			criarElementoMetodo(null, "byte", "Public");
+    	} else if(opcaoTipo == 2) {
+    		if(opcaoModificador == 1)
+    			criarElementoMetodo(null, "short", "Default");
+    		else if(opcaoModificador == 2)
+    			criarElementoMetodo(null, "short", "Public");
+    	} else if(opcaoTipo == 3) {
+    		if(opcaoModificador == 1)
+    			criarElementoMetodo(null, "int", "Default");
+    		else if(opcaoModificador == 2)
+    			criarElementoMetodo(null, "int", "Public");
+    	} else if(opcaoTipo == 4) {
+    		if(opcaoModificador == 1)
+    			criarElementoMetodo(null, "long", "Default");
+    		else if(opcaoModificador == 2)
+    			criarElementoMetodo(null, "long", "Public");
+    	} else if(opcaoTipo == 5) {
+    		if(opcaoModificador == 1)
+    			criarElementoMetodo(null, "float", "Default");
+    		else if(opcaoModificador == 2)
+    			criarElementoMetodo(null, "float", "Public");
+    	} else if(opcaoTipo == 6) {
+    		if(opcaoModificador == 1)
+    			criarElementoMetodo(null, "double", "Default");
+    		else if(opcaoModificador == 2)
+    			criarElementoMetodo(null, "double", "Public");
+    	} else if(opcaoTipo == 7) {
+    		if(opcaoModificador == 1)
+    			criarElementoMetodo(null, "boolean", "Default");
+    		else if(opcaoModificador == 2)
+    			criarElementoMetodo(null, "boolean", "Public");
+    	} else if(opcaoTipo == 8) {
+    		if(opcaoModificador == 1)
+    			criarElementoMetodo(null, "char", "Default");
+    		else if(opcaoModificador == 2)
+    			criarElementoMetodo(null, "char", "Public");
+    	} else if(opcaoTipo == 9) {
+    		if(opcaoModificador == 1)
+    			criarElementoMetodo(null, "String", "Default");
+    		else if(opcaoModificador == 2)
+    			criarElementoMetodo(null, "String", "Public");
+    	} else if(opcaoTipo == 10) {
+    		if(opcaoModificador == 1)
+    			criarElementoMetodo(null, "void", "Default");
+    		else if(opcaoModificador == 2)
+    			criarElementoMetodo(null, "void", "Public");
     	}
 	}
 	
@@ -632,6 +938,7 @@ public class Controller {
 		return copia;
 	}
 		
+	
 	public static Classe copiarElementoClasse (Classe original, Classe copia) {
 		copia.setMultiplicidade(original.getMultiplicidade());
 		copia.setModificadorDeAcesso(original.getModificadorDeAcesso());
@@ -645,6 +952,7 @@ public class Controller {
 		return copia;
 	}
 	
+	
 	public static Interface copiarElementoInterface(Interface original, Interface copia){
 		copia.setMultiplicidade(original.getMultiplicidade());
 		copia.setModificadorDeAcesso(original.getModificadorDeAcesso());
@@ -657,6 +965,7 @@ public class Controller {
 		}
 		return copia;
 	}
+	
 	
 	public static void salvarElemento(ComponenteComposto c){
 		if(c instanceof Diagrama){
@@ -676,6 +985,7 @@ public class Controller {
 		}
 	}
 	
+	
 	public static void imprimirClassesOuInterfaces(){
 		//METODO PRA IMPRIMIR TODAS AS CLASSES
 		List <ComponenteComposto> filhosDoDiagrama = new ArrayList<ComponenteComposto>();
@@ -685,6 +995,7 @@ public class Controller {
     		menu.ShowComponente(filhosDoDiagrama.get(i));
     	}
 	}
+	
 	
 	public static void mostrarOpcoesDosFilhos(String tipo, int qtdOpcoes, Map<Integer, Componente> atrelaElementoAoNumero){
 		
@@ -699,9 +1010,14 @@ public class Controller {
 		
 		else if(tipo.equals("classe") || tipo.equals("interface")){
 			for(int i = qtdOpcoes; i < (elementoCompostoAtual.getFilhos().size() + qtdOpcoes); i++){
-		          System.out.println((i+1) + " - Modificar atributo " + elementoCompostoAtual.getFilhos().get(i-qtdOpcoes).getNome());
-		          int opcaoDoAtributo = atrelaElementoAoNumero.size();
-		          atrelaElementoAoNumero.put(opcaoDoAtributo, elementoCompostoAtual.getFilhos().get(opcaoDoAtributo));
+		        if (elementoCompostoAtual.getFilhos().get(i-qtdOpcoes) instanceof Atributo) {
+		        	System.out.println((i+1) + " - Modificar atributo " + elementoCompostoAtual.getFilhos().get(i-qtdOpcoes).getNome());
+		        } else if (elementoCompostoAtual.getFilhos().get(i-qtdOpcoes) instanceof Metodo){
+		        	System.out.println((i+1) + " - Modificar metodo " + elementoCompostoAtual.getFilhos().get(i-qtdOpcoes).getNome());
+		        }
+				
+		        int opcaoDoAtributo = atrelaElementoAoNumero.size();
+		        atrelaElementoAoNumero.put(opcaoDoAtributo, elementoCompostoAtual.getFilhos().get(opcaoDoAtributo));
 	         }
       	
 		}

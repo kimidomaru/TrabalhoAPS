@@ -39,7 +39,9 @@ public class Interface extends ComponenteComposto {
 	@Override
 	public void desenha() {
 		super.desenha();
-		System.out.println("\nInterface "+ super.getNome() + " foi criada!\n");
+		if(super.getMensagemCriado()) {
+			System.out.println("\nInterface "+ super.getNome() + " foi criada!");
+		}
 	}
 	
 	@Override

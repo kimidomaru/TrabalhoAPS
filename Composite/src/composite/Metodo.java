@@ -23,8 +23,10 @@ public class Metodo extends ComponenteComposto{
 		this.modificadoresDeAcesso = modificadoresDeAcesso;
 	}
 
-	public Metodo(String nome){
+	public Metodo(String nome, String tipoRetorno, String modificadoresDeAcesso){
 		super(nome);
+		this.tipoRetorno = tipoRetorno;
+		this.modificadoresDeAcesso = modificadoresDeAcesso;
 	}
 
 	@Override
