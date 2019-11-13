@@ -49,9 +49,9 @@ public class Menu {
 			menuTipoParametro();
 		}
 		
-		else if(elemento.equals("relacionamento")){
+		/*else if(elemento.equals("relacionamento")){
 			menuRelacionamento();
-		}
+		}*/
 	}
 	
 	public void menuInicial() {
@@ -165,10 +165,32 @@ public class Menu {
 		System.out.print("Digite o numero da opcao desejada: ");
 	}
 	
-	public void menuRelacionamento(){
-		//opcoes Aqui
+	public void menuRelacionamentoClasse(){
+		System.out.println("\n---Menu do Tipo do Relacionamento---\n"
+				+ "0 - Associacao\n"
+				+ "1 - Agregacao\n"
+				+ "2 - Composicao\n"
+				+ "3 - Generalizacao\n"
+				+ "4 - Especializacao\n"
+				+ "5 - Dependencia\n");
+		System.out.print("Digite o numero da opcao desejada: ");
 	}
 	
+	public void menuRelacionamentoInterface(){
+		System.out.println("\n---Menu do Tipo do Relacionamento---\n"
+				+ "0 - Generalizacao\n"
+				+ "1 - Especializacao\n");
+		System.out.print("Digite o numero da opcao desejada: ");
+	}
+	
+	public void menuDirecao(String tipoE1, String nomeE1, String tipoE2, String nomeE2){
+		System.out.println("\n---Menu de Direcao---\n"
+				+ "0 - "+ tipoE1 + " " + nomeE1 + " ----> "+ tipoE2 + " " + nomeE2 + "\n"
+				+ "1 - "+ tipoE1 + " " + nomeE1 + " <---- "+ tipoE2 + " " + nomeE2 + "\n"
+				+ "2 - "+ tipoE1 + " " + nomeE1 + " <----> "+ tipoE2 + " " + nomeE2 + "\n");
+		
+		System.out.print("Digite o numero da opcao desejada: ");
+	}
 	public void ShowComponente(ComponenteComposto obj) {
 		String nome = obj.getNome();
 		String type= "";

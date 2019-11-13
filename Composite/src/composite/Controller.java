@@ -23,6 +23,8 @@ public class Controller {
 	public static ComponenteComposto elementoCompostoAtual;
 	public static Componente elementoAtual;
 	
+	public static List<Relacionamento> relacionamentos = new ArrayList<Relacionamento>();
+	
 	//menu que ira se adaptar as possibilidades de criacao, exclusao, etc
 	public static void menu() {	
 			
@@ -42,7 +44,7 @@ public class Controller {
 	    	case "inicial":
 	    		qtdOpcoes = 3;
 	    		menu.mostrarMenu("inicial");
-	    		opcao = c.verificarEntrada(elementoAberto, qtdOpcoes);
+	    		opcao = c.verificarEntrada(qtdOpcoes);
 	        	c.opcoesMenuInicial(opcao);
 	        	break;
 
@@ -60,7 +62,7 @@ public class Controller {
 		        System.out.println("0 - Sair");
 		        System.out.print("Digite o numero da opcao desejada: ");
 		          
-		        opcao = c.verificarEntrada(elementoAberto, qtdOpcoes);
+		        opcao = c.verificarEntrada(qtdOpcoes);
 		        c.opcoesMenuDiagrama(opcao, atrelaElementoAoNumero);  
 		        break;
 
@@ -69,6 +71,7 @@ public class Controller {
 	        	qtdOpcoes = 5;
 	        	
 	        	imprimirClassesOuInterfaces();
+	        	mostrarRelacionamentos(relacionamentos);
 	        	menu.mostrarMenu("classe");
 	        	mostrarOpcoesDosFilhos("classe", qtdOpcoes, atrelaElementoAoNumero);
 	        	qtdOpcoes += elementoCompostoAtual.getFilhos().size();
@@ -76,7 +79,7 @@ public class Controller {
 	        	System.out.println("0 - Sair");
 		        System.out.print("Digite o numero da opcao desejada: ");
 	        	
-	        	opcao = c.verificarEntrada(elementoAberto, qtdOpcoes);
+	        	opcao = c.verificarEntrada(qtdOpcoes);
 	        	c.opcoesMenuClasseOuInterface(opcao, atrelaElementoAoNumero);
 	        	break;
 	        	
@@ -84,6 +87,7 @@ public class Controller {
 	        	qtdOpcoes = 5;
 	        	
 	        	imprimirClassesOuInterfaces();
+	        	mostrarRelacionamentos(relacionamentos);
 	        	menu.mostrarMenu("interface");
 	        	mostrarOpcoesDosFilhos("interface", qtdOpcoes, atrelaElementoAoNumero);
 	        	qtdOpcoes += elementoCompostoAtual.getFilhos().size();
@@ -91,7 +95,7 @@ public class Controller {
 	        	System.out.println("0 - Sair");
 		        System.out.print("Digite o numero da opcao desejada: ");
 	        	
-	        	opcao = c.verificarEntrada(elementoAberto, qtdOpcoes);
+	        	opcao = c.verificarEntrada(qtdOpcoes);
 	        	c.opcoesMenuClasseOuInterface(opcao, atrelaElementoAoNumero);
 	        	break;
 
@@ -100,11 +104,11 @@ public class Controller {
 	        	int qtdOpcoesModificador = 4;
 	        	
 	        	menu.mostrarMenu("atributoTipo");
-	        	opcaoTipo = c.verificarEntrada(elementoAberto, qtdOpcoesTipo);
+	        	opcaoTipo = c.verificarEntrada(qtdOpcoesTipo);
 	        	
 	        	if(elementoCompostoAtual instanceof Classe) {
 	        		menu.mostrarMenu("atributoModificador");
-		        	opcaoModificador = c.verificarEntrada(elementoAberto, qtdOpcoesModificador);
+		        	opcaoModificador = c.verificarEntrada(qtdOpcoesModificador);
 	        	}
 	        	
 	        	if(elementoCompostoAtual instanceof Classe) {
@@ -121,14 +125,14 @@ public class Controller {
 	        	int qtdOpcoesModificadorMetodoInterface = 2;
 	        	
 	        	menu.mostrarMenu("metodoTipoRetorno");
-	        	opcaoTipo = c.verificarEntrada(elementoAberto, qtdOpcoesTipoRetorno);
+	        	opcaoTipo = c.verificarEntrada(qtdOpcoesTipoRetorno);
 	        	
 	        	if(elementoCompostoAtual instanceof Classe) {
 	        		menu.mostrarMenu("metodoModificadorClasse");
-		        	opcaoModificador = c.verificarEntrada(elementoAberto, qtdOpcoesModificadorMetodoClasse);
+		        	opcaoModificador = c.verificarEntrada(qtdOpcoesModificadorMetodoClasse);
 	        	} else if(elementoCompostoAtual instanceof Interface) {
 	        		menu.mostrarMenu("metodoModificadorInterface");
-	        		opcaoModificador = c.verificarEntrada(elementoAberto, qtdOpcoesModificadorMetodoInterface);
+	        		opcaoModificador = c.verificarEntrada(qtdOpcoesModificadorMetodoInterface);
 	        	}
 	        	
 	        	if(elementoCompostoAtual instanceof Classe) {
@@ -139,6 +143,12 @@ public class Controller {
 
 	        	break;
 
+	        case "relacionamento":
+	        	qtdOpcoes = paiDoAtual.getFilhos().size();
+	        	mostrarListaFilhos(paiDoAtual);
+	        	opcao = c.verificarEntrada(qtdOpcoes);
+	        	c.opcoesMenuRelacionamento(opcao, c);
+	        	break;
 	      }
 	}
 
@@ -202,11 +212,11 @@ public class Controller {
 		
 		do {
 			menu.mostrarMenu("adicionarParametro");
-			opcao = c.verificarEntrada(elementoAberto, qtdOpcoes);
+			opcao = c.verificarEntrada(qtdOpcoes);
 			
 			if(opcao == 1) {
 				menu.mostrarMenu("tipoParametro");
-				opcaoTipoParametro = c.verificarEntrada(elementoAberto, qtdOpcoesTipoParametro);
+				opcaoTipoParametro = c.verificarEntrada(qtdOpcoesTipoParametro);
 				Parametro p = null;
 				
 				if (opcaoTipoParametro == 1) {
@@ -237,7 +247,7 @@ public class Controller {
 		menu();
 	}
 	
-	public int verificarEntrada(String elementoAberto, int qtdOpcoes) {
+	public int verificarEntrada(int qtdOpcoes) {
 		Scanner entrada = new Scanner(System.in);
 		int opcao = -1;
 		
@@ -255,7 +265,41 @@ public class Controller {
 		return opcao;
 	}
 	
-	
+	public int verificarEntradaRelac(int qtdOpcoes, int opcao1, ComponenteComposto e1, ComponenteComposto e2){
+		Scanner entrada = new Scanner(System.in);
+		boolean entradaValida = true;
+		int opcao = -1;
+		do{
+    		entrada = new Scanner(System.in);
+    		try {
+    			opcao = entrada.nextInt();
+    			if(opcao < 0 || opcao > qtdOpcoes) {
+    				throw new InputMismatchException();
+    			}
+    			else if(opcao == opcao1){
+    				System.out.println("Escolha outro elemento.");
+    				throw new InputMismatchException();
+    			}
+    			else if(e1 != null){
+    				ComponenteComposto elementoEscolhido2 = (ComponenteComposto)paiDoAtual.getFilhos().get(opcao);
+    				e2 = elementoEscolhido2;
+    			}
+    			if(e1 != null && e2 != null){
+    				if(e2 instanceof Interface){
+    					if(opcao != 3 && opcao != 4){
+    						System.out.println("Relacionamento inválido para Interface");
+    						throw new InputMismatchException();
+    					}
+    				}
+    			}
+    			entradaValida = true;
+    		} catch (InputMismatchException e) {
+    			entradaValida = false;
+    			System.out.print("Opcao invalida! Digite uma opcao valida: ");
+    		}
+    	}while(opcao < 0 || opcao > qtdOpcoes || opcao == opcao1 || !entradaValida);	
+		return opcao;
+	}
 	public static void abrirDiagrama() { 
 		try {
 			File f = new File("Composite/diagramasSalvos.txt");
@@ -931,6 +975,90 @@ public class Controller {
     	}
 	}
 	
+	public void opcoesMenuRelacionamento(int opcao1, Controller c){
+		String tipoRelac = "";
+		String direcao = "";
+		
+		int qtdElementos = paiDoAtual.getFilhos().size();
+		int qtdOpcoesRelac = 5;
+		int qtdDir = 2;
+		
+		int opcaoRelac = -1;
+		int opcao2 = -1;
+		int optDir = -1;
+		
+		Menu menu = new Menu();
+		ComponenteComposto elementoEscolhido1 = (ComponenteComposto)paiDoAtual.getFilhos().get(opcao1);
+		if(elementoEscolhido1 instanceof Classe){
+			menu.menuRelacionamentoClasse();
+			opcaoRelac = c.verificarEntradaRelac(qtdOpcoesRelac, -1, null, null);
+			switch(opcaoRelac){
+				case 0:
+					tipoRelac = "Associacao";
+					break;
+				case 1:
+					tipoRelac = "Agregacao";
+					break;
+				case 2:
+					tipoRelac = "Composicao";
+					break;
+				case 3:
+					tipoRelac = "Generalizacao";
+					break;
+				case 4:
+					tipoRelac = "Especializacao";
+					break;
+				case 5:
+					tipoRelac = "Dependencia";
+					break;
+			}
+		}
+		
+		else if(elementoEscolhido1 instanceof Interface){
+			menu.menuRelacionamentoInterface();
+			qtdOpcoesRelac = 2;
+			opcaoRelac = c.verificarEntradaRelac(qtdOpcoesRelac, -1, null, null);
+			switch(opcaoRelac){
+				case 0:
+					tipoRelac = "Generalizacao";
+					break;
+				case 1:
+					tipoRelac = "Especializacao";
+					break;
+			}
+		}
+		System.out.println("Relac escolhido: " + tipoRelac);
+		if(tipoRelac.equals("Generalizacao") || tipoRelac.equals("Especializacao")){
+			direcao = "Direita";
+		}
+			
+		mostrarListaFilhos(paiDoAtual);
+		opcao2 = c.verificarEntradaRelac(qtdElementos, opcao1, elementoEscolhido1, null);
+		ComponenteComposto elementoEscolhido2 = (ComponenteComposto)paiDoAtual.getFilhos().get(opcao2);
+		
+		if(!direcao.equals("Direita")){
+			String tipoE1 = elementoEscolhido1.getClass().getSimpleName();
+			String tipoE2 = elementoEscolhido2.getClass().getSimpleName();
+			menu.menuDirecao(tipoE1, elementoEscolhido1.getNome(), tipoE2, elementoEscolhido2.getNome());
+			optDir = c.verificarEntrada(qtdDir);
+			
+			if(optDir == 0){
+				direcao = "Direita";
+			}
+			else if(optDir == 1){
+				direcao = "Esquerda";
+			}
+			else if(optDir == 2){
+				direcao = "Ambos";
+			}
+		}
+		
+		Relacionamento r = new Relacionamento(elementoEscolhido1, elementoEscolhido2, tipoRelac, tipoRelac, direcao);
+		relacionamentos.add(r);
+		elementoAberto = "classe";
+		menu();
+	}
+	
 	//COPIANDO OBJETOS PRA NAO ALTERAR O STATIC
 	public static Diagrama copiarElementoDiagrama(Diagrama original, Diagrama copia) {
 		copia.setMensagemCriado(original.getMensagemCriado());
@@ -1027,4 +1155,20 @@ public class Controller {
 		}
 	}
 	
+	public static void mostrarListaFilhos(ComponenteComposto paiDoAtual){
+		System.out.println("Selecione um elemento: \n");
+		for(int i = 0; i < paiDoAtual.getFilhos().size(); i++){
+			String tipoFilho = paiDoAtual.getFilhos().get(i).getClass().getSimpleName();
+			String nomeFilho = paiDoAtual.getFilhos().get(i).getNome();
+			System.out.println(i + " - "+ tipoFilho + " " + nomeFilho);
+		}
+		System.out.print("\nDigite o numero da opcao desejada: ");
+	}
+	
+	public static void mostrarRelacionamentos(List<Relacionamento> lista){
+		System.out.println("\nRelacionamentos:");
+		for(int i=0; i < lista.size(); i++){
+			lista.get(i).desenha();
+		}
+	}
 }

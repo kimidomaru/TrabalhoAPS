@@ -18,3 +18,8 @@ nqwgd{multipInterface:null;navegInterface:null;modifInterface:null;atributo:asda
 aaa
 bbb{multipClasse:null;navegClasse:null;modifClasse:null;atributo:dlaldl[tipoAtr-short,modifAtr-Private];atributo:plapsldpald[tipoAtr-short,modifAtr-Private];metodo:lpasldpl[retornoMetodo-void,modifMetodo-Public}
 =END
+
+[5]
+Diagrama1
+Classe1{multipClasse:null;navegClasse:null;modifClasse:null;atributo:Atr1[tipoAtr-String,modifAtr-Public];metodo:oasjdoiasdj[retornoMetodo-void,modifMetodo-Protected}
+=END

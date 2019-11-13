@@ -16,9 +16,7 @@ public class Diagrama extends ComponenteComposto{
 		//desenha o diagrama
 		if(super.getMensagemCriado()) {
 			System.out.println("\nDiagrama "+ super.getNome() + " foi criado!");
-		} /*else { //no futuro nao vai ter esse else
-			System.out.println("teste diagrama");
-		}*/
+		}
 	}
 
 	@Override
