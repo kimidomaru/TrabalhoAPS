@@ -1,12 +1,7 @@
 package composite;
 
-import java.util.ArrayList;
-import java.util.List;
+public class Classe extends ComponenteComposto{
 
-public class Classe extends ElementoComposto{
-
-	List<Atributo> atributos = new ArrayList();
-	List<Metodo> metodos = new ArrayList();
 	private String multiplicidade = null;
 	private String navegabilidade = null;
 	private String modificadorDeAcesso = null;
@@ -38,21 +33,24 @@ public class Classe extends ElementoComposto{
 
 	public Classe(String nome){
 		super(nome);
+		desenha();
 	}
 
 	@Override
 	public void desenha() {
 		super.desenha();
-		//codigo para desenhar a propria classe (borda, delimitadores, etc)
-		System.out.println("Desenhou classe");
+		//codigo para desenhar a propria classe (borda, delimitadores, etc
+		if(super.getMensagemCriado()) {
+			System.out.println("\nClasse "+ super.getNome() + " foi criada!");
+		}
 	}
 	
 	@Override
-	public void addFilho(Elemento e) {
+	public void addFilho(Componente e) {
 		if(e instanceof Atributo || e instanceof Metodo)
 			super.addFilho(e);
 		else
-			throw new IllegalArgumentException("Filho de tipo invalido!");
+			throw new IllegalArgumentException("\nFilho de tipo invalido!\n");
 	}
 
 }

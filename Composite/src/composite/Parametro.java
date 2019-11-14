@@ -1,6 +1,6 @@
 package composite;
 
-public class Parametro extends Elemento{
+public class Parametro extends Componente{
 
     private String tipo;
 
@@ -20,7 +20,7 @@ public class Parametro extends Elemento{
 
 	@Override
 	public void desenha() {
-		System.out.println("Desenhou parâmetro");
+		System.out.println("Parametro desenhado!");
 	}
 	
 	

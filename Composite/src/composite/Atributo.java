@@ -1,9 +1,9 @@
 package composite;
 
-public class Atributo extends Elemento {
+public class Atributo extends Componente {
 
 	private String tipo;
-	private String modificadoresDeAcesso = "default";
+	private String modificadoresDeAcesso = "Default";
 
 	//Get&Set
 	public String getTipo() {
@@ -19,17 +19,40 @@ public class Atributo extends Elemento {
 	}
 
 	public void setModificadoresDeAcesso(String modificadores) {
-		this.modificadoresDeAcesso = modificadoresDeAcesso;
+		this.modificadoresDeAcesso = modificadores;
 	}
 
-	public Atributo(String tipo, String nome){
+	public Atributo(String nome, String tipo, String modificadoresDeAcesso){
 		super(nome);
 		this.tipo = tipo;
+		this.modificadoresDeAcesso = modificadoresDeAcesso;
 	}
 
 	@Override
 	public void desenha() {
-		System.out.println("Desenhou atributo");
+		if(this.modificadoresDeAcesso == "Default")
+			if(super.getMensagemCriado()) {
+				System.out.println("Atributo Criado: ~ " + super.getNome() + " " + this.tipo);
+			}			
+		
+		if(this.modificadoresDeAcesso == "Private")
+			if(super.getMensagemCriado()) {
+				System.out.println("Atributo Criado: - " + super.getNome() + " " + this.tipo);
+			}
+			
+		
+		if(this.modificadoresDeAcesso == "Public")
+			if(super.getMensagemCriado()) {
+				System.out.println("Atributo Criado: + " + super.getNome() + " " + this.tipo);
+			}
+			
+		
+		if(this.modificadoresDeAcesso == "Protected")
+			if(super.getMensagemCriado()) {
+				System.out.println("Atributo Criado: # " + super.getNome() + " " + this.tipo);
+			}
+			
+
 	}
 
 }

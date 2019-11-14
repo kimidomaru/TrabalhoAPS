@@ -1,9 +1,7 @@
 package composite;
 
-import java.util.ArrayList;
-import java.util.List;
 
-public class Metodo extends ElementoComposto{
+public class Metodo extends ComponenteComposto{
 
 	private String tipoRetorno = "void";
 	private String modificadoresDeAcesso = "default";
@@ -25,21 +23,23 @@ public class Metodo extends ElementoComposto{
 		this.modificadoresDeAcesso = modificadoresDeAcesso;
 	}
 
-	public Metodo(String nome){
+	public Metodo(String nome, String tipoRetorno, String modificadoresDeAcesso){
 		super(nome);
+		this.tipoRetorno = tipoRetorno;
+		this.modificadoresDeAcesso = modificadoresDeAcesso;
 	}
 
 	@Override
 	public void desenha() {
-		System.out.println("Desenhou método");
+		System.out.println("Desenhou metodo");
 	}
 
 	@Override
-	public void addFilho(Elemento e) {
-		if(e instanceof Atributo || e instanceof Metodo)
+	public void addFilho(Componente e) {
+		if(e instanceof Parametro)
 			super.addFilho(e);
 		else
-			throw new IllegalArgumentException("Filho de tipo inválido!");
+			throw new IllegalArgumentException("Filho de tipo invalido!");
 	}	
 	
 

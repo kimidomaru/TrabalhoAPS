@@ -1,10 +1,10 @@
 package composite;
 
-import java.util.ArrayList;
-import java.util.List;
 
-public class Diagrama extends ElementoComposto{
+public class Diagrama extends ComponenteComposto{
 
+	boolean mensagemCriado = false;
+	
 	public Diagrama(String nome){
 		super(nome);
 		desenha();
@@ -14,15 +14,17 @@ public class Diagrama extends ElementoComposto{
 	public void desenha() {
 		super.desenha();
 		//desenha o diagrama
-		System.out.println("DIAGRAMA DESENHADO");
+		if(super.getMensagemCriado()) {
+			System.out.println("\nDiagrama "+ super.getNome() + " foi criado!");
+		}
 	}
 
 	@Override
-	public void addFilho(Elemento e) {
-		if(e instanceof Atributo || e instanceof Metodo)
+	public void addFilho(Componente e) {
+		if(e instanceof Classe || e instanceof Interface)
 			super.addFilho(e);
 		else
-			throw new IllegalArgumentException("Filho de tipo invalido!");
+			throw new IllegalArgumentException("\nFilho de tipo invalido!\n");
 	}
 
 	//metodo para salvar o diagrama
