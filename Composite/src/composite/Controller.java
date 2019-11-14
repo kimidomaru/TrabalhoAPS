@@ -52,6 +52,7 @@ public class Controller {
 	        case "diagrama":
 	        	if(elementoCompostoAtual.getFilhos().size() > 0) {
 	        		imprimirClassesOuInterfaces();
+	        		mostrarRelacionamentos(relacionamentos);
 	        	}
 	        	
 		        qtdOpcoes = 5;  
@@ -302,11 +303,16 @@ public class Controller {
 	}
 	public static void abrirDiagrama() { 
 		try {
-			File f = new File("Composite/diagramasSalvos.txt");
+			File f = new File(".", "diagramasSalvos.txt");
 			Scanner input = new Scanner(f);
 			Pattern inicioRegex = Pattern.compile("\\[\\d+\\]");
 			int qtdOpcoesAbrirDiagrama = 0;
 			int opcaoEscolhida = -1;
+			int tam = relacionamentos.size() -1;
+			
+			for (int i=tam;i>=0;i--) { 
+				relacionamentos.remove(i);
+			}
 			
 			System.out.println("\n---Menu para abrir diagrama---");
 			while (input.hasNextLine()) {
@@ -365,202 +371,232 @@ public class Controller {
 						
 						while(inputNovamente.hasNextLine() && !(linhaNovamente = inputNovamente.nextLine()).equals("=END")) {
 							elementoCompostoAtual = d;
-							//int posicaoNomeClasse = linhaNovamente.indexOf("{");
+							
+							if(linhaNovamente.contains("@relac@")) {
+								String informacoesLinha[] = linhaNovamente.split(":");
+								String nomeClasse1 = informacoesLinha[1];
+								String nomeClasse2 = informacoesLinha[2];
+								String tipoRelacionamento = informacoesLinha[3];
+								String direcao = informacoesLinha[4];
+								String navegabilidade = informacoesLinha[5];
+								Componente classe1 = null;
+								Componente classe2 = null;
+								List<Componente> filhos = elementoCompostoAtual.getFilhos();
 
-							String pegandoNomeClasse[] = linhaNovamente.split("\\{");
-							String pegandoClasseOuInterf[] = pegandoNomeClasse[1].split(":");
-							String nomeClasse = pegandoNomeClasse[0];
-			        		/*if(posicaoNomeClasse != -1) {
-			        			nomeClasse = linhaNovamente.substring(0 , posicaoNomeClasse);
-			        		}*/
-			        		
-							if (pegandoClasseOuInterf[0].equals("multipClasse")) {
-								//criando a classe
-				        		Classe c = new Classe(nomeClasse);
-								elementoCompostoAtual.addFilho(c);
-								elementoAberto = "classe";
-								paiDoAtual = elementoCompostoAtual;
-								elementoCompostoAtual = c;
-								salvarElemento(c);
+								try {
+									for(int x=0;x<filhos.size();x++) {
+										if(filhos.get(x).getNome().equals(nomeClasse1)) {
+											classe1 = filhos.get(x);
+										} else if(filhos.get(x).getNome().equals(nomeClasse2)) {
+											classe2 = filhos.get(x);
+										}
+									}
+								} catch (NullPointerException npe) {
+									System.err.println("Classes do relacionamento não encontradas!");
+								}
 								
+								Relacionamento relac = new Relacionamento(classe1, classe2, tipoRelacionamento, tipoRelacionamento, direcao, navegabilidade);
+								
+								relacionamentos.add(relac);
 
-				        		String componentesClasse[] = linhaNovamente.split(";");
-				        		for(int i=0; i<componentesClasse.length; i++) {        			
-				        			
-				        			String subComponente[] = componentesClasse[i].split(":");
-				        			String multipClasse;
-				        			String navegClasse;
-				        			String modifClasse;
-				        			
-				        			Pattern regexVerifInicio = Pattern.compile("\\w*\\{\\w*");
-				        			
-				    				Matcher matcherPedacoInicio = regexVerifInicio.matcher(subComponente[0]);
-				    		        boolean matchesPedacoInicio = matcherPedacoInicio.matches();
-		
-				    		        if (matchesPedacoInicio) {
-				    		        	String splitMultip[] = subComponente[0].split("\\{");
-						        		if(splitMultip[1].equals("multipClasse")) {
-						        			multipClasse = subComponente[1];
-						        			
-						        			// adiciona a multiplicidade na classe
-						        			c.setMultiplicidade(multipClasse);
-						        		}
-						        	} else if (subComponente[0].equals("atributo")) {
-				    		        	String splitAtr[] = subComponente[1].split("\\[");
-				    		        	String atrNome = splitAtr[0];
-				    		        	
-				    		        	String splitDentroAtributos[] = splitAtr[1].split(",");
-				    		        	String tipoAtr[] = splitDentroAtributos[0].split("-");
-				    		        	String tipoAtrNome = tipoAtr[1];
-				    		        	
-				    		        	String modificadorAtr[] = splitDentroAtributos[1].split("-");
-				    		        	String modificadorAtrNome = modificadorAtr[1];
-		
-				    		        	
-				    		        	// adiciona o atributo na classe
-				    		        	Atributo a = new Atributo(atrNome, tipoAtrNome, modificadorAtrNome);
-				    					elementoCompostoAtual.addFilho(a);
-				    					salvarElemento(elementoCompostoAtual);
-				    					elementoAberto = "classe";
-				    					
-				    		        } else if (subComponente[0].equals("metodo")) {
-				    		        	String splitMetodo[] = subComponente[1].split("\\[");
-				    		        	String metodoNome = splitMetodo[0];
-				    		        	
-				    		        	String splitDentroMetodos[] = splitMetodo[1].split(",");
-				    		        	String retMetodo[] = splitDentroMetodos[0].split("-");
-				    		        	String retMetodoNome = retMetodo[1];
-				    		        	
-				    		        	String modifMetodo[] = splitDentroMetodos[1].split("-");
-				    		        	String modifMetodoNome = modifMetodo[1];
-				    		        	
-				    		        	Metodo m = new Metodo(metodoNome, retMetodoNome, modifMetodoNome);
-				    		        	
-				    		        	if(splitDentroMetodos.length > 2) {
-				    		        		String paramMetodo[] = splitDentroMetodos[2].split("-");
-					    		        	String paramMetodoMaisUm[] = paramMetodo[1].split("\\(");
-					    		        	String paramMetodoNome = paramMetodoMaisUm[0];
+							} else {
+								String pegandoNomeClasse[] = linhaNovamente.split("\\{");
+								String pegandoClasseOuInterf[] = pegandoNomeClasse[1].split(":");
+								String nomeClasse = pegandoNomeClasse[0];
+				        		
+				        		
+								if (pegandoClasseOuInterf[0].equals("multipClasse")) {
+									//criando a classe
+					        		Classe c = new Classe(nomeClasse);
+									elementoCompostoAtual.addFilho(c);
+									elementoAberto = "classe";
+									paiDoAtual = elementoCompostoAtual;
+									elementoCompostoAtual = c;
+									salvarElemento(c);
+									
+
+					        		String componentesClasse[] = linhaNovamente.split(";");
+					        		for(int i=0; i<componentesClasse.length; i++) {        			
+					        			
+					        			String subComponente[] = componentesClasse[i].split(":");
+					        			String multipClasse;
+					        			String navegClasse;
+					        			String modifClasse;
+					        			
+					        			Pattern regexVerifInicio = Pattern.compile("\\w*\\{\\w*");
+					        			
+					    				Matcher matcherPedacoInicio = regexVerifInicio.matcher(subComponente[0]);
+					    		        boolean matchesPedacoInicio = matcherPedacoInicio.matches();
+			
+					    		        if (matchesPedacoInicio) {
+					    		        	String splitMultip[] = subComponente[0].split("\\{");
+							        		if(splitMultip[1].equals("multipClasse")) {
+							        			multipClasse = subComponente[1];
+							        			
+							        			// adiciona a multiplicidade na classe
+							        			c.setMultiplicidade(multipClasse);
+							        		}
+							        	} else if (subComponente[0].equals("atributo")) {
+					    		        	String splitAtr[] = subComponente[1].split("\\[");
+					    		        	String atrNome = splitAtr[0];
 					    		        	
-					    		        	String tipoParametro[] = paramMetodoMaisUm[1].split("_");
-					    		        	String tipoParametroMaisUm[] = tipoParametro[1].split("\\)");
-					    		        	String tipoParametroNome = tipoParametroMaisUm[0];
+					    		        	String splitDentroAtributos[] = splitAtr[1].split(",");
+					    		        	String tipoAtr[] = splitDentroAtributos[0].split("-");
+					    		        	String tipoAtrNome = tipoAtr[1];
 					    		        	
-					    		        	Parametro p = new Parametro(tipoParametroNome, paramMetodoNome);
-					    		        	m.addFilho(p);
-				    		        	}
-				    		        	
-				    		        	// adiciona o metodo na classe
-				    					elementoCompostoAtual.addFilho(m);
-				    					salvarElemento(elementoCompostoAtual);
-				    					elementoAberto = "classe";
-				    		        	
-				    		        } else if (subComponente[0].equals("navegClasse")) {
-				    		        	navegClasse = subComponente[1];
-				    		        	
-				    		        	// adiciona a navegabilidade na classe
-				    		        	c.setNavegabilidade(navegClasse);
-				    		        } else if (subComponente[0].equals("modifClasse")) {
-				    		        	modifClasse = subComponente[1];
-				    		        	
-				    		        	// adiciona o modificador na classe
-				    		        	c.setMultiplicidade(modifClasse);
-				    		        }
-				    		        
-				        		}
-							} else if (pegandoClasseOuInterf[0].equals("multipInterface")) {
-								Interface interf = new Interface(nomeClasse);
-								elementoCompostoAtual.addFilho(interf);
-								elementoAberto = "interface";
-								paiDoAtual = elementoCompostoAtual;
-								elementoCompostoAtual = interf;
-								salvarElemento(interf);
+					    		        	String modificadorAtr[] = splitDentroAtributos[1].split("-");
+					    		        	String modificadorAtrNome = modificadorAtr[1];
+			
+					    		        	
+					    		        	// adiciona o atributo na classe
+					    		        	Atributo a = new Atributo(atrNome, tipoAtrNome, modificadorAtrNome);
+					    					elementoCompostoAtual.addFilho(a);
+					    					salvarElemento(elementoCompostoAtual);
+					    					elementoAberto = "classe";
+					    					
+					    		        } else if (subComponente[0].equals("metodo")) {
+					    		        	String splitMetodo[] = subComponente[1].split("\\[");
+					    		        	String metodoNome = splitMetodo[0];
+					    		        	
+					    		        	String splitDentroMetodos[] = splitMetodo[1].split(",");
+					    		        	String retMetodo[] = splitDentroMetodos[0].split("-");
+					    		        	String retMetodoNome = retMetodo[1];
+					    		        	
+					    		        	String modifMetodo[] = splitDentroMetodos[1].split("-");
+					    		        	String modifMetodoNome = modifMetodo[1];
+					    		        	
+					    		        	Metodo m = new Metodo(metodoNome, retMetodoNome, modifMetodoNome);
+					    		        	
+					    		        	if(splitDentroMetodos.length > 2) {
+					    		        		String paramMetodo[] = splitDentroMetodos[2].split("-");
+						    		        	String paramMetodoMaisUm[] = paramMetodo[1].split("\\(");
+						    		        	String paramMetodoNome = paramMetodoMaisUm[0];
+						    		        	
+						    		        	String tipoParametro[] = paramMetodoMaisUm[1].split("_");
+						    		        	String tipoParametroMaisUm[] = tipoParametro[1].split("\\)");
+						    		        	String tipoParametroNome = tipoParametroMaisUm[0];
+						    		        	
+						    		        	Parametro p = new Parametro(tipoParametroNome, paramMetodoNome);
+						    		        	m.addFilho(p);
+					    		        	}
+					    		        	
+					    		        	// adiciona o metodo na classe
+					    					elementoCompostoAtual.addFilho(m);
+					    					salvarElemento(elementoCompostoAtual);
+					    					elementoAberto = "classe";
+					    		        	
+					    		        } else if (subComponente[0].equals("navegClasse")) {
+					    		        	navegClasse = subComponente[1];
+					    		        	
+					    		        	// adiciona a navegabilidade na classe
+					    		        	c.setNavegabilidade(navegClasse);
+					    		        } else if (subComponente[0].equals("modifClasse")) {
+					    		        	modifClasse = subComponente[1];
+					    		        	
+					    		        	// adiciona o modificador na classe
+					    		        	c.setMultiplicidade(modifClasse);
+					    		        }
+					    		        
+					        		}
+								} else if (pegandoClasseOuInterf[0].equals("multipInterface")) {
+									Interface interf = new Interface(nomeClasse);
+									elementoCompostoAtual.addFilho(interf);
+									elementoAberto = "interface";
+									paiDoAtual = elementoCompostoAtual;
+									elementoCompostoAtual = interf;
+									salvarElemento(interf);
+									
+									String componentesInterface[] = linhaNovamente.split(";");
+					        		for(int i=0; i<componentesInterface.length; i++) {        			
+					        			
+					        			String subComponente[] = componentesInterface[i].split(":");
+					        			String multipInterface;
+					        			String navegInterface;
+					        			String modifInterface;
+					        			
+					        			Pattern regexVerifInicio = Pattern.compile("\\w*\\{\\w*");
+					        			
+					    				Matcher matcherPedacoInicio = regexVerifInicio.matcher(subComponente[0]);
+					    		        boolean matchesPedacoInicio = matcherPedacoInicio.matches();
+			
+					    		        if (matchesPedacoInicio) {
+					    		        	String splitMultip[] = subComponente[0].split("\\{");
+							        		if(splitMultip[1].equals("multipClasse")) {
+							        			multipInterface = subComponente[1];
+							        			
+							        			// adiciona a multiplicidade na interface
+							        			interf.setMultiplicidade(multipInterface);
+							        		}
+							        	} else if (subComponente[0].equals("atributo")) {
+					    		        	String splitAtr[] = subComponente[1].split("\\[");
+					    		        	String atrNome = splitAtr[0];
+					    		        	
+					    		        	String splitDentroAtributos[] = splitAtr[1].split(",");
+					    		        	String tipoAtr[] = splitDentroAtributos[0].split("-");
+					    		        	String tipoAtrNome = tipoAtr[1];
+					    		        	
+					    		        	String modificadorAtr[] = splitDentroAtributos[1].split("-");
+					    		        	String modificadorAtrNome = modificadorAtr[1];
+			
+					    		        	
+					    		        	// adiciona o atributo na interface
+					    		        	Atributo a = new Atributo(atrNome, tipoAtrNome, modificadorAtrNome);
+					    					elementoCompostoAtual.addFilho(a);
+					    					salvarElemento(elementoCompostoAtual);
+					    					elementoAberto = "interface";
+					    					
+					    		        } else if (subComponente[0].equals("metodo")) {
+					    		        	String splitMetodo[] = subComponente[1].split("\\[");
+					    		        	String metodoNome = splitMetodo[0];
+					    		        	
+					    		        	String splitDentroMetodos[] = splitMetodo[1].split(",");
+					    		        	String retMetodo[] = splitDentroMetodos[0].split("-");
+					    		        	String retMetodoNome = retMetodo[1];
+					    		        	
+					    		        	String modifMetodo[] = splitDentroMetodos[1].split("-");
+					    		        	String modifMetodoNome = modifMetodo[1];
+					    		        	
+					    		        	Metodo m = new Metodo(metodoNome, retMetodoNome, modifMetodoNome);
+					    		        	
+					    		        	if(splitDentroMetodos.length > 2) {
+					    		        		String paramMetodo[] = splitDentroMetodos[2].split("-");
+						    		        	String paramMetodoMaisUm[] = paramMetodo[1].split("\\(");
+						    		        	String paramMetodoNome = paramMetodoMaisUm[0];
+						    		        	
+						    		        	String tipoParametro[] = paramMetodoMaisUm[1].split("_");
+						    		        	String tipoParametroMaisUm[] = tipoParametro[1].split("\\)");
+						    		        	String tipoParametroNome = tipoParametroMaisUm[0];
+						    		        	
+						    		        	Parametro p = new Parametro(tipoParametroNome, paramMetodoNome);
+						    		        	m.addFilho(p);
+					    		        	}
+					    		        	
+					    		        	// adiciona o metodo na interface
+					    					elementoCompostoAtual.addFilho(m);
+					    					salvarElemento(elementoCompostoAtual);
+					    					elementoAberto = "interface";
+					    		        	
+					    		        } else if (subComponente[0].equals("navegInterface")) {
+					    		        	navegInterface = subComponente[1];
+					    		        	
+					    		        	// adiciona a navegabilidade na interface
+					    		        	interf.setNavegabilidade(navegInterface);
+					    		        } else if (subComponente[0].equals("modifInterface")) {
+					    		        	modifInterface = subComponente[1];
+					    		        	
+					    		        	// adiciona o modificador na interface
+					    		        	interf.setMultiplicidade(modifInterface);
+					    		        }
+					    		        
+					        		}
+								}
 								
-								String componentesInterface[] = linhaNovamente.split(";");
-				        		for(int i=0; i<componentesInterface.length; i++) {        			
-				        			
-				        			String subComponente[] = componentesInterface[i].split(":");
-				        			String multipInterface;
-				        			String navegInterface;
-				        			String modifInterface;
-				        			
-				        			Pattern regexVerifInicio = Pattern.compile("\\w*\\{\\w*");
-				        			
-				    				Matcher matcherPedacoInicio = regexVerifInicio.matcher(subComponente[0]);
-				    		        boolean matchesPedacoInicio = matcherPedacoInicio.matches();
-		
-				    		        if (matchesPedacoInicio) {
-				    		        	String splitMultip[] = subComponente[0].split("\\{");
-						        		if(splitMultip[1].equals("multipClasse")) {
-						        			multipInterface = subComponente[1];
-						        			
-						        			// adiciona a multiplicidade na interface
-						        			interf.setMultiplicidade(multipInterface);
-						        		}
-						        	} else if (subComponente[0].equals("atributo")) {
-				    		        	String splitAtr[] = subComponente[1].split("\\[");
-				    		        	String atrNome = splitAtr[0];
-				    		        	
-				    		        	String splitDentroAtributos[] = splitAtr[1].split(",");
-				    		        	String tipoAtr[] = splitDentroAtributos[0].split("-");
-				    		        	String tipoAtrNome = tipoAtr[1];
-				    		        	
-				    		        	String modificadorAtr[] = splitDentroAtributos[1].split("-");
-				    		        	String modificadorAtrNome = modificadorAtr[1];
-		
-				    		        	
-				    		        	// adiciona o atributo na interface
-				    		        	Atributo a = new Atributo(atrNome, tipoAtrNome, modificadorAtrNome);
-				    					elementoCompostoAtual.addFilho(a);
-				    					salvarElemento(elementoCompostoAtual);
-				    					elementoAberto = "interface";
-				    					
-				    		        } else if (subComponente[0].equals("metodo")) {
-				    		        	String splitMetodo[] = subComponente[1].split("\\[");
-				    		        	String metodoNome = splitMetodo[0];
-				    		        	
-				    		        	String splitDentroMetodos[] = splitMetodo[1].split(",");
-				    		        	String retMetodo[] = splitDentroMetodos[0].split("-");
-				    		        	String retMetodoNome = retMetodo[1];
-				    		        	
-				    		        	String modifMetodo[] = splitDentroMetodos[1].split("-");
-				    		        	String modifMetodoNome = modifMetodo[1];
-				    		        	
-				    		        	Metodo m = new Metodo(metodoNome, retMetodoNome, modifMetodoNome);
-				    		        	
-				    		        	if(splitDentroMetodos.length > 2) {
-				    		        		String paramMetodo[] = splitDentroMetodos[2].split("-");
-					    		        	String paramMetodoMaisUm[] = paramMetodo[1].split("\\(");
-					    		        	String paramMetodoNome = paramMetodoMaisUm[0];
-					    		        	
-					    		        	String tipoParametro[] = paramMetodoMaisUm[1].split("_");
-					    		        	String tipoParametroMaisUm[] = tipoParametro[1].split("\\)");
-					    		        	String tipoParametroNome = tipoParametroMaisUm[0];
-					    		        	
-					    		        	Parametro p = new Parametro(tipoParametroNome, paramMetodoNome);
-					    		        	m.addFilho(p);
-				    		        	}
-				    		        	
-				    		        	// adiciona o metodo na interface
-				    					elementoCompostoAtual.addFilho(m);
-				    					salvarElemento(elementoCompostoAtual);
-				    					elementoAberto = "interface";
-				    		        	
-				    		        } else if (subComponente[0].equals("navegInterface")) {
-				    		        	navegInterface = subComponente[1];
-				    		        	
-				    		        	// adiciona a navegabilidade na interface
-				    		        	interf.setNavegabilidade(navegInterface);
-				    		        } else if (subComponente[0].equals("modifInterface")) {
-				    		        	modifInterface = subComponente[1];
-				    		        	
-				    		        	// adiciona o modificador na interface
-				    		        	interf.setMultiplicidade(modifInterface);
-				    		        }
-				    		        
-				        		}
+								
+								
 							}
+							
 						}
-						
+
 						// ir para o menu de diagrama
 						elementoAberto = "diagrama";
 						elementoCompostoAtual = d;
@@ -617,10 +653,15 @@ public class Controller {
         }
         
         else if(opcao == 4) {
-      	  System.out.println("Salvando diagrama...");
-      	  DiagramasSalvos.salvarDiagrama(elementoAberto, elementoCompostoAtual);
-      	  elementoAberto = "inicial";
-      	  menu();
+      	  System.out.println("\nSalvando diagrama...");
+      	  try {
+      		  DiagramasSalvos.salvarDiagrama(elementoAberto, elementoCompostoAtual, relacionamentos);
+      		  elementoAberto = "inicial";
+      		  System.out.println("Diagrama salvo com sucesso!");
+      		  menu();
+      	  } catch (Exception e) {
+      		  System.err.println("Não foi possível salvar o diagrama. Tente novamente.");
+      	  }
         }
 		
         else if(opcao == 5) {
@@ -978,14 +1019,17 @@ public class Controller {
 	public void opcoesMenuRelacionamento(int opcao1, Controller c){
 		String tipoRelac = "";
 		String direcao = "";
+		String navegabilidade = "";
 		
 		int qtdElementos = paiDoAtual.getFilhos().size();
 		int qtdOpcoesRelac = 5;
 		int qtdDir = 2;
+		int qtdOpcoesNaveg = 4;
 		
 		int opcaoRelac = -1;
 		int opcao2 = -1;
 		int optDir = -1;
+		int optNaveg = -1;
 		
 		Menu menu = new Menu();
 		ComponenteComposto elementoEscolhido1 = (ComponenteComposto)paiDoAtual.getFilhos().get(opcao1);
@@ -1012,9 +1056,10 @@ public class Controller {
 					tipoRelac = "Dependencia";
 					break;
 			}
-		}
-		
-		else if(elementoEscolhido1 instanceof Interface){
+			
+			
+			
+		} else if(elementoEscolhido1 instanceof Interface){
 			menu.menuRelacionamentoInterface();
 			qtdOpcoesRelac = 2;
 			opcaoRelac = c.verificarEntradaRelac(qtdOpcoesRelac, -1, null, null);
@@ -1025,9 +1070,10 @@ public class Controller {
 				case 1:
 					tipoRelac = "Especializacao";
 					break;
-			}
+			}			
 		}
-		System.out.println("Relac escolhido: " + tipoRelac);
+		
+		System.out.println("Relacionamento escolhido: " + tipoRelac);
 		if(tipoRelac.equals("Generalizacao") || tipoRelac.equals("Especializacao")){
 			direcao = "Direita";
 		}
@@ -1053,7 +1099,24 @@ public class Controller {
 			}
 		}
 		
-		Relacionamento r = new Relacionamento(elementoEscolhido1, elementoEscolhido2, tipoRelac, tipoRelac, direcao);
+		menu.menuRelacionamentoMultiplicidade();
+		optNaveg = c.verificarEntrada(qtdOpcoesNaveg);
+		switch(optNaveg){
+		case 0:
+			navegabilidade = "1...1";
+			break;
+		case 1:
+			navegabilidade = "1...n";
+			break;
+		case 2:
+			navegabilidade = "n...1";
+			break;
+		case 3:
+			navegabilidade = "n...n";
+			break;
+		}
+		
+		Relacionamento r = new Relacionamento(elementoEscolhido1, elementoEscolhido2, tipoRelac, tipoRelac, direcao, navegabilidade);
 		relacionamentos.add(r);
 		elementoAberto = "classe";
 		menu();

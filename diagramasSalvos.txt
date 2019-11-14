@@ -1,0 +1,9 @@
+[1]
+Diagrama1
+ClasseA{multipClasse:null};navegClasse:null;modifClasse:null;atributo:atributo1[tipoAtr-String,modifAtr-Private];metodo:metodo1[retornoMetodo-void,modifMetodo-Public,paramMetodo-parametro1(tipoParam_String)]}
+ClasseB{multipClasse:null};navegClasse:null;modifClasse:null;atributo:atributo2[tipoAtr-int,modifAtr-Private];atributo:atributo3[tipoAtr-double,modifAtr-Private];metodo:metodo2[retornoMetodo-String,modifMetodo-Public;metodo:metodo3[retornoMetodo-boolean,modifMetodo-Public,paramMetodo-parametro1(tipoParam_boolean),paramMetodo-parametro2(tipoParam_float),paramMetodo-parametro3(tipoParam_double)];metodo:metodo4[retornoMetodo-String,modifMetodo-Public,paramMetodo-parametro1(tipoParam_int)]}
+@relac@:ClasseA:ClasseB:Associacao:Direita:1...1
+@relac@:ClasseA:ClasseB:Associacao:Direita:1...n
+@relac@:ClasseA:ClasseB:Associacao:Direita:n...1
+@relac@:ClasseA:ClasseB:Associacao:Direita:n...n
+=END

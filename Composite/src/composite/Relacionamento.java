@@ -7,11 +7,20 @@ public class Relacionamento extends Componente{
     private String tipoRelacionamento;
     private String nome;
 	private String direcaoLeitura;
+	private String multiplicidade;
 	//private String navegabilidade;
     List<Componente> elementos = new ArrayList(2);
     
     
-    public String getTipoRelacionamento() {
+    public String getMultiplicidade() {
+		return multiplicidade;
+	}
+
+	public void setMultiplicidade(String multiplicidade) {
+		this.multiplicidade = multiplicidade;
+	}
+
+	public String getTipoRelacionamento() {
 		return tipoRelacionamento;
 	}
 
@@ -52,36 +61,52 @@ public class Relacionamento extends Componente{
 	}
 
     
-	public Relacionamento(Componente elemento1, Componente elemento2, String tipoRelacionamento, String nome, String direcaoLeitura) {
+	public Relacionamento(Componente elemento1, Componente elemento2, String tipoRelacionamento, String nome, String direcaoLeitura, String multiplicidade) {
 		super(nome);
 		elementos.add(elemento1);
         elementos.add(elemento2);
 		this.tipoRelacionamento = tipoRelacionamento;
-		//this.nome = nome;
 		this.direcaoLeitura = direcaoLeitura;
-		//this.navegabilidade = navegabilidade;
+		this.multiplicidade = multiplicidade;
 	}
 	
 	@Override
 	public void desenha() {
+		if(this.direcaoLeitura.equals("Direita"))
+			if(multiplicidade.equals("1...1")) {
+				System.out.println(elementos.get(0).getNome() + " [1]" + "--(" + this.tipoRelacionamento + ")-->" + "[1] " + elementos.get(1).getNome());
+			} else if(multiplicidade.equals("1...n")) {
+				System.out.println(elementos.get(0).getNome() + " [1]" + "--(" + this.tipoRelacionamento + ")-->" + "[N] " + elementos.get(1).getNome());
+			} else if(multiplicidade.equals("n...1")) {
+				System.out.println(elementos.get(0).getNome() + " [N]" + "--(" + this.tipoRelacionamento + ")-->" + "[1] " + elementos.get(1).getNome());
+			} else if(multiplicidade.equals("n...n")) {
+				System.out.println(elementos.get(0).getNome() + " [N]" + "--(" + this.tipoRelacionamento + ")-->" + "[N] " + elementos.get(1).getNome());
+			}
+			
 		
-		/*if(this.navegabilidade == "Direita" )
-			System.out.println( elementos.get(0).getNome() + " ----> " + elementos.get(1).getNome() );
+		if(this.direcaoLeitura.equals("Esquerda"))
+			if(multiplicidade.equals("1...1")) {
+				System.out.println(elementos.get(0).getNome() + " [1]" + "<--(" + this.tipoRelacionamento + ")--" + "[1] " + elementos.get(1).getNome());
+			} else if(multiplicidade.equals("1...n")) {
+				System.out.println(elementos.get(0).getNome() + " [1]" + "<--(" + this.tipoRelacionamento + ")--" + "[N] " + elementos.get(1).getNome());
+			} else if(multiplicidade.equals("n...1")) {
+				System.out.println(elementos.get(0).getNome() + " [N]" + "<--(" + this.tipoRelacionamento + ")--" + "[1] " + elementos.get(1).getNome());
+			} else if(multiplicidade.equals("n...n")) {
+				System.out.println(elementos.get(0).getNome() + " [N]" + "<--(" + this.tipoRelacionamento + ")--" + "[N] " + elementos.get(1).getNome());
+			}
+			
 		
-		if(this.navegabilidade == "Esquerda")
-			System.out.println( elementos.get(0).getNome() + " <---- " + elementos.get(1).getNome() );
-		
-		if(this.navegabilidade == "Ambos")
-			System.out.println( elementos.get(0).getNome() + " ---- " + elementos.get(1).getNome() );
-		*/
-		if(this.direcaoLeitura == "Direita")
-			System.out.println( elementos.get(0).getNome() +" --(" + this.tipoRelacionamento + ")--> " + elementos.get(1).getNome() );
-		
-		if(this.direcaoLeitura == "Esquerda")
-			System.out.println( elementos.get(1).getNome() +" <--(" + this.tipoRelacionamento + ")-- " + elementos.get(0).getNome() );
-		
-		if(this.direcaoLeitura == "Ambos")
-			System.out.println( elementos.get(0).getNome() +" <--(" + this.tipoRelacionamento + ")--> " + elementos.get(1).getNome() );
+		if(this.direcaoLeitura.equals("Ambos")) {
+			if(multiplicidade.equals("1...1")) {
+				System.out.println(elementos.get(0).getNome() + " [1]" + "<--(" + this.tipoRelacionamento + ")-->" + "[1] " + elementos.get(1).getNome());
+			} else if(multiplicidade.equals("1...n")) {
+				System.out.println(elementos.get(0).getNome() + " [1]" + "<--(" + this.tipoRelacionamento + ")-->" + "[N] " + elementos.get(1).getNome());
+			} else if(multiplicidade.equals("n...1")) {
+				System.out.println(elementos.get(0).getNome() + " [N]" + "<--(" + this.tipoRelacionamento + ")-->" + "[1] " + elementos.get(1).getNome());
+			} else if(multiplicidade.equals("n...n")) {
+				System.out.println(elementos.get(0).getNome() + " [N]" + "<--(" + this.tipoRelacionamento + ")-->" + "[N] " + elementos.get(1).getNome());
+			}
+		}
 		
 	}
 	

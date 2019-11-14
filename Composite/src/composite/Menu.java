@@ -191,6 +191,16 @@ public class Menu {
 		
 		System.out.print("Digite o numero da opcao desejada: ");
 	}
+	
+	public void menuRelacionamentoMultiplicidade(){
+		System.out.println("\n---Menu de Multiplicidade---\n"
+				+ "0 - Um ... Um\n"
+				+ "1 - Um ... N\n"
+				+ "2 - N ... Um\n"
+				+ "3 - N ... N");
+		System.out.print("Digite o numero da opcao desejada: ");
+	}
+	
 	public void ShowComponente(ComponenteComposto obj) {
 		String nome = obj.getNome();
 		String type= "";

@@ -44,12 +44,12 @@ public class DiagramasSalvos {
 		return null;
 	}
 	
-	public static void salvarDiagrama(String elementoAberto, ComponenteComposto elementoCompostoAtual) { 
+	public static void salvarDiagrama(String elementoAberto, ComponenteComposto elementoCompostoAtual, List<Relacionamento> relacionamentos) { 
 		int qtdDiagramasSalvos = 0;
 		boolean emBranco = true;
 		
 		try {
-			File arquivo = new File("Composite/diagramasSalvos.txt");		
+			File arquivo = new File(".", "diagramasSalvos.txt");		
 			Pattern cabecalhoRegex = Pattern.compile("\\[\\d+\\]");
 			Scanner input = new Scanner(arquivo);
 			
@@ -79,7 +79,9 @@ public class DiagramasSalvos {
 		        		arquivoEscrever.write("\n"+ elementoCompostoAtual.getNome());
 			        	arquivoEscrever.flush();
 		        		List<Componente> listaDeFilhos = elementoCompostoAtual.getFilhos();
-						for(int i = 0; i<listaDeFilhos.size();i++) {
+						
+		        		// le todas as classes ou interface salvas e seus componentes filhos
+		        		for(int i = 0; i<listaDeFilhos.size();i++) {
 							Componente filhoPosicao = listaDeFilhos.get(i);
 							
 							if(filhoPosicao instanceof Classe) {
@@ -176,6 +178,21 @@ public class DiagramasSalvos {
 					        	
 					        	arquivoEscrever.write("}");
 			        			arquivoEscrever.flush();
+							}
+						}
+						
+		        		// le todos os relacionamentos e anota
+						for (int b=0;b<relacionamentos.size();b++) {
+							Relacionamento relacionamento = relacionamentos.get(b);
+							if(relacionamento.getDirecaoLeitura().equals("Direita")) {
+								arquivoEscrever.write("\n@relac@:" + relacionamento.getElementos().get(0).getNome() + ":" + relacionamento.getElementos().get(1).getNome() + ":" + relacionamento.getTipoRelacionamento() + ":Direita:" + relacionamento.getMultiplicidade());
+								arquivoEscrever.flush();
+							} else if(relacionamento.getDirecaoLeitura().equals("Esquerda")) {
+								arquivoEscrever.write("\n@relac@:" + relacionamento.getElementos().get(0).getNome() + ":" + relacionamento.getElementos().get(1).getNome() + ":" + relacionamento.getTipoRelacionamento() + ":Esquerda:" + relacionamento.getMultiplicidade());
+								arquivoEscrever.flush();
+							} else if(relacionamento.getDirecaoLeitura().equals("Ambos")) {
+								arquivoEscrever.write("\n@relac@:" + relacionamento.getElementos().get(0).getNome() + ":" + relacionamento.getElementos().get(1).getNome() + ":" + relacionamento.getTipoRelacionamento() + ":Ambos:" + relacionamento.getMultiplicidade());
+								arquivoEscrever.flush();
 							}
 						}
 						arquivoEscrever.write("\n=END");
@@ -297,6 +314,22 @@ public class DiagramasSalvos {
 					        			arquivoEscrever.flush();
 									}
 								}
+								
+								// le todos os relacionamentos e anota
+								for (int b=0;b<relacionamentos.size();b++) {
+									Relacionamento relacionamento = relacionamentos.get(b);
+									if(relacionamento.getDirecaoLeitura().equals("Direita")) {
+										arquivoEscrever.write("\n@relac@:" + relacionamento.getElementos().get(0).getNome() + ":" + relacionamento.getElementos().get(1).getNome() + ":" + relacionamento.getTipoRelacionamento() + ":Direita:" + relacionamento.getMultiplicidade());
+										arquivoEscrever.flush();
+									} else if(relacionamento.getDirecaoLeitura().equals("Esquerda")) {
+										arquivoEscrever.write("\n@relac@:" + relacionamento.getElementos().get(0).getNome() + ":" + relacionamento.getElementos().get(1).getNome() + ":" + relacionamento.getTipoRelacionamento() + ":Esquerda:" + relacionamento.getMultiplicidade());
+										arquivoEscrever.flush();
+									} else if(relacionamento.getDirecaoLeitura().equals("Ambos")) {
+										arquivoEscrever.write("\n@relac@:" + relacionamento.getElementos().get(0).getNome() + ":" + relacionamento.getElementos().get(1).getNome() + ":" + relacionamento.getTipoRelacionamento() + ":Ambos:" + relacionamento.getMultiplicidade());
+										arquivoEscrever.flush();
+									}
+								}
+								
 								arquivoEscrever.write("\n=END");
 			        			arquivoEscrever.flush();
 							}
@@ -309,13 +342,13 @@ public class DiagramasSalvos {
 			
 		} catch (FileNotFoundException exc) {
 			// Criar arquivo
-			File file = new File("Composite/", "diagramasSalvos.txt");
+			File file = new File(".", "diagramasSalvos.txt");
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			salvarDiagrama(elementoAberto, elementoCompostoAtual);
+			salvarDiagrama(elementoAberto, elementoCompostoAtual, relacionamentos);
 		}
 		
 	}
