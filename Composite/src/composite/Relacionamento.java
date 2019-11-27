@@ -5,7 +5,6 @@ import java.util.List;
 
 public class Relacionamento extends Componente{
     private String tipoRelacionamento;
-    private String nome;
 	private String direcaoLeitura;
 	private String multiplicidade;
 	//private String navegabilidade;
@@ -22,14 +21,6 @@ public class Relacionamento extends Componente{
 
 	public String getTipoRelacionamento() {
 		return tipoRelacionamento;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
 	}
 
 	public String getDirecaoLeitura() {

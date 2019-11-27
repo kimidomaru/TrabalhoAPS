@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DiagramasSalvos {
-	static List<ComponenteComposto> salvos = new ArrayList<ComponenteComposto>();
+	public static List<ComponenteComposto> salvos = new ArrayList<ComponenteComposto>();
 	
 	public static void quickSave(ComponenteComposto comp) {
 		salvos.add(comp);
@@ -37,6 +37,7 @@ public class DiagramasSalvos {
 		//System.out.println("\n_____"+tipo + " "+ salvos.get(ultimo).getNome()+ " removido(a)!_____\n");
 		System.err.println("\n"+tipoElemento + " "+ nomeElemento+ " removido(a)!\n");
 		salvos.remove(ultimo);
+	
 		if(ultimo > 0) {
 			ultimo--;
 			return salvos.get(ultimo);
